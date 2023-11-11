@@ -26,6 +26,9 @@ public class BaseRobotMethods {
 
     public DcMotorEx intake;
 
+    public LinearOpMode parent;
+    public Telemetry telemetry;
+
     int climbTarget = 5;
 
     public Servo score;
