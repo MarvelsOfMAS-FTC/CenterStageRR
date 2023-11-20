@@ -20,13 +20,14 @@ public class RoadRunnerTesting extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         if (TuningOpModes.DRIVE_CLASS.equals(MecanumDrive.class)) {
-            MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 90));
+            MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
 
             waitForStart();
             Actions.runBlocking(
                     drive.actionBuilder(drive.pose)
                             .splineTo(new Vector2d(30, 30), Math.PI)
                             .splineTo(new Vector2d(60, 0), Math.PI)
+
                             .build());
 
         }
