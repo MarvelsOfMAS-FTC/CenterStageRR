@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.util.Size;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -11,11 +13,24 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 public class BaseRobotMethods extends LinearOpMode{
 
     //VARIABLES---------------------------------------------------------------------------------------------------------------
     private ElapsedTime     runtime = new ElapsedTime();
+    private static final boolean USE_WEBCAM = true;
+
+    private AprilTagProcessor aprilTag;
+
+    private FirstVisionProcessor visionProcessor;
+
+    private VisionPortal visionPortal;
+    private VisionPortal visionPortalBack;
+
+    private VisionPortal visionPortalApril;
 
     public DcMotorEx arm;
 
@@ -44,6 +59,7 @@ public class BaseRobotMethods extends LinearOpMode{
     public Servo elbowr;
     public Servo wrist;
     public Servo launch;
+    public String placement = "None";
     TouchSensor elevatorLimit; //elevator limit switch used to reset elevator encoder
 
      private int timeout = 7;
@@ -60,6 +76,9 @@ public class BaseRobotMethods extends LinearOpMode{
 
     //HARDWARE SETUP-------------------------------------------------------------------------------------------------
     public BaseRobotMethods(HardwareMap hardwareMap) {// init all hardware
+        visionProcessor = new FirstVisionProcessor();
+
+
         fl = hardwareMap.get(DcMotorEx.class, "lf");
         fr = hardwareMap.get(DcMotorEx.class, "rf");
         bl = hardwareMap.get(DcMotorEx.class, "lb");
@@ -94,7 +113,7 @@ public class BaseRobotMethods extends LinearOpMode{
 
         fr.setDirection(DcMotorEx.Direction.REVERSE);
         br.setDirection(DcMotorEx.Direction.REVERSE);
-        
+
         climbl.setPower(1.0);
         climbr.setPower(1.0);
         climbl.setTargetPosition(5);
@@ -106,6 +125,17 @@ public class BaseRobotMethods extends LinearOpMode{
 
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+    //CAMERA COMMANDS ----------------------------------------------------------------------------------------------------
+    public void initCamera(){
+        // visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE
+        visionPortal = new VisionPortal.Builder()
+                .setCamera(hardwareMap.get(WebcamName.class, "webcamfront"))
+                .addProcessor(visionProcessor)
+                .setCameraResolution(new Size(544, 288))
+                .setStreamFormat(VisionPortal.StreamFormat.YUY2)
+                .setAutoStopLiveView(true)
+                .build();
     }
     //MOTOR COMMANDS-------------------------------------------------------------------------------------------------------
     public void setMotorMode(DcMotor.RunMode mode){
@@ -140,6 +170,7 @@ public class BaseRobotMethods extends LinearOpMode{
         stopMovement();
         runtime.reset();
     }
+
     public void stopMovement(){
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
