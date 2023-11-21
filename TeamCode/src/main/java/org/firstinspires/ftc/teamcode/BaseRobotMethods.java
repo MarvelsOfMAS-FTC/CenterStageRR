@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -11,18 +12,25 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-public class BaseRobotMethods {
+public class BaseRobotMethods extends LinearOpMode{
 
     //VARIABLES---------------------------------------------------------------------------------------------------------------
     private ElapsedTime     runtime = new ElapsedTime();
 
     public DcMotorEx arm;
+
+    static final double COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
+    static final double DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
+    static final double WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
+    static final double COUNTS_PER_INCH         = ((COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (WHEEL_DIAMETER_INCHES * 3.1415)) / 3.5625;
     public DcMotorEx climbl;
     public DcMotorEx climbr;
     public DcMotorEx fl;
     public DcMotorEx fr;
     public DcMotorEx bl;
     public DcMotorEx br;
+    public DcMotorEx extend;
 
     public DcMotorEx intake;
 
@@ -38,9 +46,6 @@ public class BaseRobotMethods {
     public Servo launch;
     TouchSensor elevatorLimit; //elevator limit switch used to reset elevator encoder
 
-
-  //  public LinearOpMode parent;
-   // public Telemetry telemetry;
      private int timeout = 7;
 
      public double elbowhome = 0.25;
@@ -51,8 +56,6 @@ public class BaseRobotMethods {
     ElapsedTime timer = new ElapsedTime(); //not currently used
     boolean holdWrist = false;
     boolean resetEncoder = false; //this does the same thing as resetElevatorEncoder but while transfering, yeah sorry :(
-
-
 
 
     //HARDWARE SETUP-------------------------------------------------------------------------------------------------
@@ -91,7 +94,7 @@ public class BaseRobotMethods {
 
         fr.setDirection(DcMotorEx.Direction.REVERSE);
         br.setDirection(DcMotorEx.Direction.REVERSE);
-
+        
         climbl.setPower(1.0);
         climbr.setPower(1.0);
         climbl.setTargetPosition(5);
@@ -161,26 +164,6 @@ public class BaseRobotMethods {
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setPower(0);
     }
-
-    public void transfer(){
-        elbowl.setPosition(0.0);
-        elbowr.setPosition(0.0);
-        intake.setPower(-1);
-    }
-    public void home(){
-        elbowl.setPosition(elbowhome + 0.3);//  INTAKE UP // Transfer
-        elbowr.setPosition((1 - elbowhome));
-        score.setPosition(scoreHome);
-        wrist.setPosition(0.84);
-        if(elevatorLimit.isPressed()&&timer.milliseconds()>700)
-        {
-            intake.setPower(.75);
-        }
-        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        arm.setPower(-0.5);//set 50% speed elevator in
-        resetEncoder = true;
-        elbowhome = (0.26 + ((Math.max(climbl.getTargetPosition(),climbl.getCurrentPosition()) / 1925.0) * 0.4));//set elbow position based on climb position
-    }
     public void groundWrist(){
         elbowl.setPosition(0.975);//  INTAKE DOWN and TURN ON
         elbowr.setPosition(0.325);
@@ -201,5 +184,89 @@ public class BaseRobotMethods {
     }
     public static double Tiles(double amt_of_tiles){
         return (double) amt_of_tiles*24;
+    }
+    public void transfer(){
+
+        //wait until elevator limit switch is pressed
+        while(!elevatorLimit.isPressed())
+        {
+            extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            extend.setPower(-0.5);//set 50% speed elevator in
+        }
+        //then transfer and reset elevator encoder
+        intake.setPower(0.75);
+
+        extend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        extend.setTargetPosition(0);
+        extend.setPower(1.0);
+        extend.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+    }
+    public void intakeDown(){
+        runtime.reset();
+        double elbowHome = 0.0;
+        elbowl.setPosition(elbowHome + .32);//  INTAKE UP // Transfer
+        elbowr.setPosition((.28 + elbowHome));
+
+        wrist.setPosition(0.33);
+
+        while(runtime.seconds()<0.5)
+        {
+
+            //elbowHome = Math.min(runtime.seconds()*elbowHome*2+elbowHome,0.68);
+
+            elbowl.setPosition(Math.min(runtime.seconds()*elbowHome*4+elbowHome,0.27));
+            elbowr.setPosition(Math.min(runtime.seconds()*elbowHome*4+elbowHome,0.27));
+        }
+    }
+
+    public void intakeUp(){
+        elbowl.setPosition(.32);//  INTAKE UP // Transfer
+        elbowr.setPosition(.28);
+        wrist.setPosition(0.4);
+    }
+
+    public void low() {
+        extend.setTargetPosition(350);
+        climbl.setTargetPosition(260);
+        climbr.setTargetPosition(260);
+        score.setPosition(0.38);
+    }
+
+    public void mid() {
+        extend.setTargetPosition(450);
+        climbl.setTargetPosition(525);
+        climbr.setTargetPosition(525);
+        score.setPosition(0.31);
+    }
+
+    public void home() {
+        extend.setTargetPosition(0);
+        climbl.setTargetPosition(0);
+        climbr.setTargetPosition(0);
+        score.setPosition(0.93);
+    }
+
+    public void intakeToPos(int pos) {
+        if(pos == 5) {
+            wrist.setPosition(0.485);
+            elbowl.setPosition(0.95);
+            elbowr.setPosition(0.35);
+        } else if(pos == 4) {
+            wrist.setPosition(0.455);
+            elbowl.setPosition(0.965);
+            elbowr.setPosition(0.335);
+        } else if(pos == 3) {
+            wrist.setPosition(0.475);
+            elbowl.setPosition(0.965);
+            elbowr.setPosition(0.335);
+        } else if(pos == 2) {
+            wrist.setPosition(0.42);
+            elbowl.setPosition(0.965);
+            elbowr.setPosition(0.335);
+        }
+    }
+    @Override
+    public void runOpMode() throws InterruptedException {
+
     }
 }
