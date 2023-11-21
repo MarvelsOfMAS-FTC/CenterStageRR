@@ -20,7 +20,7 @@ public class RoadRunnerTesting extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         if (TuningOpModes.DRIVE_CLASS.equals(MecanumDrive.class)) {
-            MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+            MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-9, -72, 90));
 
             waitForStart();
             Actions.runBlocking(
