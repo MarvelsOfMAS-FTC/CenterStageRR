@@ -1,15 +1,12 @@
 package org.firstinspires.ftc.teamcode;
-
 import android.util.Size;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -17,122 +14,88 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-public class BaseRobotMethods extends LinearOpMode{
+
+public class BaseRobotMethods {
 
     //VARIABLES---------------------------------------------------------------------------------------------------------------
-    private ElapsedTime     runtime = new ElapsedTime();
     private static final boolean USE_WEBCAM = true;
+    ElapsedTime timer = new ElapsedTime(); //not currently used
+    boolean holdWrist = false;
+    boolean resetEncoder = false;
 
     private AprilTagProcessor aprilTag;
 
-    private FirstVisionProcessor visionProcessor;
+    public FirstVisionProcessor visionProcessor;
 
     private VisionPortal visionPortal;
     private VisionPortal visionPortalBack;
 
     private VisionPortal visionPortalApril;
 
-    public DcMotorEx arm;
+    DcMotorEx intake, climbl, climbr, extend, fl, fr, bl, br;
+    Servo wrist, elbowl, elbowr, lhook, rhook, score;
+    private ElapsedTime runtime = new ElapsedTime();
+    boolean passiveIntake = false;
+    TouchSensor elevatorLimit;
+    private int timeout = 7;
+    double scoreHome = 0.95;
+    public LinearOpMode parent;
+    public Telemetry telemetry;
 
-    static final double COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
+    static final double COUNTS_PER_MOTOR_REV    = 1440 ;
+    public double elbowhome = 0.25;// eg: TETRIX Motor Encoder
     static final double DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
     static final double WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double COUNTS_PER_INCH         = ((COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415)) / 3.5625;
-    public DcMotorEx climbl;
-    public DcMotorEx climbr;
-    public DcMotorEx fl;
-    public DcMotorEx fr;
-    public DcMotorEx bl;
-    public DcMotorEx br;
-    public DcMotorEx extend;
-
-    public DcMotorEx intake;
-
-    public LinearOpMode parent;
-    public Telemetry telemetry;
-
-    int climbTarget = 5;
-
-    public Servo score;
-    public Servo elbowl;
-    public Servo elbowr;
-    public Servo wrist;
-    public Servo launch;
-    public String placement = "None";
-    TouchSensor elevatorLimit; //elevator limit switch used to reset elevator encoder
-
-     private int timeout = 7;
-
-     public double elbowhome = 0.25;
-
-    double scoreHome = 0.95; //home position for scoring mec
-
-    boolean passiveIntake = false; //if true then the intake should run in (to keep game element inside intake)
-    ElapsedTime timer = new ElapsedTime(); //not currently used
-    boolean holdWrist = false;
-    boolean resetEncoder = false; //this does the same thing as resetElevatorEncoder but while transfering, yeah sorry :(
-
 
     //HARDWARE SETUP-------------------------------------------------------------------------------------------------
     public BaseRobotMethods(HardwareMap hardwareMap) {// init all hardware
+
         visionProcessor = new FirstVisionProcessor();
 
 
+        //grab motors
+        elevatorLimit = hardwareMap.get(TouchSensor.class, "elevatorLimit");
+        intake = hardwareMap.get(DcMotorEx.class, "intake");
+        climbl = hardwareMap.get(DcMotorEx.class, "lclimb");
+        climbr = hardwareMap.get(DcMotorEx.class, "rclimb");
+        extend = hardwareMap.get(DcMotorEx.class, "extend");
         fl = hardwareMap.get(DcMotorEx.class, "lf");
         fr = hardwareMap.get(DcMotorEx.class, "rf");
         bl = hardwareMap.get(DcMotorEx.class, "lb");
         br = hardwareMap.get(DcMotorEx.class, "rb");
-        arm = hardwareMap.get(DcMotorEx.class, "arm");
-        climbl = hardwareMap.get(DcMotorEx.class, "climbl");
-        climbr = hardwareMap.get(DcMotorEx.class, "climbr");
-        intake = hardwareMap.get(DcMotorEx.class, "intake");
-
-
-        score = hardwareMap.get(Servo.class, "score");
-        elbowl = hardwareMap.get(Servo.class, "elbowl");
-        elbowr = hardwareMap.get(Servo.class, "elbowr");
-        wrist = hardwareMap.get(Servo.class, "wrist");
-        launch = hardwareMap.get(Servo.class, "launch");
-
-
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        climbl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        climbr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        extend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        climbl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        climbr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        intake.setPower(0);
+        //grab servos
+        elbowl = hardwareMap.get(Servo.class, "larm");
+        elbowr = hardwareMap.get(Servo.class, "rarm");
+        wrist = hardwareMap.get(Servo.class, "wrist");
+        lhook = hardwareMap.get(Servo.class, "lhook");
+        rhook = hardwareMap.get(Servo.class, "rhook");
+        score = hardwareMap.get(Servo.class, "score");
 
-        arm.setTargetPosition(0);
-        arm.setPower(1.0);
-        arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        arm.setTargetPosition(0); //it doesn't crash when we keep this in so idk
+        //set intake position
+        double elbowHome = (0.0);
+        elbowl.setPosition(elbowHome + .32);//  INTAKE UP // Transfer
+        elbowr.setPosition((.28 + elbowHome));
+        wrist.setPosition(0.28); //0.75
+        initCamera(hardwareMap);
 
-        fr.setDirection(DcMotorEx.Direction.REVERSE);
-        br.setDirection(DcMotorEx.Direction.REVERSE);
-
-        climbl.setPower(1.0);
-        climbr.setPower(1.0);
-        climbl.setTargetPosition(5);
-        climbr.setTargetPosition(5);
-        climbTarget = 5;
-        climbl.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        climbr.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-
-
-        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
     //CAMERA COMMANDS ----------------------------------------------------------------------------------------------------
-    public void initCamera(){
-        // visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE
+    public void initCamera(HardwareMap hardwareMap){
         visionPortal = new VisionPortal.Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, "webcamfront"))
+                .setCamera(hardwareMap.get(WebcamName.class, "webcamback"))
                 .addProcessor(visionProcessor)
-                .setCameraResolution(new Size(544, 288))
+                .setCameraResolution(new Size(640, 360)) // 544 288
                 .setStreamFormat(VisionPortal.StreamFormat.YUY2)
                 .setAutoStopLiveView(true)
                 .build();
@@ -181,19 +144,6 @@ public class BaseRobotMethods extends LinearOpMode{
         fl.setPower(0);
         fr.setPower(0);
         br.setPower(0);
-    }
-
-    //ARM COMMANDS--------------------------------------------------------------------------------------------
-    public void moveArm(int distance, double power){
-        arm.setTargetPosition(distance);
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        arm.setPower(power);
-
-    }
-
-    public void stopArm(){
-        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm.setPower(0);
     }
     public void groundWrist(){
         elbowl.setPosition(0.975);//  INTAKE DOWN and TURN ON
@@ -295,9 +245,5 @@ public class BaseRobotMethods extends LinearOpMode{
             elbowl.setPosition(0.965);
             elbowr.setPosition(0.335);
         }
-    }
-    @Override
-    public void runOpMode() throws InterruptedException {
-
     }
 }
