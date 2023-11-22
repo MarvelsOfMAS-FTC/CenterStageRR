@@ -25,6 +25,7 @@ public class AutonClose extends LinearOpMode {
         //CAMERA INITIALIZATION --------------------------------------------------------------------
         telemetry.addData("--Frostbite Close Auto--",true);
         telemetry.addData("Placement: ", robot.visionProcessor.getSelection());
+        telemetry.update();
 
         //EXECUTE ACTIONS -----------------------------------------------------------------
         waitForStart();
