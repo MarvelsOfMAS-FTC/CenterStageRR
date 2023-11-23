@@ -15,7 +15,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 
-public class BaseRobotMethods {
+public class BaseRobotMethods extends LinearOpMode{
 
     //VARIABLES---------------------------------------------------------------------------------------------------------------
     private static final boolean USE_WEBCAM = true;
@@ -87,7 +87,7 @@ public class BaseRobotMethods {
         elbowl.setPosition(elbowHome + .32);//  INTAKE UP // Transfer
         elbowr.setPosition((.28 + elbowHome));
         wrist.setPosition(0.28); //0.75
-        initCamera(hardwareMap);
+        //initCamera(hardwareMap);
 
     }
     //CAMERA COMMANDS ----------------------------------------------------------------------------------------------------
@@ -145,6 +145,7 @@ public class BaseRobotMethods {
         fr.setPower(0);
         br.setPower(0);
     }
+
     public void groundWrist(){
         elbowl.setPosition(0.975);//  INTAKE DOWN and TURN ON
         elbowr.setPosition(0.325);
@@ -205,7 +206,11 @@ public class BaseRobotMethods {
         elbowr.setPosition(.28);
         wrist.setPosition(0.4);
     }
-
+    public void extend(int extendticks) {
+        extend.setTargetPosition(extendticks);
+        climbl.setTargetPosition(climbl.getCurrentPosition()+80);
+        climbr.setTargetPosition(climbr.getCurrentPosition()+80);
+    }
     public void low() {
         extend.setTargetPosition(350);
         climbl.setTargetPosition(260);
@@ -220,11 +225,23 @@ public class BaseRobotMethods {
         score.setPosition(0.31);
     }
 
-    public void home() {
-        extend.setTargetPosition(0);
+    public void home(double power) {
+        while(!elevatorLimit.isPressed())
+        {
+            extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            extend.setPower(-0.5);//set 50% speed elevator in
+        }
+        extend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         climbl.setTargetPosition(0);
         climbr.setTargetPosition(0);
         score.setPosition(0.93);
+        climbl.setPower(power);
+        climbr.setPower(power);
+        climbl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        climbr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(250);
+        climbl.setPower(0);
+        climbr.setPower(0);
     }
 
     public void intakeToPos(int pos) {
@@ -246,4 +263,7 @@ public class BaseRobotMethods {
             elbowr.setPosition(0.335);
         }
     }
+
+    @Override
+    public void runOpMode() throws InterruptedException {}
 }
