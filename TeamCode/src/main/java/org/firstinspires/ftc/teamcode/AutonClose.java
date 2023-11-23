@@ -20,12 +20,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 @Autonomous
 public class AutonClose extends LinearOpMode {
     //VARIABLES---------------------------------------------------------------------------------------------------------------
-    double startposx = 12;
+    double startposx = 9;
     double startposy = 72;
     double startheading = Math.toRadians(90);
     double tagposx=0;
-    double tagposy=5;
-    double tagheading = 1;
+    double tagposy=-5;
+    double tagheading = Math.toRadians(1);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -79,11 +79,18 @@ public class AutonClose extends LinearOpMode {
             telemetry.addLine("3");
             telemetry.update();
             robot.home(1);
+            robot.extend.setTargetPosition(0);
+            robot.extend.setPower(-0.5);
+            robot.extend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            sleep(1000);
+            robot.extend.setPower(0);
             Actions.runBlocking(
                     drive.actionBuilder(new Pose2d(0,startposy+tagposy,0))
                             .turn(-tagheading)
-                            .lineToY(startposy)
+                            .lineToY(-43)
+                            .turn(Math.toRadians(90))
                             .build());
+
             break;
 
 
