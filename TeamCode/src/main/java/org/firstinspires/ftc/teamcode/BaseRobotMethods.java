@@ -33,7 +33,7 @@ public class BaseRobotMethods extends LinearOpMode{
     private VisionPortal visionPortalApril;
 
     DcMotorEx intake, climbl, climbr, extend, fl, fr, bl, br;
-    Servo wrist, elbowl, elbowr, lhook, rhook, score;
+    Servo wrist, elbowl, elbowr, lhook, rhook, score, finger;
     private ElapsedTime runtime = new ElapsedTime();
     boolean passiveIntake = false;
     TouchSensor elevatorLimit;
@@ -44,6 +44,8 @@ public class BaseRobotMethods extends LinearOpMode{
 
     static final double COUNTS_PER_MOTOR_REV    = 1440 ;
     public double elbowhome = 0.25;// eg: TETRIX Motor Encoder
+
+    public double elbowHome = 0.0;
     static final double DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
     static final double WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double COUNTS_PER_INCH         = ((COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
@@ -81,6 +83,7 @@ public class BaseRobotMethods extends LinearOpMode{
         lhook = hardwareMap.get(Servo.class, "lhook");
         rhook = hardwareMap.get(Servo.class, "rhook");
         score = hardwareMap.get(Servo.class, "score");
+        finger = hardwareMap.get(Servo.class, "Finger");
 
         //set intake position
         double elbowHome = (0.0);
@@ -206,6 +209,9 @@ public class BaseRobotMethods extends LinearOpMode{
         elbowr.setPosition(.28);
         wrist.setPosition(0.4);
     }
+    public void spikeExtend(int extendticks) {
+        extend. setTargetPosition(extendticks);
+    }
     public void extend(int extendticks) {
         extend.setTargetPosition(extendticks);
         climbl.setTargetPosition(climbl.getCurrentPosition()+80);
@@ -216,6 +222,12 @@ public class BaseRobotMethods extends LinearOpMode{
         climbl.setTargetPosition(260);
         climbr.setTargetPosition(260);
         score.setPosition(0.38);
+        extend.setPower(1);
+        climbl.setPower(1);
+        climbr.setPower(1);
+        extend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        climbl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        climbr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public void mid() {
@@ -223,6 +235,14 @@ public class BaseRobotMethods extends LinearOpMode{
         climbl.setTargetPosition(525);
         climbr.setTargetPosition(525);
         score.setPosition(0.31);
+        extend.setPower(1);
+        climbl.setPower(1);
+        climbr.setPower(1);
+        extend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        climbl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        climbr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
     }
 
     public void home(double power) {
@@ -231,7 +251,9 @@ public class BaseRobotMethods extends LinearOpMode{
             extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             extend.setPower(-0.5);//set 50% speed elevator in
         }
+
         extend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        extend.setPower(0);
         climbl.setTargetPosition(0);
         climbr.setTargetPosition(0);
         score.setPosition(0.93);
@@ -242,6 +264,8 @@ public class BaseRobotMethods extends LinearOpMode{
         sleep(250);
         climbl.setPower(0);
         climbr.setPower(0);
+        elbowl.setPosition(0.58 - elbowHome);//  INTAKE UP // Transfer
+        elbowr.setPosition(0.36 + elbowHome);
     }
 
     public void intakeToPos(int pos) {
