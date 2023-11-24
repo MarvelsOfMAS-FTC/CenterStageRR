@@ -210,28 +210,58 @@ public class BaseRobotMethods extends LinearOpMode{
         wrist.setPosition(0.4);
     }
     public void spikeExtend(int extendticks) {
-        extend. setTargetPosition(extendticks);
+        extend.setPower(1);
+        extend.setTargetPosition(extendticks);
+        while (extend.getCurrentPosition()>50){
+            finger.setPosition(-0.000235294*extend.getCurrentPosition()+0.37);
+        }
+        extend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+    public void retract (double power) {
+        int clpos = climbl.getCurrentPosition();
+        int crpos = climbr.getCurrentPosition();
+        climbl.setTargetPosition(clpos+240);
+        climbr.setTargetPosition(crpos+240);
+     //   extend.setTargetPosition(0);
+        climbl.setPower(power);
+        climbr.setPower(power);
+        extend.setPower(power);
+        climbl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        climbr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        sleep(350);
+        finger.setPosition(0.84);
+        extend.setTargetPosition(0);
+        extend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        climbl.setTargetPosition(0);
+        climbr.setTargetPosition(0);
+        climbl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        climbr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        score.setPosition(0.95);
+
+
+
     }
     public void extend(int extendticks) {
         extend.setTargetPosition(extendticks);
         climbl.setTargetPosition(climbl.getCurrentPosition()+80);
         climbr.setTargetPosition(climbr.getCurrentPosition()+80);
     }
-    public void low() {
-        extend.setTargetPosition(350);
+    public void low(int extendTarget) {
+        extend.setTargetPosition(extendTarget);
         climbl.setTargetPosition(260);
         climbr.setTargetPosition(260);
         score.setPosition(0.38);
         extend.setPower(1);
         climbl.setPower(1);
         climbr.setPower(1);
+        score.setPosition(0.38);
         extend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         climbl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         climbr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-    public void mid() {
-        extend.setTargetPosition(450);
+    public void mid(int extendTarget) {
+        extend.setTargetPosition(extendTarget);
         climbl.setTargetPosition(525);
         climbr.setTargetPosition(525);
         score.setPosition(0.31);
