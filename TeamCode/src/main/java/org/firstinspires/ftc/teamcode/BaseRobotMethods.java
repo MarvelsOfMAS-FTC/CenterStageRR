@@ -1,6 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 import android.util.Size;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -15,7 +20,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 
-public class BaseRobotMethods extends LinearOpMode{
+public class BaseRobotMethods{
 
     //VARIABLES---------------------------------------------------------------------------------------------------------------
     private static final boolean USE_WEBCAM = true;
@@ -44,7 +49,6 @@ public class BaseRobotMethods extends LinearOpMode{
 
     static final double COUNTS_PER_MOTOR_REV    = 1440 ;
     public double elbowhome = 0.25;// eg: TETRIX Motor Encoder
-
     public double elbowHome = 0.0;
     static final double DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
     static final double WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
@@ -56,8 +60,7 @@ public class BaseRobotMethods extends LinearOpMode{
 
         visionProcessor = new FirstVisionProcessor();
 
-
-        //grab motors
+        //MOTORS INIT
         elevatorLimit = hardwareMap.get(TouchSensor.class, "elevatorLimit");
         intake = hardwareMap.get(DcMotorEx.class, "intake");
         climbl = hardwareMap.get(DcMotorEx.class, "lclimb");
@@ -76,23 +79,22 @@ public class BaseRobotMethods extends LinearOpMode{
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        //grab servos
+        climbl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        climbr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //SERVOS INIT
         elbowl = hardwareMap.get(Servo.class, "larm");
         elbowr = hardwareMap.get(Servo.class, "rarm");
         wrist = hardwareMap.get(Servo.class, "wrist");
         lhook = hardwareMap.get(Servo.class, "lhook");
         rhook = hardwareMap.get(Servo.class, "rhook");
         score = hardwareMap.get(Servo.class, "score");
-        finger = hardwareMap.get(Servo.class, "Finger");
+        finger = hardwareMap.get(Servo.class, "finger");
 
-        //set intake position
-        double elbowHome = (0.0);
-        elbowl.setPosition(elbowHome + .32);//  INTAKE UP // Transfer
-        elbowr.setPosition((.28 + elbowHome));
-        wrist.setPosition(0.28); //0.75
-        //initCamera(hardwareMap);
-
+        //CAMERA INIT
+        initCamera(hardwareMap);
     }
+
     //CAMERA COMMANDS ----------------------------------------------------------------------------------------------------
     public void initCamera(HardwareMap hardwareMap){
         visionPortal = new VisionPortal.Builder()
@@ -149,16 +151,28 @@ public class BaseRobotMethods extends LinearOpMode{
         br.setPower(0);
     }
 
-    public void groundWrist(){
-        elbowl.setPosition(0.975);//  INTAKE DOWN and TURN ON
-        elbowr.setPosition(0.325);
-        wrist.setPosition(0.35);
+    public class GroundWrist implements Action{
 
-        intake.setPower(-1.0); //turn intake on full speed
+        public Action init(){
+            elbowl.setPosition(0.975);//  INTAKE DOWN and TURN ON
+            elbowr.setPosition(0.325);
+            wrist.setPosition(0.35);
 
-        passiveIntake = true;
-        timer.reset();
-        holdWrist = false;
+            intake.setPower(-1.0); //turn intake on full speed
+
+            passiveIntake = true;
+            timer.reset();
+            holdWrist = false;
+            return new GroundWrist();
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            return false;
+        }
+    }
+    public Action groundWrist() {
+        return new GroundWrist().init();
     }
 
     public void initPos(){
@@ -167,9 +181,7 @@ public class BaseRobotMethods extends LinearOpMode{
         elbowl.setPosition(elbowhome + 0.3);//  INTAKE UP // Transfer
         elbowr.setPosition((1 - elbowhome));
     }
-    public static double Tiles(double amt_of_tiles){
-        return (double) amt_of_tiles*24;
-    }
+
     public void transfer(){
 
         //wait until elevator limit switch is pressed
@@ -228,7 +240,7 @@ public class BaseRobotMethods extends LinearOpMode{
         extend.setPower(power);
         climbl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         climbr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        sleep(350);
+        new SleepAction(0.35);
         finger.setPosition(0.84);
         extend.setTargetPosition(0);
         extend.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -246,6 +258,7 @@ public class BaseRobotMethods extends LinearOpMode{
         climbl.setTargetPosition(climbl.getCurrentPosition()+80);
         climbr.setTargetPosition(climbr.getCurrentPosition()+80);
     }
+
     public void low(int extendTarget) {
         extend.setTargetPosition(extendTarget);
         climbl.setTargetPosition(260);
@@ -291,7 +304,7 @@ public class BaseRobotMethods extends LinearOpMode{
         climbr.setPower(power);
         climbl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         climbr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        sleep(250);
+        new SleepAction(0.35);
         climbl.setPower(0);
         climbr.setPower(0);
         elbowl.setPosition(0.58 - elbowHome);//  INTAKE UP // Transfer
@@ -317,7 +330,7 @@ public class BaseRobotMethods extends LinearOpMode{
             elbowr.setPosition(0.335);
         }
     }
-
-    @Override
-    public void runOpMode() throws InterruptedException {}
+    public static double Tiles(double amt_of_tiles){
+        return (double) amt_of_tiles*24;
+    }
 }
