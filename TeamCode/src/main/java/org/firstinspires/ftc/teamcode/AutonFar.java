@@ -57,13 +57,16 @@ public class AutonFar extends LinearOpMode {
             }
 
             Action drive_to_drop = drive.actionBuilder(drive.pose)
-                    .lineToY(48)
+                    .lineToY(28)
                     .endTrajectory().build();
 
             Actions.runBlocking(new ParallelAction(
-                    drive_to_drop,
                     new SequentialAction(
-                        robot.groundWrist()
+                            drive_to_drop
+                    ),
+                    new SequentialAction(
+                            robot.groundWrist(),
+                            robot.low(530)
                     )
                 )
             );
