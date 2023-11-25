@@ -48,37 +48,32 @@ import java.util.List;
 public final class MecanumDrive {
     public static class Params {
         // drive model parameters
-       // public double inPerTick = 0.0313199105145414;
-
-        public double inPerTick = 0.0408522946394138;
-        public double lateralInPerTick = 0.0316988608221892;
-        public double trackWidthTicks = 752.6442665584359;
+        public double inPerTick = 0.0311572700296736;
+        public double lateralInPerTick = 0.0312267657992565;
+        public double trackWidthTicks = 743.1812201833369;
 
         // feedforward parameters (in tick units)
-       // public double kS = 1.0796968902825856;//i
-        public double kS = 1.1724110419444111;
-
-        //  public double kV =  0.004186902276173363;//p
-        public double kV = 0.0041066401018619616;
-        public double kA = 0.000511;//d
+        public double kS = 0.2;
+        public double kV = 0.00428817217934955;
+        public double kA = 0.00100;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
-        public double minProfileAccel = -30;
-        public double maxProfileAccel = 50;
+        public double minProfileAccel = -55;
+        public double maxProfileAccel = 55;
 
         // turn profile parameters (in radians)
         public double maxAngVel = Math.PI; // shared with path
         public double maxAngAccel = Math.PI;
 
         // path controller gains
-        public double axialGain = 5;
-        public double lateralGain = 5;
-        public double headingGain = 4; // shared with turn
+        public double axialGain = 6;
+        public double lateralGain = 3;
+        public double headingGain = 3; // shared with turn
 
-        public double axialVelGain = 0.5;
-        public double lateralVelGain = 0.1;
-        public double headingVelGain = 1; // shared with turn
+        public double axialVelGain = 0;
+        public double lateralVelGain = 0;
+        public double headingVelGain = 0; // shared with turn
     }
 
     public static Params PARAMS = new Params();
