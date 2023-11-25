@@ -177,7 +177,6 @@ public class BaseRobotMethods{
 
     public void initPos(){
         score.setPosition(scoreHome);
-
         elbowl.setPosition(elbowhome + 0.3);//  INTAKE UP // Transfer
         elbowr.setPosition((1 - elbowhome));
     }
