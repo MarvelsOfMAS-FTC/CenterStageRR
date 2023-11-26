@@ -107,8 +107,7 @@ public class BaseRobotMethods{
         elbowl.setPosition(0.29 + elbowHome);
         elbowr.setPosition(0.25 + elbowHome);
         wrist.setPosition(0.725);
-
-        finger.setPosition(0.37);
+        finger.setPosition(0.46);
 
         elevatorLimit = hardwareMap.get(TouchSensor.class, "elevatorLimit");
 
@@ -214,7 +213,7 @@ public class BaseRobotMethods{
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setTargetPosition(300);
             while (extend.isBusy()) {
-                finger.setPosition(0.00007 * extend.getCurrentPosition() + 0.37);
+                finger.setPosition(-0.00007 * extend.getCurrentPosition() + 0.44);
             }
             return false;
         }
@@ -224,20 +223,30 @@ public class BaseRobotMethods{
         return new SpikeExtend();
     }
 
-    public class ScoreSpike implements Action{
+    public class SpikeScore implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            climbl.setTargetPosition(200);
-            climbr.setTargetPosition(200);
-            new SleepAction(0.2);
-            finger.setPosition(0.84);
+            climbl.setTargetPosition(300);
+            climbr.setTargetPosition(300);
             return false;
         }
 
     }
-    public Action scoreSpike(){
-        return new ScoreSpike();
+    public Action spikeScore(){
+        return new SpikeScore();
     }
+
+    public class FingerHome implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            finger.setPosition(0.84);
+            return false;
+        }
+    }
+    public Action fingerHome(){
+        return new FingerHome();
+    }
+
 
     public class Low implements Action { //(int extendTarget)
         @Override
