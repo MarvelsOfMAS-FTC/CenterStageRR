@@ -24,7 +24,7 @@ public class BaseRobotMethods{
 
     //VARIABLES---------------------------------------------------------------------------------------------------------------
     private static final boolean USE_WEBCAM = true;
-    ElapsedTime timer = new ElapsedTime(); //not currently used
+    ElapsedTime timer = new ElapsedTime();
     boolean holdWrist = false;
     boolean resetEncoder = false;
 
@@ -154,15 +154,13 @@ public class BaseRobotMethods{
     public class GroundWrist implements Action{
 
         public Action init(){
-            elbowl.setPosition(0.975);//  INTAKE DOWN and TURN ON
-            elbowr.setPosition(0.325);
-            wrist.setPosition(0.35);
+            elbowl.setPosition(0.59);//  INTAKE DOWN and TURN ON
+            elbowr.setPosition(0.55);
+            wrist.setPosition(0.3);
 
             intake.setPower(-1.0); //turn intake on full speed
 
             passiveIntake = true;
-            timer.reset();
-            holdWrist = false;
             return new GroundWrist();
         }
 
@@ -177,8 +175,8 @@ public class BaseRobotMethods{
 
     public void initPos(){
         score.setPosition(scoreHome);
-        elbowl.setPosition(elbowHome + 0.3);//  INTAKE UP // Transfer
-        elbowr.setPosition((1 - elbowHome));
+        elbowl.setPosition(0.29 + elbowHome);//  INTAKE UP // Transfer
+        elbowr.setPosition(0.25 + elbowHome);
     }
 
     public class Transfer implements Action{
