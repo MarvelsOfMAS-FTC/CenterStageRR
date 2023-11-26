@@ -46,7 +46,7 @@ public class AutonClose extends LinearOpMode {
         telemetry.update();
         robot.climbl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.climbr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.home(1);
+        robot.home();
         robot.finger.setPosition(0.37);
 
         //EXECUTE ACTIONS -----------------------------------------------------------------
@@ -71,14 +71,14 @@ public class AutonClose extends LinearOpMode {
                             .build());
             robot.spikeExtend(510);
             sleep(500);
-            robot.retract(1);
+            robot.home();
 
             //SPLINE TO BACKBOARD PREP POS
             Actions.runBlocking(
                     drive.actionBuilder(new Pose2d(0,58, Math.toRadians(90)))
                             .splineToLinearHeading(new Pose2d(36, 32, Math.toRadians(180)), Math.toRadians(90))
                             .build());
-            robot.low(450);
+            robot.low();
 
             //DRIVE INTO BACKBOARD TO SCORE
             Actions.runBlocking(
@@ -87,8 +87,8 @@ public class AutonClose extends LinearOpMode {
                             .waitSeconds(1)
                             .lineToX(45)
                             .build());
-            robot.mid(450);
-            robot.retract(1);
+            robot.mid();
+            robot.home();
 
             //DRIVE TO PUCK STACK
             Actions.runBlocking(
