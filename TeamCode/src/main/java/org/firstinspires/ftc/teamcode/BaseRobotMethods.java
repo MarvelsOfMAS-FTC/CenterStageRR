@@ -48,7 +48,6 @@ public class BaseRobotMethods{
     public Telemetry telemetry;
 
     static final double COUNTS_PER_MOTOR_REV    = 1440 ;
-    public double elbowhome = 0.25;// eg: TETRIX Motor Encoder
     public double elbowHome = 0.0;
     static final double DRIVE_GEAR_REDUCTION    = 1.0 ;     // No External Gearing.
     static final double WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
@@ -56,9 +55,7 @@ public class BaseRobotMethods{
             (WHEEL_DIAMETER_INCHES * 3.1415)) / 3.5625;
 
     //HARDWARE SETUP-------------------------------------------------------------------------------------------------
-    public BaseRobotMethods(HardwareMap hardwareMap) {// init all hardware
-
-        visionProcessor = new FirstVisionProcessor();
+    public BaseRobotMethods(HardwareMap hardwareMap) {
 
         //MOTORS INIT
         elevatorLimit = hardwareMap.get(TouchSensor.class, "elevatorLimit");
@@ -66,21 +63,23 @@ public class BaseRobotMethods{
         climbl = hardwareMap.get(DcMotorEx.class, "lclimb");
         climbr = hardwareMap.get(DcMotorEx.class, "rclimb");
         extend = hardwareMap.get(DcMotorEx.class, "extend");
+
         fl = hardwareMap.get(DcMotorEx.class, "lf");
         fr = hardwareMap.get(DcMotorEx.class, "rf");
         bl = hardwareMap.get(DcMotorEx.class, "lb");
         br = hardwareMap.get(DcMotorEx.class, "rb");
+
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         climbl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         climbr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        climbl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        climbr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         extend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        climbl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        climbr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         //SERVOS INIT
         elbowl = hardwareMap.get(Servo.class, "larm");
@@ -92,6 +91,7 @@ public class BaseRobotMethods{
         finger = hardwareMap.get(Servo.class, "finger");
 
         //CAMERA INIT
+        visionProcessor = new FirstVisionProcessor();
         initCamera(hardwareMap);
     }
 
@@ -177,8 +177,8 @@ public class BaseRobotMethods{
 
     public void initPos(){
         score.setPosition(scoreHome);
-        elbowl.setPosition(elbowhome + 0.3);//  INTAKE UP // Transfer
-        elbowr.setPosition((1 - elbowhome));
+        elbowl.setPosition(elbowHome + 0.3);//  INTAKE UP // Transfer
+        elbowr.setPosition((1 - elbowHome));
     }
 
     public class Transfer implements Action{
@@ -209,7 +209,6 @@ public class BaseRobotMethods{
     public class IntakeDown implements Action{
         public Action init(){
             runtime.reset();
-            double elbowHome = 0.0;
             elbowl.setPosition(elbowHome + .32);//  INTAKE UP // Transfer
             elbowr.setPosition((.28 + elbowHome));
 

@@ -1,29 +1,33 @@
 package org.firstinspires.ftc.teamcode;
 
-import static com.acmerobotics.roadrunner.ftc.Actions.runBlocking;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
-import com.acmerobotics.roadrunner.TimeTurn;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous
 public class AutonFar extends LinearOpMode {
     //VARIABLES---------------------------------------------------------------------------------------------------------------
+    public String side = "None";
+    public String placement = "None"; //this is the variable for which spot the robot should score
+    public boolean grabStack = true; //grabstack means robot will go pick up 2 pixels and deposit
+
+    //START POS
     double startposx = 0;
     double startposy = 0;
     double startheading = Math.toRadians(90);
+
+    //TAG POS
     double tagposx=0;
     double tagposy=-5;
     double tagheading = Math.toRadians(0);
-
-    double elbowHome = (0.0);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -34,20 +38,48 @@ public class AutonFar extends LinearOpMode {
         robot.parent = this;
 
         //INIT POSITIONS
-        //robot.home(1);
+        robot.home(1);
         robot.finger.setPosition(0.37);
-        //robot.elbowl.setPosition(elbowHome + .32);//  INTAKE UP // Transfer
-        //robot.elbowr.setPosition((.28 + elbowHome));
-        //robot.wrist.setPosition(0.28);
 
         //CAMERA INITIALIZATION --------------------------------------------------------------------
-        telemetry.addData("--Frostbite Close Auto--", true);
         telemetry.addData("Placement: ", robot.visionProcessor.getSelection());
         telemetry.update();
+        robot.climbl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.climbr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //WAIT FOR START CODE ----------------------------------------------------------------------
+        while (!opModeIsActive() && !isStopRequested())
+        {
+            //Running pipeline
+            if(gamepad1.x) {
+                side = "Blue";
+            } else if(gamepad1.b) {
+                side = "Red";
+            }
+
+            //determine if we should grab the stack
+            if(gamepad1.a) {
+                grabStack = true;
+            } else if(gamepad1.y) {
+                grabStack = false;
+            }
+
+            telemetry.addData("--Frostbite Close Auto--",true);
+            telemetry.addData("Placement: ", robot.visionProcessor.getSelection());
+            telemetry.addData("Side: ", side);
+            telemetry.addData("GrabStack?: ", grabStack);
+
+            telemetry.addData("Press X for Blue Side",true);
+            telemetry.addData("Press B for Red Side",true);
+            telemetry.addData("Press A for Grabbing Stack",true);
+            telemetry.addData("Press Y for NOT Grabbing Stack",true);
+            telemetry.update();
+        }
 
         //EXECUTE ACTIONS -----------------------------------------------------------------
-        waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
+
+            //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagheading = 0;
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
@@ -56,21 +88,41 @@ public class AutonFar extends LinearOpMode {
                 tagheading= -90;
             }
 
-            Action drive_to_drop = drive.actionBuilder(drive.pose)
-                    .lineToY(28)
-                    .endTrajectory().build();
+            //ROADRUNNER TRAJECTORIES BUILD
+            Action strafeLeft = drive.actionBuilder(drive.pose)
+                    .strafeTo(new Vector2d(24,0))
+                    .turn(Math.toRadians(90))
+                    .build();
 
-            Actions.runBlocking(new ParallelAction(
-                    new SequentialAction(
-                            drive_to_drop
+            Actions.runBlocking(new SequentialAction(
+                    new ParallelAction(
+                            strafeLeft
                     ),
                     new SequentialAction(
-                            robot.groundWrist(),
-                            robot.low(530)
+                            new SleepAction(2),
+                            robot.low(200)
                     )
                 )
             );
+
             drive.updatePoseEstimate();
+            Action splineStraight = drive.actionBuilder(drive.pose)
+                    .splineTo(new Vector2d(48,48),90)
+                    .build();
+
+            Actions.runBlocking(new SequentialAction(
+                            new ParallelAction(
+                                    splineStraight
+                            ),
+                            new SequentialAction(
+                                    robot.home(1),
+                                    new SleepAction(2),
+                                    robot.low(200)
+
+                            )
+                    )
+            );
+
             break;
         }
     }
