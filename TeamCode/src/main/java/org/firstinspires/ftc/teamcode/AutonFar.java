@@ -38,7 +38,7 @@ public class AutonFar extends LinearOpMode {
         robot.parent = this;
 
         //INIT POSITIONS
-        robot.home(1);
+        robot.home();
         robot.finger.setPosition(0.37);
 
         //CAMERA INITIALIZATION --------------------------------------------------------------------
@@ -100,7 +100,7 @@ public class AutonFar extends LinearOpMode {
                     ),
                     new SequentialAction(
                             new SleepAction(2),
-                            robot.low(200)
+                            robot.low()
                     )
                 )
             );
@@ -115,9 +115,9 @@ public class AutonFar extends LinearOpMode {
                                     splineStraight
                             ),
                             new SequentialAction(
-                                    robot.home(1),
+                                    robot.home(),
                                     new SleepAction(2),
-                                    robot.low(200)
+                                    robot.low()
 
                             )
                     )
