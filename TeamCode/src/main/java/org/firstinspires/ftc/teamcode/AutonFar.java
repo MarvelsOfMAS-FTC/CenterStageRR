@@ -19,9 +19,9 @@ public class AutonFar extends LinearOpMode {
     public boolean grabStack = true; //grabstack means robot will go pick up 2 pixels and deposit
 
     //START POS
-    double startposx = 0;
-    double startposy = 0;
-    double startheading = Math.toRadians(0);
+    double startposx = -36;
+    double startposy = 72;
+    double startheading = Math.toRadians(90);
 
     //TAG POS
     double tagposx=0;
@@ -75,19 +75,21 @@ public class AutonFar extends LinearOpMode {
 
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
-                tagheading = 0;
+                tagheading = Math.toRadians(100);
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
-                tagheading= 90;
+                tagheading= Math.toRadians(130);
             } else {
-                tagheading= -90;
+                tagheading= Math.toRadians(60);
             }
 
             //ROADRUNNER TRAJECTORIES BUILD
             Action strafeLeft = drive.actionBuilder(drive.pose)
-                    .afterTime(1, robot.low())
-                    .afterTime(3, robot.home())
-                    .lineToX(-24)
-                    .turn(Math.toRadians(90))
+                    .afterTime(0, robot.spikeExtend())
+                    .afterTime(1, robot.spikeScore())
+                    .afterTime(1.25, robot.fingerHome())
+                    .afterTime(1.75, robot.home())
+
+                    .lineToYLinearHeading(54, tagheading)
                     .waitSeconds(5)
                     .endTrajectory()
                     .build();
