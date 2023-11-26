@@ -71,10 +71,6 @@ public class BaseRobotMethods{
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        //reverse drivetrain motors
-        fr.setDirection(DcMotorEx.Direction.REVERSE);
-        br.setDirection(DcMotorEx.Direction.REVERSE);
-
         extend.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         extend.setTargetPosition(0);
         extend.setPower(0.0);
@@ -265,20 +261,17 @@ public class BaseRobotMethods{
     }
 
     public class Low implements Action { //(int extendTarget)
-        public Action init() {
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setTargetPosition(350);
             climbl.setTargetPosition(260);
             climbr.setTargetPosition(260);
             score.setPosition(0.4);
-            return new Low();
-        }
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             return false;
         }
     }
     public Action low(){
-        return new Low().init();
+        return new Low();
     }
 
     public class Mid implements Action{ //(int extendTarget)
