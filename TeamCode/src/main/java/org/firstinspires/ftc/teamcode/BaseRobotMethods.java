@@ -142,27 +142,24 @@ public class BaseRobotMethods{
 
 
     public class Home implements Action{ //(double power)
-        public Action init() {
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setTargetPosition(0);
             climbl.setTargetPosition(5);
             climbr.setTargetPosition(5);
             score.setPosition(scoreHome);
             finger.setPosition(0.84);
-            return new Home();
-        }
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             return false;
         }
 
     }
     public Action home(){
-        return new Home().init();
+        return new Home();
     }
 
     public class IntakeGround implements Action{
-
-        public Action init(){
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             elbowl.setPosition(0.59);//  INTAKE DOWN and TURN ON
             elbowr.setPosition(0.55);
             wrist.setPosition(0.3);
@@ -170,20 +167,16 @@ public class BaseRobotMethods{
             intake.setPower(-1.0); //turn intake on full speed
 
             passiveIntake = true;
-            return new IntakeGround();
-        }
-
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             return false;
         }
     }
     public Action intakeGround() {
-        return new IntakeGround().init();
+        return new IntakeGround();
     }
 
     public class Transfer implements Action{
-        public Action init(){
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             while(!elevatorLimit.isPressed())
             {
                 extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -196,68 +189,54 @@ public class BaseRobotMethods{
             extend.setTargetPosition(0);
             extend.setPower(1.0);
             extend.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            return new Transfer();
-        }
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             return false;
         }
-
-        //wait until elevator limit switch is pressed
-
     }
-    public Action transfer(){return new Transfer().init();}
+    public Action transfer(){return new Transfer();}
+    //wait until elevator limit switch is pressed
+
 
     public class IntakeUp implements Action{
-        public Action init(){
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             elbowl.setPosition(0.29 + elbowHome);
             elbowr.setPosition(0.25 + elbowHome);
             wrist.setPosition(0.725);
-            return new IntakeUp();
-        }
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             return false;
         }
 
     }
-    public Action intakeUp(){return new IntakeUp().init();}
+    public Action intakeUp(){return new IntakeUp();}
 
     public class SpikeExtend implements Action {
-        public Action init(int extendTicks) {
-            extend.setTargetPosition(extendTicks);
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            extend.setTargetPosition(300);
             while (extend.isBusy()) {
                 finger.setPosition(0.00007 * extend.getCurrentPosition() + 0.37);
             }
-            return new SpikeExtend();
-        }
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             return false;
         }
         // (int extendticks)
     }
-    public Action spikeExtend( int extendticks){
-        return new SpikeExtend().init(extendticks);
+    public Action spikeExtend(){
+        return new SpikeExtend();
     }
 
     public class ScoreSpike implements Action{
-        public Action init() {
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             climbl.setTargetPosition(200);
             climbr.setTargetPosition(200);
             new SleepAction(0.2);
             finger.setPosition(0.84);
-
-            return new ScoreSpike();
-        }
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             return false;
         }
 
     }
     public Action scoreSpike(){
-        return new ScoreSpike().init();
+        return new ScoreSpike();
     }
 
     public class Low implements Action { //(int extendTarget)
@@ -275,22 +254,19 @@ public class BaseRobotMethods{
     }
 
     public class Mid implements Action{ //(int extendTarget)
-        public Action init() {
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setTargetPosition(450);
             climbl.setTargetPosition(525);
             climbr.setTargetPosition(525);
             score.setPosition(0.34);
-            return new Mid();
-        }
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             return false;
         }
 
 
     }
     public Action mid(){
-        return new Mid().init();
+        return new Mid();
     }
 
 
