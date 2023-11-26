@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -22,7 +21,7 @@ public class AutonFar extends LinearOpMode {
     //START POS
     double startposx = 0;
     double startposy = 0;
-    double startheading = Math.toRadians(90);
+    double startheading = Math.toRadians(0);
 
     //TAG POS
     double tagposx=0;
@@ -32,20 +31,15 @@ public class AutonFar extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         //ROBOT INITIALIZATION ---------------------------------------------------------------------
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(startposx, startposy, startheading));
         BaseRobotMethods robot = new BaseRobotMethods(hardwareMap);
         robot.telemetry = this.telemetry;
         robot.parent = this;
 
-        //INIT POSITIONS
-        robot.home();
-        robot.finger.setPosition(0.37);
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(startposx, startposy, startheading));
 
         //CAMERA INITIALIZATION --------------------------------------------------------------------
         telemetry.addData("Placement: ", robot.visionProcessor.getSelection());
         telemetry.update();
-        robot.climbl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.climbr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         //WAIT FOR START CODE ----------------------------------------------------------------------
         while (!opModeIsActive() && !isStopRequested())
@@ -90,38 +84,33 @@ public class AutonFar extends LinearOpMode {
 
             //ROADRUNNER TRAJECTORIES BUILD
             Action strafeLeft = drive.actionBuilder(drive.pose)
-                    .strafeTo(new Vector2d(24,0))
+                    .afterTime(1, robot.low())
+                    .afterTime(3, robot.home())
+                    .lineToX(-24)
                     .turn(Math.toRadians(90))
+                    .waitSeconds(5)
+                    .endTrajectory()
                     .build();
 
-            Actions.runBlocking(new SequentialAction(
-                    new ParallelAction(
-                            strafeLeft
-                    ),
-                    new SequentialAction(
-                            new SleepAction(2),
-                            robot.low()
-                    )
-                )
-            );
+            Actions.runBlocking(strafeLeft);
 
-            drive.updatePoseEstimate();
-            Action splineStraight = drive.actionBuilder(drive.pose)
-                    .splineTo(new Vector2d(48,48),90)
-                    .build();
-
-            Actions.runBlocking(new SequentialAction(
-                            new ParallelAction(
-                                    splineStraight
-                            ),
-                            new SequentialAction(
-                                    robot.home(),
-                                    new SleepAction(2),
-                                    robot.low()
-
-                            )
-                    )
-            );
+//            drive.updatePoseEstimate();
+//            Action splineStraight = drive.actionBuilder(drive.pose)
+//                    .splineTo(new Vector2d(48,48),90)
+//                    .build();
+//
+//            Actions.runBlocking(new SequentialAction(
+//                            new ParallelAction(
+//                                    splineStraight
+//                            ),
+//                            new SequentialAction(
+//                                    robot.home(1),
+//                                    new SleepAction(2),
+//                                    robot.low(200)
+//
+//                            )
+//                    )
+//            );
 
             break;
         }
