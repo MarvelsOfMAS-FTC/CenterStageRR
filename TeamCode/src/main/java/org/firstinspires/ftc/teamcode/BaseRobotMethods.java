@@ -38,7 +38,7 @@ public class BaseRobotMethods{
     private VisionPortal visionPortalApril;
 
     DcMotorEx intake, climbl, climbr, extend, fl, fr, bl, br;
-    Servo wrist, elbowl, elbowr, lhook, rhook, score, finger;
+    Servo wrist, elbowl, elbowr, lhook, rhook, score, finger, droneLaunch;
     private ElapsedTime runtime = new ElapsedTime();
     boolean passiveIntake = false;
     TouchSensor elevatorLimit;
@@ -58,12 +58,10 @@ public class BaseRobotMethods{
     public BaseRobotMethods(HardwareMap hardwareMap) {
 
         //MOTORS INIT
-        elevatorLimit = hardwareMap.get(TouchSensor.class, "elevatorLimit");
         intake = hardwareMap.get(DcMotorEx.class, "intake");
         climbl = hardwareMap.get(DcMotorEx.class, "lclimb");
         climbr = hardwareMap.get(DcMotorEx.class, "rclimb");
         extend = hardwareMap.get(DcMotorEx.class, "extend");
-
         fl = hardwareMap.get(DcMotorEx.class, "lf");
         fr = hardwareMap.get(DcMotorEx.class, "rf");
         bl = hardwareMap.get(DcMotorEx.class, "lb");
@@ -72,23 +70,54 @@ public class BaseRobotMethods{
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         climbl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         climbr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        climbl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        climbr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         extend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        //SERVOS INIT
+        //reverse drivetrain motors
+        fr.setDirection(DcMotorEx.Direction.REVERSE);
+        br.setDirection(DcMotorEx.Direction.REVERSE);
+
+        extend.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        extend.setTargetPosition(0);
+        extend.setPower(0.0);
+        extend.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        extend.setTargetPosition(0); //it doesn't crash when we keep this in so idk
+        extend.setVelocityPIDFCoefficients(25.0,0.0,0.0,0.0);
+        extend.setPositionPIDFCoefficients(25.0);
+        extend.setPower(1.0);
+
+        climbl.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        climbr.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        climbl.setPower(0.0);
+        climbr.setPower(0.0);
+        climbl.setTargetPosition(0);
+        climbr.setTargetPosition(0);
+        climbl.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        climbr.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        climbl.setPower(1.0);
+        climbr.setPower(1.0);
+
         elbowl = hardwareMap.get(Servo.class, "larm");
         elbowr = hardwareMap.get(Servo.class, "rarm");
         wrist = hardwareMap.get(Servo.class, "wrist");
         lhook = hardwareMap.get(Servo.class, "lhook");
         rhook = hardwareMap.get(Servo.class, "rhook");
         score = hardwareMap.get(Servo.class, "score");
+        droneLaunch = hardwareMap.get(Servo.class, "launch");
         finger = hardwareMap.get(Servo.class, "finger");
+
+        droneLaunch.setPosition(0.4);
+        score.setPosition(scoreHome);
+
+        //set the intake to starting position
+        elbowl.setPosition(0.29 + elbowHome);
+        elbowr.setPosition(0.25 + elbowHome);
+        wrist.setPosition(0.725);
+
+        elevatorLimit = hardwareMap.get(TouchSensor.class, "elevatorLimit");
 
         //CAMERA INIT
         visionProcessor = new FirstVisionProcessor();
@@ -100,7 +129,7 @@ public class BaseRobotMethods{
         visionPortal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "webcamback"))
                 .addProcessor(visionProcessor)
-                .setCameraResolution(new Size(640, 360)) // 544 288
+                .setCameraResolution(new Size(864, 480)) // 544 288
                 .setStreamFormat(VisionPortal.StreamFormat.YUY2)
                 .setAutoStopLiveView(true)
                 .build();
@@ -151,34 +180,13 @@ public class BaseRobotMethods{
         br.setPower(0);
     }
 
-    public void initPos(){
-        score.setPosition(scoreHome);
-        elbowl.setPosition(0.29 + elbowHome);//  INTAKE UP // Transfer
-        elbowr.setPosition(0.25 + elbowHome);
-    }
 
     public class Home implements Action{ //(double power)
         public Action init(double power) {
-            while(!elevatorLimit.isPressed())
-            {
-                extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                extend.setPower(-0.5);//set 50% speed elevator in
-            }
-
-            extend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            extend.setPower(0);
-            climbl.setTargetPosition(0);
-            climbr.setTargetPosition(0);
-            score.setPosition(0.93);
-            climbl.setPower(power);
-            climbr.setPower(power);
-            climbl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            climbr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            new SleepAction(0.35);
-            climbl.setPower(0);
-            climbr.setPower(0);
-            elbowl.setPosition(0.58 - elbowHome);//  INTAKE UP // Transfer
-            elbowr.setPosition(0.36 + elbowHome);
+            extend.setTargetPosition(0);
+            climbl.setTargetPosition(5);
+            climbr.setTargetPosition(5);
+            score.setPosition(scoreHome);
             return new Home();
         }
         @Override
@@ -213,8 +221,6 @@ public class BaseRobotMethods{
         return new GroundWrist().init();
     }
 
-
-
     public class Transfer implements Action{
         public Action init(){
             while(!elevatorLimit.isPressed())
@@ -224,7 +230,6 @@ public class BaseRobotMethods{
             }
             //then transfer and reset elevator encoder
             intake.setPower(0.75);
-
 
             extend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             extend.setTargetPosition(0);
@@ -269,9 +274,9 @@ public class BaseRobotMethods{
 
     public class IntakeUp implements Action{
         public Action init(){
-            elbowl.setPosition(.32);//  INTAKE UP // Transfer
-            elbowr.setPosition(.28);
-            wrist.setPosition(0.4);
+            elbowl.setPosition(0.29 + elbowHome);
+            elbowr.setPosition(0.25 + elbowHome);
+            wrist.setPosition(0.725);
             return new IntakeUp();
         }
         @Override
