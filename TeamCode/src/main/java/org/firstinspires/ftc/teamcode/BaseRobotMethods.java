@@ -265,7 +265,9 @@ public class BaseRobotMethods{
             if (autoAim) {
 
                 headingError = orientation.getYaw(AngleUnit.DEGREES) - headingStart;
-                //double  xError        = desiredTag.ftcPose.yaw;
+
+                xPosition = (trackLocation-2)*3.8;
+
                 double aprilTagXError = -(aprilTagX - xPosition);
 
                 if (aprilTagY < 26 && extend.getCurrentPosition() > 200) {
