@@ -266,7 +266,7 @@ public class BaseRobotMethods{
 
                 headingError = orientation.getYaw(AngleUnit.DEGREES) - headingStart;
 
-                xPosition = (trackLocation-2)*3.8;
+                xPosition = (trackLocation-2)*6;
 
                 double aprilTagXError = -(aprilTagX - xPosition);
 
