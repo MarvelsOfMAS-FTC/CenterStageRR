@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous
-public class FarPreload extends LinearOpMode {
+public class FarPreloadRed extends LinearOpMode {
     //VARIABLES---------------------------------------------------------------------------------------------------------------
     public String side = "None";
     public String placement = "None"; //this is the variable for which spot the robot should score
@@ -15,11 +15,11 @@ public class FarPreload extends LinearOpMode {
 
     //START POS
     double startposx = -36;
-    double startposy = 72;
-    double startheading = Math.toRadians(90);
+    double startposy = -72;
+    double startheading = Math.toRadians(270);
 
     //TAG POS
-    double tagheading = Math.toRadians(90);
+    double tagheading = Math.toRadians(270);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -79,20 +79,20 @@ public class FarPreload extends LinearOpMode {
             //SCORE SPIKE MARK PIXEL & DRIVE TO BACKDROP
             Action spikeMark = drive.actionBuilder(drive.pose)
                     //SCORE MARK PIXEL
-                    .afterTime(0, robot.spikeExtend())
-                    .afterTime(1, robot.spikeScore())
-                    .afterTime(1.25, robot.fingerHome())
-                    .afterTime(1.5, robot.home())
+//                    .afterTime(0, robot.spikeExtend())
+//                    .afterTime(1, robot.spikeScore())
+//                    .afterTime(1.25, robot.fingerHome())
+//                    .afterTime(1.5, robot.home())
 
                     //PREPARE BACKDROP PIXEL
-                    .afterTime(3, robot.low())
+                    //.afterTime(6, robot.low())
 
                     //THE HEADING IS CONTROLLED BY THE VISION CODE
-                    .lineToYLinearHeading(55, tagheading)
+                    .lineToYLinearHeading(-55, tagheading)
                     .waitSeconds(0.5)
-                    .splineToLinearHeading(new Pose2d(-36, 6, Math.toRadians(180)), Math.toRadians(tagheading))
-                    .splineToLinearHeading(new Pose2d(12, 6, Math.toRadians(180)), Math.toRadians(tagheading))
-                    .splineToLinearHeading(new Pose2d(36, 38, Math.toRadians(180)), Math.toRadians(tagheading))
+                    .splineToLinearHeading(new Pose2d(-36, -6, Math.toRadians(180)), Math.toRadians(tagheading))
+                    .splineToLinearHeading(new Pose2d(12, -6, Math.toRadians(180)), Math.toRadians(tagheading))
+                    .splineToLinearHeading(new Pose2d(36, -38, Math.toRadians(180)), Math.toRadians(tagheading))
                     .build();
 
             Actions.runBlocking(spikeMark);
