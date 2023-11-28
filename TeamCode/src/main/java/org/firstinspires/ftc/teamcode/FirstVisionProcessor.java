@@ -13,9 +13,9 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 public class FirstVisionProcessor implements VisionProcessor {
-  public Rect rectLeft = new Rect((int)(115/1.35), 200, 60, 60);
-  public Rect rectMiddle = new Rect((int)(375/1.35), 200, 60, 60);
-  public Rect rectRight = new Rect((int)(620/1.35), 200, 60, 60);
+  public Rect rectLeft = new Rect(180, 30, 60, 60);
+  public Rect rectMiddle = new Rect(400, 30, 60, 60);
+  public Rect rectRight = new Rect(700, 30, 60, 60);
   Selected selection = Selected.NONE;
 
   Mat submat = new Mat();
@@ -57,7 +57,7 @@ public class FirstVisionProcessor implements VisionProcessor {
 
   @Override
   public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight,
-    float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
+                          float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
     Paint selectedPaint = new Paint();
     selectedPaint.setColor(Color.RED);
     selectedPaint.setStyle(Paint.Style.STROKE);
@@ -67,35 +67,35 @@ public class FirstVisionProcessor implements VisionProcessor {
     nonSelectedPaint.setColor(Color.GREEN);
 
     android.graphics.Rect drawRectangleLeft = makeGraphicsRect(rectLeft,
-      scaleBmpPxToCanvasPx);
+            scaleBmpPxToCanvasPx);
     android.graphics.Rect drawRectangleMiddle = makeGraphicsRect(rectMiddle,
-      scaleBmpPxToCanvasPx);
+            scaleBmpPxToCanvasPx);
     android.graphics.Rect drawRectangleRight = makeGraphicsRect(rectRight,
-      scaleBmpPxToCanvasPx);
+            scaleBmpPxToCanvasPx);
 
     selection = (Selected) userContext;
     switch (selection) {
-    case LEFT:
-      canvas.drawRect(drawRectangleLeft, selectedPaint);
-      canvas.drawRect(drawRectangleMiddle, nonSelectedPaint);
-      canvas.drawRect(drawRectangleRight, nonSelectedPaint);
-      break;
-    case MIDDLE:
-      canvas.drawRect(drawRectangleLeft, nonSelectedPaint);
-      canvas.drawRect(drawRectangleMiddle, selectedPaint);
-      canvas.drawRect(drawRectangleRight, nonSelectedPaint);
-      break;
-    case RIGHT:
-      canvas.drawRect(drawRectangleLeft, nonSelectedPaint);
-      canvas.drawRect(drawRectangleMiddle, nonSelectedPaint);
-      canvas.drawRect(drawRectangleRight, selectedPaint);
-      break;
-    case NONE:
-      canvas.drawRect(drawRectangleLeft, nonSelectedPaint);
+      case LEFT:
+        canvas.drawRect(drawRectangleLeft, selectedPaint);
+        canvas.drawRect(drawRectangleMiddle, nonSelectedPaint);
+        canvas.drawRect(drawRectangleRight, nonSelectedPaint);
+        break;
+      case MIDDLE:
+        canvas.drawRect(drawRectangleLeft, nonSelectedPaint);
+        canvas.drawRect(drawRectangleMiddle, selectedPaint);
+        canvas.drawRect(drawRectangleRight, nonSelectedPaint);
+        break;
+      case RIGHT:
+        canvas.drawRect(drawRectangleLeft, nonSelectedPaint);
+        canvas.drawRect(drawRectangleMiddle, nonSelectedPaint);
+        canvas.drawRect(drawRectangleRight, selectedPaint);
+        break;
+      case NONE:
+        canvas.drawRect(drawRectangleLeft, nonSelectedPaint);
 
-      canvas.drawRect(drawRectangleMiddle, nonSelectedPaint);
-      canvas.drawRect(drawRectangleRight, nonSelectedPaint);
-      break;
+        canvas.drawRect(drawRectangleMiddle, nonSelectedPaint);
+        canvas.drawRect(drawRectangleRight, nonSelectedPaint);
+        break;
     }
   }
 
