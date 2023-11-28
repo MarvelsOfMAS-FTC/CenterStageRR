@@ -78,10 +78,10 @@ public class AutonClose extends LinearOpMode {
                 tagheading = Math.toRadians(100);
                 tagoffset = 0;
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
-                tagheading = Math.toRadians(130); //130
+                tagheading = Math.toRadians(125); //130
                 tagoffset = 4;
             } else {
-                tagheading = Math.toRadians(60); //60
+                tagheading = Math.toRadians(75); //60
                 tagoffset = -4;
             }
 
