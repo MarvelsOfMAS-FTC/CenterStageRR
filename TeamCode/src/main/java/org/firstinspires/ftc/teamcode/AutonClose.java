@@ -24,7 +24,8 @@ public class AutonClose extends LinearOpMode {
     double startheading = Math.toRadians(90);
 
     //TAG POS
-    double tagheading = Math.toRadians(90);
+    double tagheading = Math.toRadians(100);
+    double tagoffset = 0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -75,10 +76,13 @@ public class AutonClose extends LinearOpMode {
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagheading = Math.toRadians(100);
+                tagoffset = 0;
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
-                tagheading = Math.toRadians(100); //130
+                tagheading = Math.toRadians(130); //130
+                tagoffset = -4;
             } else {
-                tagheading = Math.toRadians(100); //60
+                tagheading = Math.toRadians(60); //60
+                tagoffset = 4;
             }
 
             //SCORE SPIKE MARK PIXEL & DRIVE TO BACKDROP
@@ -95,7 +99,7 @@ public class AutonClose extends LinearOpMode {
                     //THE HEADING IS CONTROLLED BY THE VISION CODE
                     .lineToYLinearHeading(55, tagheading)
                     .waitSeconds(0.5)
-                    .splineToLinearHeading(new Pose2d(36, 38, Math.toRadians(180)), Math.toRadians(tagheading))
+                    .splineToLinearHeading(new Pose2d(36, 38 + tagoffset, Math.toRadians(180)), Math.toRadians(tagheading))
                     .build();
 
             Actions.runBlocking(spikeMark);
@@ -108,6 +112,7 @@ public class AutonClose extends LinearOpMode {
 
                     //PUSH INTO BACKDROP & SCORE
                     .lineToX(44)
+                    .strafeToConstantHeading(new Vector2d(36,38-tagoffset))
                     .build();
 
             Actions.runBlocking(backDrop);
