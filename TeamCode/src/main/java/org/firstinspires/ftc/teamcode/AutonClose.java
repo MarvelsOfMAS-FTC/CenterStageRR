@@ -118,14 +118,15 @@ public class AutonClose extends LinearOpMode {
                     //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
                     .afterTime(0, robot.home())
                     .afterTime(1.75, robot.intakeLevel5())
-                    .afterTime(2.75, robot.intakeUp())
-                    .afterTime(3.5, robot.transfer())
-                    .afterTime(5.5, robot.mid())
+                    .afterTime(3.25, robot.intakeUp())
+                    .afterTime(4, robot.transfer())
+                    .afterTime(5, robot.mid())
 
                     //GOTO STACK AND RETURN
-                    .lineToXLinearHeading(-53, Math.toRadians(178))
+                    .lineToX(-55)
+                    .waitSeconds(0.75)
+                    .lineToX(42)
                     .waitSeconds(0.5)
-                    .lineToXLinearHeading(44, Math.toRadians(180))
                     .build();
 
             Actions.runBlocking(cyclePixel);
@@ -133,23 +134,41 @@ public class AutonClose extends LinearOpMode {
 
             Action cyclePixel1 = drive.actionBuilder(drive.pose)
                     //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
-                    .afterTime(0, robot.home())
+                    .afterTime(0.5, robot.home())
                     .afterTime(1.75, robot.intakeGround())
-                    .afterTime(2.75, robot.intakeUp())
-                    .afterTime(3.5, robot.transfer())
-                    .afterTime(5.5, robot.mid())
+                    .afterTime(3.25, robot.intakeUp())
+                    .afterTime(4, robot.transfer())
+                    .afterTime(5, robot.mid())
 
                     //GOTO STACK AND RETURN
-                    .lineToXLinearHeading(-55, Math.toRadians(176))
+                    .lineToX(-55)
+                    .waitSeconds(0.75)
+                    .lineToX(42)
                     .waitSeconds(0.5)
-                    .lineToXLinearHeading(44, Math.toRadians(180))
                     .build();
 
             Actions.runBlocking(cyclePixel1);
             drive.updatePoseEstimate();
+
+            Action cyclePixel2 = drive.actionBuilder(drive.pose)
+                    //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
+                    .afterTime(0.5, robot.home())
+                    .afterTime(1.75, robot.intakeGround())
+                    .afterTime(3.25, robot.intakeUp())
+                    .afterTime(4, robot.transfer())
+                    .afterTime(5, robot.mid())
+                    .afterTime(7, robot.home())
+
+                    //GOTO STACK AND RETURN
+                    .lineToX(-55)
+                    .waitSeconds(0.75)
+                    .lineToX(42)
+                    .waitSeconds(0.5)
+                    .build();
+
+            Actions.runBlocking(cyclePixel2);
+            drive.updatePoseEstimate();
             break;
         }
     }
-
 }
-
