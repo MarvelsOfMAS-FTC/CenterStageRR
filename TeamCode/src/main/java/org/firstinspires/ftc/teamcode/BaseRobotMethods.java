@@ -105,9 +105,9 @@ public class BaseRobotMethods{
         score.setPosition(scoreHome);
 
         //set the intake to starting position
-        elbowl.setPosition(0.29 + elbowHome);
-        elbowr.setPosition(0.25 + elbowHome);
-        wrist.setPosition(0.725);
+        elbowl.setPosition(0.345 + elbowHome);
+        elbowr.setPosition(0.305 + elbowHome);
+        wrist.setPosition(0.766);
         finger.setPosition(0.46);
 
         elevatorLimit = hardwareMap.get(TouchSensor.class, "elevatorLimit");
@@ -162,9 +162,9 @@ public class BaseRobotMethods{
     public class IntakeGround implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            elbowl.setPosition(0.5973);//  INTAKE DOWN and TURN ON
-            elbowr.setPosition(0.5574);
-            wrist.setPosition(0.32);
+            elbowl.setPosition(0.589);//  INTAKE DOWN and TURN ON
+            elbowr.setPosition(0.5496);
+            wrist.setPosition(0.31);
 
             intake.setPower(-1.0); //turn intake on full speed
 
@@ -212,15 +212,15 @@ public class BaseRobotMethods{
         }
     }
     public Action transfer(){return new Transfer();}
-    //wait until elevator limit switch is pressed
+    //wait until elevator limit switch is pressed'
 
 
     public class IntakeUp implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            elbowl.setPosition(0.34122 + elbowHome);
-            elbowr.setPosition(0.30122 + elbowHome);
-            wrist.setPosition(0.744);
+            elbowl.setPosition(0.345 + elbowHome);
+            elbowr.setPosition(0.305 + elbowHome);
+            wrist.setPosition(0.766);
             return false;
         }
 
