@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.variable.VariableType;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -10,13 +11,15 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
+import java.util.concurrent.TimeUnit;
 
 @Autonomous
 public class AutonClose extends LinearOpMode {
     //VARIABLES---------------------------------------------------------------------------------------------------------------
     public String side = "None";
     public String placement = "None"; //this is the variable for which spot the robot should score
-    public boolean grabStack = true; //grabstack means robot will go pick up 2 pixels and deposit
 
     //START POS
     double startposx = 12;
@@ -26,6 +29,8 @@ public class AutonClose extends LinearOpMode {
     //TAG POS
     double tagheading = Math.toRadians(100);
     double tagoffset = 0;
+    ElapsedTime consoletime = new ElapsedTime();
+    public final String PREFIX= "["+consoletime.now(TimeUnit.SECONDS)+"]";
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -51,39 +56,39 @@ public class AutonClose extends LinearOpMode {
                 side = "Red";
             }
 
-            //determine if we should grab the stack
-            if(gamepad1.a) {
-                grabStack = true;
-            } else if(gamepad1.y) {
-                grabStack = false;
-            }
+
 
             telemetry.addData("--Frostbite Close Auto--",true);
             telemetry.addData("Placement: ", robot.visionProcessor.getSelection());
             telemetry.addData("Side: ", side);
-            telemetry.addData("GrabStack?: ", grabStack);
-
+            telemetry.addData("Position Estimate",drive.updatePoseEstimate());
             telemetry.addData("Press X for Blue Side",true);
             telemetry.addData("Press B for Red Side",true);
-            telemetry.addData("Press A for Grabbing Stack",true);
-            telemetry.addData("Press Y for NOT Grabbing Stack",true);
             telemetry.update();
         }
 
+
         //EXECUTE ACTIONS -----------------------------------------------------------------
         while (opModeIsActive() && !isStopRequested()) {
+            telemetry.addLine("----------- Console Logger V1.0 -----------");
+            telemetry.addData(PREFIX,"Running!");
+            telemetry.update();
 
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagheading = Math.toRadians(100);
                 tagoffset = 0;
+                telemetry.addData(PREFIX,"Found Middle setting tag heading and offset!");
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagheading = Math.toRadians(125); //130
                 tagoffset = 4;
+                telemetry.addData(PREFIX,"Found Left setting tag heading and offset!");
             } else {
                 tagheading = Math.toRadians(75); //60
                 tagoffset = -4;
+                telemetry.addData(PREFIX,"Found Right setting tag heading and offset!");
             }
+            telemetry.addData(PREFIX,"Done With Camera Loading spike Traj");
 
             //SCORE SPIKE MARK PIXEL & DRIVE TO BACKDROP
             Action spikeMark = drive.actionBuilder(drive.pose)
@@ -103,7 +108,10 @@ public class AutonClose extends LinearOpMode {
                     .build();
 
             Actions.runBlocking(spikeMark);
+            telemetry.addData(PREFIX,"Running spike traj");
             drive.updatePoseEstimate();
+            telemetry.addData(PREFIX,"Updating Drive Pos Estimate");
+            telemetry.addData(PREFIX,"Loading backDrop Traj");
 
             //SCORE BACKDROP PIXEL
             Action backDrop = drive.actionBuilder(drive.pose)
@@ -114,9 +122,11 @@ public class AutonClose extends LinearOpMode {
                     .lineToX(44)
                     .strafeToConstantHeading(new Vector2d(36,38-tagoffset))
                     .build();
-
+            telemetry.addData(PREFIX,"Running backdrop traj");
             Actions.runBlocking(backDrop);
             drive.updatePoseEstimate();
+            telemetry.addData(PREFIX,"Updating Drive Pos Estimate");
+            telemetry.addData(PREFIX,"Loading cyclePixel traj");
 
             //CYCLE PIXEL STACK
             Action cyclePixel = drive.actionBuilder(drive.pose)
@@ -133,9 +143,10 @@ public class AutonClose extends LinearOpMode {
                     .lineToX(42)
                     .waitSeconds(0.5)
                     .build();
-
+            telemetry.addData(PREFIX,"Running cyclePixel traj");
             Actions.runBlocking(cyclePixel);
             drive.updatePoseEstimate();
+            telemetry.addData(PREFIX,"Updating Drive Pos Estimate");
 
             Action cyclePixel1 = drive.actionBuilder(drive.pose)
                     //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
@@ -151,9 +162,10 @@ public class AutonClose extends LinearOpMode {
                     .lineToX(42)
                     .waitSeconds(0.5)
                     .build();
-
+            telemetry.addData(PREFIX,"Running cyclePixel1 traj");
             Actions.runBlocking(cyclePixel1);
             drive.updatePoseEstimate();
+            telemetry.addData(PREFIX,"Updating Drive Pos Estimate");
 
             Action cyclePixel2 = drive.actionBuilder(drive.pose)
                     //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
@@ -170,9 +182,14 @@ public class AutonClose extends LinearOpMode {
                     .lineToX(42)
                     .waitSeconds(2)
                     .build();
+            telemetry.addData(PREFIX,"Running cyclePixel2 traj");
 
             Actions.runBlocking(cyclePixel2);
             drive.updatePoseEstimate();
+            telemetry.addData(PREFIX,"Updating Drive Pos Estimate");
+            double timeleft = 30 - consoletime.now(TimeUnit.SECONDS);
+            telemetry.addData(PREFIX,"Done Auton! With "+timeleft+" Left");
+
             break;
         }
     }
