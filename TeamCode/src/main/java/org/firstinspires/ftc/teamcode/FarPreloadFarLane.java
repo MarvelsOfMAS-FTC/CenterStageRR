@@ -1,18 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous
-public class AutonFarNoah extends LinearOpMode {
+public class FarPreloadFarLane extends LinearOpMode {
     //VARIABLES---------------------------------------------------------------------------------------------------------------
     public String side = "None";
     public String placement = "None"; //this is the variable for which spot the robot should score
@@ -95,7 +90,9 @@ public class AutonFarNoah extends LinearOpMode {
                     //THE HEADING IS CONTROLLED BY THE VISION CODE
                     .lineToYLinearHeading(55, tagheading)
                     .waitSeconds(0.5)
-                    .splineToLinearHeading(new Pose2d(36, 12, Math.toRadians(180)), Math.toRadians(tagheading))
+                    .splineToLinearHeading(new Pose2d(-36, 6, Math.toRadians(180)), Math.toRadians(tagheading))
+                    .splineToLinearHeading(new Pose2d(12, 6, Math.toRadians(180)), Math.toRadians(tagheading))
+                    .splineToLinearHeading(new Pose2d(36, 38, Math.toRadians(180)), Math.toRadians(tagheading))
                     .build();
 
             Actions.runBlocking(spikeMark);
