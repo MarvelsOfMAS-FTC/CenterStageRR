@@ -6,8 +6,7 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Autonomous
-public class FarPreloadFarLane extends LinearOpMode {
+public class FarPreloadMidLane extends LinearOpMode {
     //VARIABLES---------------------------------------------------------------------------------------------------------------
     public String side = "None";
     public String placement = "None"; //this is the variable for which spot the robot should score
@@ -85,13 +84,15 @@ public class FarPreloadFarLane extends LinearOpMode {
                     .afterTime(1.5, robot.home())
 
                     //PREPARE BACKDROP PIXEL
-                    .afterTime(3, robot.low())
+                    //.afterTime(3, robot.low())
 
                     //THE HEADING IS CONTROLLED BY THE VISION CODE
                     .lineToYLinearHeading(55, tagheading)
                     .waitSeconds(0.5)
-                    .splineToLinearHeading(new Pose2d(-36, 6, Math.toRadians(180)), Math.toRadians(tagheading))
-                    .splineToLinearHeading(new Pose2d(12, 6, Math.toRadians(180)), Math.toRadians(tagheading))
+                    .lineToYLinearHeading(47, tagheading)
+
+                    .splineToLinearHeading(new Pose2d(-36, 38, Math.toRadians(180)), Math.toRadians(tagheading))
+                  //  .splineToLinearHeading(new Pose2d(12, 38, Math.toRadians(180)), Math.toRadians(tagheading))
                     .splineToLinearHeading(new Pose2d(36, 38, Math.toRadians(180)), Math.toRadians(tagheading))
                     .build();
 
