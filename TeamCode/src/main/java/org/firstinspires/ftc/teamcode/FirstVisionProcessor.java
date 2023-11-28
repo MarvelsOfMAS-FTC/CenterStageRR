@@ -13,9 +13,9 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 public class FirstVisionProcessor implements VisionProcessor {
-  public Rect rectLeft = new Rect(0, 30, 60, 60);
-  public Rect rectMiddle = new Rect(240, 35, 60, 60);
-  public Rect rectRight = new Rect(480, 40, 60, 60);
+  public Rect rectLeft = new Rect(180, 30, 60, 60);
+  public Rect rectMiddle = new Rect(630, 30, 60, 60);
+  public Rect rectRight = new Rect(864, 40, 60, 60);
   Selected selection = Selected.NONE;
 
   Mat submat = new Mat();
