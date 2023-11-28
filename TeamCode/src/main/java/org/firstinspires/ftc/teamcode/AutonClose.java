@@ -163,7 +163,7 @@ public class AutonClose extends LinearOpMode {
                     .lineToX(-55)
                     .waitSeconds(0.75)
                     .lineToX(42)
-                    .waitSeconds(0.5)
+                    .waitSeconds(2)
                     .build();
 
             Actions.runBlocking(cyclePixel2);
