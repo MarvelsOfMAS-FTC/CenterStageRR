@@ -19,8 +19,6 @@ import java.util.concurrent.TimeUnit;
 public class AutonClose extends LinearOpMode {
     //VARIABLES---------------------------------------------------------------------------------------------------------------
     public String side = "None";
-    public String placement = "None"; //this is the variable for which spot the robot should score
-
     //START POS
     double startposx = 12;
     double startposy = 72;
@@ -90,116 +88,122 @@ public class AutonClose extends LinearOpMode {
             }
             telemetry.addData(PREFIX,"Done With Camera Loading spike Traj");
             telemetry.update();
+            if(side.equalsIgnoreCase("Blue")) {
+                //SCORE SPIKE MARK PIXEL & DRIVE TO BACKDROP
+                Action spikeMark = drive.actionBuilder(drive.pose)
+                        //SCORE MARK PIXEL
+                        .afterTime(0, robot.spikeExtend())
+                        .afterTime(1, robot.spikeScore())
+                        .afterTime(1.25, robot.fingerHome())
+                        .afterTime(1.5, robot.home())
 
-            //SCORE SPIKE MARK PIXEL & DRIVE TO BACKDROP
-            Action spikeMark = drive.actionBuilder(drive.pose)
-                    //SCORE MARK PIXEL
-                    .afterTime(0, robot.spikeExtend())
-                    .afterTime(1, robot.spikeScore())
-                    .afterTime(1.25, robot.fingerHome())
-                    .afterTime(1.5, robot.home())
+                        //PREPARE BACKDROP PIXEL
+                        .afterTime(3, robot.low())
 
-                    //PREPARE BACKDROP PIXEL
-                    .afterTime(3, robot.low())
+                        //THE HEADING IS CONTROLLED BY THE VISION CODE
+                        .lineToYLinearHeading(55, tagheading)
+                        .waitSeconds(0.5)
+                        .splineToLinearHeading(new Pose2d(36, 38 + tagoffset, Math.toRadians(180)), Math.toRadians(tagheading))
+                        .build();
 
-                    //THE HEADING IS CONTROLLED BY THE VISION CODE
-                    .lineToYLinearHeading(55, tagheading)
-                    .waitSeconds(0.5)
-                    .splineToLinearHeading(new Pose2d(36, 38 + tagoffset, Math.toRadians(180)), Math.toRadians(tagheading))
-                    .build();
+                Actions.runBlocking(spikeMark);
+                telemetry.addData(PREFIX, "Running spike traj");
+                telemetry.update();
+                drive.updatePoseEstimate();
+                telemetry.addData(PREFIX, "Updating Drive Pos Estimate");
+                telemetry.addData(PREFIX, "Loading backDrop Traj");
+                telemetry.update();
 
-            Actions.runBlocking(spikeMark);
-            telemetry.addData(PREFIX,"Running spike traj");
-            telemetry.update();
-            drive.updatePoseEstimate();
-            telemetry.addData(PREFIX,"Updating Drive Pos Estimate");
-            telemetry.addData(PREFIX,"Loading backDrop Traj");
-            telemetry.update();
+                //SCORE BACKDROP PIXEL
+                Action backDrop = drive.actionBuilder(drive.pose)
+                        //CLEAR PIXEL AFTER SCORING
+                        .afterTime(0.5, robot.mid())
 
-            //SCORE BACKDROP PIXEL
-            Action backDrop = drive.actionBuilder(drive.pose)
-                    //CLEAR PIXEL AFTER SCORING
-                    .afterTime(0.5, robot.mid())
+                        //PUSH INTO BACKDROP & SCORE
+                        .lineToX(44)
+                        .strafeToConstantHeading(new Vector2d(36, 38 - tagoffset))
+                        .build();
+                telemetry.addData(PREFIX, "Running backdrop traj");
+                telemetry.update();
+                Actions.runBlocking(backDrop);
+                drive.updatePoseEstimate();
+                telemetry.addData(PREFIX, "Updating Drive Pos Estimate");
+                telemetry.addData(PREFIX, "Loading cyclePixel traj");
+                telemetry.update();
 
-                    //PUSH INTO BACKDROP & SCORE
-                    .lineToX(44)
-                    .strafeToConstantHeading(new Vector2d(36,38-tagoffset))
-                    .build();
-            telemetry.addData(PREFIX,"Running backdrop traj");
-            telemetry.update();
-            Actions.runBlocking(backDrop);
-            drive.updatePoseEstimate();
-            telemetry.addData(PREFIX,"Updating Drive Pos Estimate");
-            telemetry.addData(PREFIX,"Loading cyclePixel traj");
-            telemetry.update();
+                //CYCLE PIXEL STACK
+                Action cyclePixel = drive.actionBuilder(drive.pose)
+                        //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
+                        .afterTime(0, robot.home())
+                        .afterTime(1.75, robot.intakeLevel5())
+                        .afterTime(3.25, robot.intakeUp())
+                        .afterTime(4, robot.transfer())
+                        .afterTime(5, robot.mid())
 
-            //CYCLE PIXEL STACK
-            Action cyclePixel = drive.actionBuilder(drive.pose)
-                    //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
-                    .afterTime(0, robot.home())
-                    .afterTime(1.75, robot.intakeLevel5())
-                    .afterTime(3.25, robot.intakeUp())
-                    .afterTime(4, robot.transfer())
-                    .afterTime(5, robot.mid())
+                        //GOTO STACK AND RETURN
+                        .lineToX(-55)
+                        .waitSeconds(0.75)
+                        .lineToX(42)
+                        .waitSeconds(0.5)
+                        .build();
+                telemetry.addData(PREFIX, "Running cyclePixel traj");
+                telemetry.update();
+                Actions.runBlocking(cyclePixel);
+                drive.updatePoseEstimate();
+                telemetry.addData(PREFIX, "Updating Drive Pos Estimate");
+                telemetry.update();
 
-                    //GOTO STACK AND RETURN
-                    .lineToX(-55)
-                    .waitSeconds(0.75)
-                    .lineToX(42)
-                    .waitSeconds(0.5)
-                    .build();
-            telemetry.addData(PREFIX,"Running cyclePixel traj");
-            telemetry.update();
-            Actions.runBlocking(cyclePixel);
-            drive.updatePoseEstimate();
-            telemetry.addData(PREFIX,"Updating Drive Pos Estimate");
-            telemetry.update();
+                Action cyclePixel1 = drive.actionBuilder(drive.pose)
+                        //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
+                        .afterTime(0.5, robot.home())
+                        .afterTime(1.75, robot.intakeGround())
+                        .afterTime(3.25, robot.intakeUp())
+                        .afterTime(4, robot.transfer())
+                        .afterTime(5, robot.mid())
 
-            Action cyclePixel1 = drive.actionBuilder(drive.pose)
-                    //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
-                    .afterTime(0.5, robot.home())
-                    .afterTime(1.75, robot.intakeGround())
-                    .afterTime(3.25, robot.intakeUp())
-                    .afterTime(4, robot.transfer())
-                    .afterTime(5, robot.mid())
+                        //GOTO STACK AND RETURN
+                        .lineToX(-55)
+                        .waitSeconds(0.75)
+                        .lineToX(42)
+                        .waitSeconds(0.5)
+                        .build();
+                telemetry.addData(PREFIX, "Running cyclePixel1 traj");
+                telemetry.update();
+                Actions.runBlocking(cyclePixel1);
+                drive.updatePoseEstimate();
+                telemetry.addData(PREFIX, "Updating Drive Pos Estimate");
+                telemetry.update();
 
-                    //GOTO STACK AND RETURN
-                    .lineToX(-55)
-                    .waitSeconds(0.75)
-                    .lineToX(42)
-                    .waitSeconds(0.5)
-                    .build();
-            telemetry.addData(PREFIX,"Running cyclePixel1 traj");
-            telemetry.update();
-            Actions.runBlocking(cyclePixel1);
-            drive.updatePoseEstimate();
-            telemetry.addData(PREFIX,"Updating Drive Pos Estimate");
-            telemetry.update();
+                Action cyclePixel2 = drive.actionBuilder(drive.pose)
+                        //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
+                        .afterTime(0.5, robot.home())
+                        .afterTime(1.75, robot.intakeGround())
+                        .afterTime(3.25, robot.intakeUp())
+                        .afterTime(4, robot.transfer())
+                        .afterTime(5, robot.mid())
+                        .afterTime(7, robot.home())
 
-            Action cyclePixel2 = drive.actionBuilder(drive.pose)
-                    //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
-                    .afterTime(0.5, robot.home())
-                    .afterTime(1.75, robot.intakeGround())
-                    .afterTime(3.25, robot.intakeUp())
-                    .afterTime(4, robot.transfer())
-                    .afterTime(5, robot.mid())
-                    .afterTime(7, robot.home())
+                        //GOTO STACK AND RETURN
+                        .lineToX(-55)
+                        .waitSeconds(0.75)
+                        .lineToX(42)
+                        .waitSeconds(2)
+                        .build();
+                telemetry.addData(PREFIX, "Running cyclePixel2 traj");
+                telemetry.update();
 
-                    //GOTO STACK AND RETURN
-                    .lineToX(-55)
-                    .waitSeconds(0.75)
-                    .lineToX(42)
-                    .waitSeconds(2)
-                    .build();
-            telemetry.addData(PREFIX,"Running cyclePixel2 traj");
-            telemetry.update();
+                Actions.runBlocking(cyclePixel2);
+                drive.updatePoseEstimate();
+                telemetry.addData(PREFIX, "Updating Drive Pos Estimate");
+                telemetry.update();
+                double timeleft = 30 - consoletime.now(TimeUnit.SECONDS);
+                telemetry.addData(PREFIX, "Done Auton! With " + timeleft + " Left");
+                telemetry.update();
+            }else if (side.equalsIgnoreCase("Red")){
 
-            Actions.runBlocking(cyclePixel2);
-            drive.updatePoseEstimate();
-            telemetry.addData(PREFIX,"Updating Drive Pos Estimate");
-            telemetry.update();
-            double timeleft = 30 - consoletime.now(TimeUnit.SECONDS);
-            telemetry.addData(PREFIX,"Done Auton! With "+timeleft+" Left");
+            }else{
+                telemetry.addLine("Nothing Selected Not Running Auton :( Next Time Use X or B");
+            }
             telemetry.update();
             break;
         }

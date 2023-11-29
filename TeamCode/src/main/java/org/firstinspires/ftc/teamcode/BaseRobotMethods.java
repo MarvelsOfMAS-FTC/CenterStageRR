@@ -179,9 +179,13 @@ public class BaseRobotMethods{
     public class IntakeLevel5 implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            elbowl.setPosition(0.555);//  INTAKE DOWN and TURN ON
-            elbowr.setPosition(0.5153);
-            wrist.setPosition(0.34);
+//            elbowl.setPosition(0.555);//  INTAKE DOWN and TURN ON
+//            elbowr.setPosition(0.5153);
+//            wrist.setPosition(0.34);
+
+            wrist.setPosition(0.3726);
+            elbowl.setPosition(0.3323);
+            elbowr.setPosition(0.6076);
 
             intake.setPower(-1.0); //turn intake on full speed
 
