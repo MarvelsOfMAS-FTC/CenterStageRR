@@ -89,6 +89,7 @@ public class AutonClose extends LinearOpMode {
                 telemetry.addData(PREFIX,"Found Right setting tag heading and offset!");
             }
             telemetry.addData(PREFIX,"Done With Camera Loading spike Traj");
+            telemetry.update();
 
             //SCORE SPIKE MARK PIXEL & DRIVE TO BACKDROP
             Action spikeMark = drive.actionBuilder(drive.pose)
@@ -109,9 +110,11 @@ public class AutonClose extends LinearOpMode {
 
             Actions.runBlocking(spikeMark);
             telemetry.addData(PREFIX,"Running spike traj");
+            telemetry.update();
             drive.updatePoseEstimate();
             telemetry.addData(PREFIX,"Updating Drive Pos Estimate");
             telemetry.addData(PREFIX,"Loading backDrop Traj");
+            telemetry.update();
 
             //SCORE BACKDROP PIXEL
             Action backDrop = drive.actionBuilder(drive.pose)
@@ -123,10 +126,12 @@ public class AutonClose extends LinearOpMode {
                     .strafeToConstantHeading(new Vector2d(36,38-tagoffset))
                     .build();
             telemetry.addData(PREFIX,"Running backdrop traj");
+            telemetry.update();
             Actions.runBlocking(backDrop);
             drive.updatePoseEstimate();
             telemetry.addData(PREFIX,"Updating Drive Pos Estimate");
             telemetry.addData(PREFIX,"Loading cyclePixel traj");
+            telemetry.update();
 
             //CYCLE PIXEL STACK
             Action cyclePixel = drive.actionBuilder(drive.pose)
@@ -144,9 +149,11 @@ public class AutonClose extends LinearOpMode {
                     .waitSeconds(0.5)
                     .build();
             telemetry.addData(PREFIX,"Running cyclePixel traj");
+            telemetry.update();
             Actions.runBlocking(cyclePixel);
             drive.updatePoseEstimate();
             telemetry.addData(PREFIX,"Updating Drive Pos Estimate");
+            telemetry.update();
 
             Action cyclePixel1 = drive.actionBuilder(drive.pose)
                     //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
@@ -163,9 +170,11 @@ public class AutonClose extends LinearOpMode {
                     .waitSeconds(0.5)
                     .build();
             telemetry.addData(PREFIX,"Running cyclePixel1 traj");
+            telemetry.update();
             Actions.runBlocking(cyclePixel1);
             drive.updatePoseEstimate();
             telemetry.addData(PREFIX,"Updating Drive Pos Estimate");
+            telemetry.update();
 
             Action cyclePixel2 = drive.actionBuilder(drive.pose)
                     //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
@@ -183,13 +192,15 @@ public class AutonClose extends LinearOpMode {
                     .waitSeconds(2)
                     .build();
             telemetry.addData(PREFIX,"Running cyclePixel2 traj");
+            telemetry.update();
 
             Actions.runBlocking(cyclePixel2);
             drive.updatePoseEstimate();
             telemetry.addData(PREFIX,"Updating Drive Pos Estimate");
+            telemetry.update();
             double timeleft = 30 - consoletime.now(TimeUnit.SECONDS);
             telemetry.addData(PREFIX,"Done Auton! With "+timeleft+" Left");
-
+            telemetry.update();
             break;
         }
     }
