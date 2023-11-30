@@ -79,11 +79,11 @@ public class AutonClose extends LinearOpMode {
                 telemetry.addData(PREFIX,"Found Middle setting tag heading and offset!");
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagheading = Math.toRadians(125); //130
-                tagoffset = 4;
+                tagoffset = 6;
                 telemetry.addData(PREFIX,"Found Left setting tag heading and offset!");
             } else {
-                tagheading = Math.toRadians(75); //60
-                tagoffset = -4;
+                tagheading = Math.toRadians(60); //60
+                tagoffset = -5;
                 telemetry.addData(PREFIX,"Found Right setting tag heading and offset!");
             }
             telemetry.addData(PREFIX,"Done With Camera Loading spike Traj");
@@ -118,10 +118,11 @@ public class AutonClose extends LinearOpMode {
                 Action backDrop = drive.actionBuilder(drive.pose)
                         //CLEAR PIXEL AFTER SCORING
                         .afterTime(0.5, robot.mid())
-
+                        .afterTime(3, robot.home())
                         //PUSH INTO BACKDROP & SCORE
                         .lineToX(44)
                         .strafeToConstantHeading(new Vector2d(36, 38 - tagoffset))
+
                         .build();
                 telemetry.addData(PREFIX, "Running backdrop traj");
                 telemetry.update();
@@ -132,7 +133,7 @@ public class AutonClose extends LinearOpMode {
                 telemetry.update();
 
                 //CYCLE PIXEL STACK
-                Action cyclePixel = drive.actionBuilder(drive.pose)
+                /*Action cyclePixel = drive.actionBuilder(drive.pose)
                         //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
                         .afterTime(0, robot.home())
                         .afterTime(1.75, robot.intakeLevel5())
@@ -198,9 +199,50 @@ public class AutonClose extends LinearOpMode {
                 telemetry.update();
                 double timeleft = 30 - consoletime.now(TimeUnit.SECONDS);
                 telemetry.addData(PREFIX, "Done Auton! With " + timeleft + " Left");
-                telemetry.update();
+                telemetry.update();*/
             }else if (side.equalsIgnoreCase("Red")){
+                //SCORE SPIKE MARK PIXEL & DRIVE TO BACKDROP
+                Action spikeMark = drive.actionBuilder(drive.pose)
+                        //SCORE MARK PIXEL
+                        .afterTime(0, robot.spikeExtend())
+                        .afterTime(1, robot.spikeScore())
+                        .afterTime(1.25, robot.fingerHome())
+                        .afterTime(1.5, robot.home())
 
+                        //PREPARE BACKDROP PIXEL
+                        .afterTime(3, robot.low())
+
+                        //THE HEADING IS CONTROLLED BY THE VISION CODE
+                        .lineToYLinearHeading(-55, tagheading)
+                        .waitSeconds(0.5)
+                        .splineToLinearHeading(new Pose2d(36, -38 - tagoffset, Math.toRadians(180)), Math.toRadians(tagheading))
+                        .build();
+
+                Actions.runBlocking(spikeMark);
+                telemetry.addData(PREFIX, "Running spike traj");
+                telemetry.update();
+                drive.updatePoseEstimate();
+                telemetry.addData(PREFIX, "Updating Drive Pos Estimate");
+                telemetry.addData(PREFIX, "Loading backDrop Traj");
+                telemetry.update();
+
+                //SCORE BACKDROP PIXEL
+                Action backDrop = drive.actionBuilder(drive.pose)
+                        //CLEAR PIXEL AFTER SCORING
+                        .afterTime(0.5, robot.mid())
+                        .afterTime(3, robot.home())
+                        //PUSH INTO BACKDROP & SCORE
+                        .lineToX(44)
+                        .strafeToConstantHeading(new Vector2d(36, -38 + tagoffset))
+
+                        .build();
+                telemetry.addData(PREFIX, "Running backdrop traj");
+                telemetry.update();
+                Actions.runBlocking(backDrop);
+                drive.updatePoseEstimate();
+                telemetry.addData(PREFIX, "Updating Drive Pos Estimate");
+                telemetry.addData(PREFIX, "Loading cyclePixel traj");
+                telemetry.update();
             }else{
                 telemetry.addLine("Nothing Selected Not Running Auton :( Next Time Use X or B");
             }
