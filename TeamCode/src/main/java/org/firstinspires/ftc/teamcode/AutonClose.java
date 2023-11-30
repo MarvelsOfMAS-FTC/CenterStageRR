@@ -29,6 +29,7 @@ public class AutonClose extends LinearOpMode {
     double tagoffset = 0;
     ElapsedTime consoletime = new ElapsedTime();
     public final String PREFIX= "["+consoletime.now(TimeUnit.SECONDS)+"]";
+    double sideHeading =0;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -50,8 +51,10 @@ public class AutonClose extends LinearOpMode {
             //Running pipeline
             if(gamepad1.x) {
                 side = "Blue";
+                sideHeading=0;
             } else if(gamepad1.b) {
                 side = "Red";
+                sideHeading=180;
             }
 
 
@@ -69,20 +72,22 @@ public class AutonClose extends LinearOpMode {
         //EXECUTE ACTIONS -----------------------------------------------------------------
         while (opModeIsActive() && !isStopRequested()) {
             telemetry.addLine("----------- Console Logger V1.0 -----------");
+            consoletime.reset();
+            consoletime.startTime();
             telemetry.addData(PREFIX,"Running!");
             telemetry.update();
 
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
-                tagheading = Math.toRadians(100);
+                tagheading = Math.toRadians(100+sideHeading);
                 tagoffset = 0;
                 telemetry.addData(PREFIX,"Found Middle setting tag heading and offset!");
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
-                tagheading = Math.toRadians(125); //130
+                tagheading = Math.toRadians(125+sideHeading); //130
                 tagoffset = 6;
                 telemetry.addData(PREFIX,"Found Left setting tag heading and offset!");
             } else {
-                tagheading = Math.toRadians(60); //60
+                tagheading = Math.toRadians(60+sideHeading); //60
                 tagoffset = -5;
                 telemetry.addData(PREFIX,"Found Right setting tag heading and offset!");
             }
@@ -90,7 +95,7 @@ public class AutonClose extends LinearOpMode {
             telemetry.update();
             if(side.equalsIgnoreCase("Blue")) {
                 //SCORE SPIKE MARK PIXEL & DRIVE TO BACKDROP
-                Action spikeMark = drive.actionBuilder(drive.pose)
+                Action spikeMark = drive.actionBuilder(new Pose2d(startposx,startposy,startheading))
                         //SCORE MARK PIXEL
                         .afterTime(0, robot.spikeExtend())
                         .afterTime(1, robot.spikeScore())
@@ -202,7 +207,8 @@ public class AutonClose extends LinearOpMode {
                 telemetry.update();*/
             }else if (side.equalsIgnoreCase("Red")){
                 //SCORE SPIKE MARK PIXEL & DRIVE TO BACKDROP
-                Action spikeMark = drive.actionBuilder(drive.pose)
+                telemetry.addData(PREFIX, "Red Side");
+                Action spikeMark = drive.actionBuilder(new Pose2d(startposx,-startposy,startheading+sideHeading))
                         //SCORE MARK PIXEL
                         .afterTime(0, robot.spikeExtend())
                         .afterTime(1, robot.spikeScore())
@@ -213,9 +219,9 @@ public class AutonClose extends LinearOpMode {
                         .afterTime(3, robot.low())
 
                         //THE HEADING IS CONTROLLED BY THE VISION CODE
-                        .lineToYLinearHeading(-55, tagheading)
+                        .lineToYLinearHeading(55, tagheading)
                         .waitSeconds(0.5)
-                        .splineToLinearHeading(new Pose2d(36, -38 - tagoffset, Math.toRadians(180)), Math.toRadians(tagheading))
+                        .splineToLinearHeading(new Pose2d(36, 38 + tagoffset, Math.toRadians(180)), Math.toRadians(tagheading))
                         .build();
 
                 Actions.runBlocking(spikeMark);
@@ -233,7 +239,7 @@ public class AutonClose extends LinearOpMode {
                         .afterTime(3, robot.home())
                         //PUSH INTO BACKDROP & SCORE
                         .lineToX(44)
-                        .strafeToConstantHeading(new Vector2d(36, -38 + tagoffset))
+                        .strafeToConstantHeading(new Vector2d(36, 38 - tagoffset))
 
                         .build();
                 telemetry.addData(PREFIX, "Running backdrop traj");
