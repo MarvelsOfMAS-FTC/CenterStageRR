@@ -18,7 +18,7 @@ public class AutonFar extends LinearOpMode {
     public boolean cycleStack = true;
 
     public boolean waitBool = false;
-    public double waitDuration = 2.0; //how long to wait on partner alliance! 
+    public int waitDuration = 2000; //how long to wait on partner alliance in ms!
 
     //START POS
     double startPosX = 12;
@@ -117,7 +117,6 @@ public class AutonFar extends LinearOpMode {
             Action backDrop = drive.actionBuilder(drive.pose)
                     //CLEAR PIXEL AFTER SCORING
                     .afterTime(0.5, robot.mid())
-
                     //PUSH INTO BACKDROP & SCORE
                     .lineToX(44)
                     .build();
@@ -125,62 +124,69 @@ public class AutonFar extends LinearOpMode {
             Actions.runBlocking(backDrop);
             drive.updatePoseEstimate();
 
+            //WAIT FOR PARTNER
+            if (waitBool) {
+                sleep(waitDuration);
+            }
+
             //CYCLE PIXEL STACK
-            Action cyclePixel = drive.actionBuilder(drive.pose)
-                    //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
-                    .afterTime(0, robot.home())
-                    .afterTime(1.75, robot.intakeLevel5())
-                    .afterTime(3.25, robot.intakeUp())
-                    .afterTime(4, robot.transfer())
-                    .afterTime(5, robot.mid())
+            if (cycleStack) {
+                Action cyclePixel = drive.actionBuilder(drive.pose)
+                        //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
+                        .afterTime(0, robot.home())
+                        .afterTime(1.75, robot.intakeLevel5())
+                        .afterTime(3.25, robot.intakeUp())
+                        .afterTime(4, robot.transfer())
+                        .afterTime(5, robot.mid())
 
-                    //GOTO STACK AND RETURN
-                    .lineToX(-55)
-                    .waitSeconds(0.75)
-                    .lineToX(42)
-                    .waitSeconds(0.5)
-                    .build();
+                        //GOTO STACK AND RETURN
+                        .lineToX(-55)
+                        .waitSeconds(0.75)
+                        .lineToX(42)
+                        .waitSeconds(0.5)
+                        .build();
 
-            Actions.runBlocking(cyclePixel);
-            drive.updatePoseEstimate();
-
-            Action cyclePixel1 = drive.actionBuilder(drive.pose)
-                    //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
-                    .afterTime(0.5, robot.home())
-                    .afterTime(1.75, robot.intakeGround())
-                    .afterTime(3.25, robot.intakeUp())
-                    .afterTime(4, robot.transfer())
-                    .afterTime(5, robot.mid())
-
-                    //GOTO STACK AND RETURN
-                    .lineToX(-55)
-                    .waitSeconds(0.75)
-                    .lineToX(42)
-                    .waitSeconds(0.5)
-                    .build();
-
-            Actions.runBlocking(cyclePixel1);
-            drive.updatePoseEstimate();
-
-            Action cyclePixel2 = drive.actionBuilder(drive.pose)
-                    //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
-                    .afterTime(0.5, robot.home())
-                    .afterTime(1.75, robot.intakeGround())
-                    .afterTime(3.25, robot.intakeUp())
-                    .afterTime(4, robot.transfer())
-                    .afterTime(5, robot.mid())
-                    .afterTime(7, robot.home())
-
-                    //GOTO STACK AND RETURN
-                    .lineToX(-55)
-                    .waitSeconds(0.75)
-                    .lineToX(42)
-                    .waitSeconds(2)
-                    .build();
-
-            Actions.runBlocking(cyclePixel2);
-            drive.updatePoseEstimate();
-            break;
+                Actions.runBlocking(cyclePixel);
+                drive.updatePoseEstimate();
+                //
+                //            Action cyclePixel1 = drive.actionBuilder(drive.pose)
+                //                    //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
+                //                    .afterTime(0.5, robot.home())
+                //                    .afterTime(1.75, robot.intakeGround())
+                //                    .afterTime(3.25, robot.intakeUp())
+                //                    .afterTime(4, robot.transfer())
+                //                    .afterTime(5, robot.mid())
+                //
+                //                    //GOTO STACK AND RETURN
+                //                    .lineToX(-55)
+                //                    .waitSeconds(0.75)
+                //                    .lineToX(42)
+                //                    .waitSeconds(0.5)
+                //                    .build();
+                //
+                //            Actions.runBlocking(cyclePixel1);
+                //            drive.updatePoseEstimate();
+                //
+                //            Action cyclePixel2 = drive.actionBuilder(drive.pose)
+                //                    //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
+                //                    .afterTime(0.5, robot.home())
+                //                    .afterTime(1.75, robot.intakeGround())
+                //                    .afterTime(3.25, robot.intakeUp())
+                //                    .afterTime(4, robot.transfer())
+                //                    .afterTime(5, robot.mid())
+                //                    .afterTime(7, robot.home())
+                //
+                //                    //GOTO STACK AND RETURN
+                //                    .lineToX(-55)
+                //                    .waitSeconds(0.75)
+                //                    .lineToX(42)
+                //                    .waitSeconds(2)
+                //                    .build();
+                //
+                //            Actions.runBlocking(cyclePixel2);
+                //            drive.updatePoseEstimate();
+                break;
+            }
         }
     }
 }
