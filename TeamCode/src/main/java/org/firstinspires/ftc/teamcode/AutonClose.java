@@ -37,7 +37,6 @@ public class AutonClose extends LinearOpMode {
         robot.parent = this;
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(startPosX, startPosY, startHeading));
-        drive.updatePoseEstimate();
 
         //CAMERA INITIALIZATION --------------------------------------------------------------------
         telemetry.addData("Placement: ", robot.visionProcessor.getSelection());
@@ -88,9 +87,9 @@ public class AutonClose extends LinearOpMode {
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagHeading = Math.toRadians(100);
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
-                tagHeading = Math.toRadians(100); //130
+                tagHeading = Math.toRadians(130); //130
             } else {
-                tagHeading = Math.toRadians(100); //60
+                tagHeading = Math.toRadians(60); //60
             }
 
             //SCORE SPIKE MARK PIXEL & DRIVE TO BACKDROP
@@ -131,7 +130,7 @@ public class AutonClose extends LinearOpMode {
 
             //CYCLE PIXEL STACK
             if (cycleStack) {
-                Action cyclePixel = drive.actionBuilder(drive.pose)
+                Action cyclePixel = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, Math.toRadians(180)))
                         //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
                         .afterTime(0, robot.home())
                         .afterTime(1.75, robot.intakeLevel5())
@@ -148,43 +147,6 @@ public class AutonClose extends LinearOpMode {
 
                 Actions.runBlocking(cyclePixel);
                 drive.updatePoseEstimate();
-                //
-                //            Action cyclePixel1 = drive.actionBuilder(drive.pose)
-                //                    //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
-                //                    .afterTime(0.5, robot.home())
-                //                    .afterTime(1.75, robot.intakeGround())
-                //                    .afterTime(3.25, robot.intakeUp())
-                //                    .afterTime(4, robot.transfer())
-                //                    .afterTime(5, robot.mid())
-                //
-                //                    //GOTO STACK AND RETURN
-                //                    .lineToX(-55)
-                //                    .waitSeconds(0.75)
-                //                    .lineToX(42)
-                //                    .waitSeconds(0.5)
-                //                    .build();
-                //
-                //            Actions.runBlocking(cyclePixel1);
-                //            drive.updatePoseEstimate();
-                //
-                //            Action cyclePixel2 = drive.actionBuilder(drive.pose)
-                //                    //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
-                //                    .afterTime(0.5, robot.home())
-                //                    .afterTime(1.75, robot.intakeGround())
-                //                    .afterTime(3.25, robot.intakeUp())
-                //                    .afterTime(4, robot.transfer())
-                //                    .afterTime(5, robot.mid())
-                //                    .afterTime(7, robot.home())
-                //
-                //                    //GOTO STACK AND RETURN
-                //                    .lineToX(-55)
-                //                    .waitSeconds(0.75)
-                //                    .lineToX(42)
-                //                    .waitSeconds(2)
-                //                    .build();
-                //
-                //            Actions.runBlocking(cyclePixel2);
-                //            drive.updatePoseEstimate();
                 break;
             }
         }
