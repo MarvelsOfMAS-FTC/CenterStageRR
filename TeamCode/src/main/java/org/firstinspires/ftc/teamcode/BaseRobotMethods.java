@@ -45,18 +45,22 @@ public class BaseRobotMethods{
         climbl = hardwareMap.get(DcMotorEx.class, "lclimb");
         climbr = hardwareMap.get(DcMotorEx.class, "rclimb");
         extend = hardwareMap.get(DcMotorEx.class, "extend");
+
         fl = hardwareMap.get(DcMotorEx.class, "lf");
         fr = hardwareMap.get(DcMotorEx.class, "rf");
         bl = hardwareMap.get(DcMotorEx.class, "lb");
         br = hardwareMap.get(DcMotorEx.class, "rb");
+
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         climbl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         climbr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         extend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         extend.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         extend.setTargetPosition(0);
         extend.setPower(0.0);
@@ -65,6 +69,7 @@ public class BaseRobotMethods{
         extend.setVelocityPIDFCoefficients(25.0,0.0,0.0,0.0);
         extend.setPositionPIDFCoefficients(25.0);
         extend.setPower(1.0);
+
         climbl.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         climbr.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         climbl.setPower(0.0);
@@ -75,6 +80,7 @@ public class BaseRobotMethods{
         climbr.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         climbl.setPower(1.0);
         climbr.setPower(1.0);
+
         elbowl = hardwareMap.get(Servo.class, "larm");
         elbowr = hardwareMap.get(Servo.class, "rarm");
         wrist = hardwareMap.get(Servo.class, "wrist");
@@ -83,14 +89,18 @@ public class BaseRobotMethods{
         score = hardwareMap.get(Servo.class, "score");
         droneLaunch = hardwareMap.get(Servo.class, "launch");
         finger = hardwareMap.get(Servo.class, "finger");
-        droneLaunch.setPosition(0.4);
+        elevatorLimit = hardwareMap.get(TouchSensor.class, "elevatorLimit");
+
         score.setPosition(scoreHome);
-        //set the intake to starting position
+
+        //SERVO POS
         elbowl.setPosition(0.29 + elbowHome);
         elbowr.setPosition(0.25 + elbowHome);
         wrist.setPosition(0.725);
-        finger.setPosition(0.46);
-        elevatorLimit = hardwareMap.get(TouchSensor.class, "elevatorLimit");
+        finger.setPosition(0.43);
+        droneLaunch.setPosition(0.4);
+
+
         //CAMERA INIT
         visionProcessor = new FirstVisionProcessor();
         initCamera(hardwareMap);
