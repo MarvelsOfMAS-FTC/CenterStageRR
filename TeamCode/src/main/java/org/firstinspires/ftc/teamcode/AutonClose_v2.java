@@ -1,24 +1,22 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous
-public class AutonClose extends LinearOpMode {
+public class AutonClose_v2 extends LinearOpMode {
     //VARIABLES---------------------------------------------------------------------------------------------------------------
-    public String fieldSide = "None";
+    public String fieldSide = "Blue";
     public boolean cycleStack = true;
 
+    public boolean insideRoute = false;
+
     public boolean waitBool = false;
-    public int waitDuration = 2000; //how long to wait on partner alliance in ms!
+    public int waitDuration = 1000; //how long to wait on partner alliance in ms!
 
     //START POS
     double startPosX = 12;
@@ -26,8 +24,11 @@ public class AutonClose extends LinearOpMode {
     double startHeading = Math.toRadians(90);
 
     //TAG POS
-    double tagHeading = Math.toRadians(90);
-    double tagOffset = 0;
+    double tagHeading;
+    double tagLeft = Math.toRadians(120);
+    double tagMid = Math.toRadians(100);
+    double tagRight = Math.toRadians(72);
+    double tagScoreYOffset = 5.5; //Controls Left/Right Displacement. Absolute Value
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -60,23 +61,32 @@ public class AutonClose extends LinearOpMode {
                 cycleStack = false;
             }
 
-            //WAIT ON ALLIANCE?
+            //INSIDE CYCLE OR OUTSIDE?
             if(gamepad1.left_bumper) {
-                cycleStack = true;
+                insideRoute = true;
             } else if(gamepad1.right_bumper) {
-                cycleStack = false;
+                insideRoute = false;
+            }
+
+            //WAIT ON ALLIANCE?
+            if(gamepad1.left_trigger > 0.1) {
+                waitBool = true;
+            } else if(gamepad1.right_trigger > 0.1) {
+                waitBool = false;
             }
 
             telemetry.addData("-- FAR AUTO --","");
             telemetry.addData("Placement: ", robot.visionProcessor.getSelection());
             telemetry.addData("Side: ", fieldSide);
             telemetry.addData("Cycle Stack?: ", cycleStack);
+            telemetry.addData("Inside Route?: ", insideRoute);
             telemetry.addData("Wait on Partner?: ", waitBool);
             telemetry.addData("","");
 
             telemetry.addData("Press X for BLUE, B for RED","");
             telemetry.addData("Press A to CYCLE, Y to NOT CYCLE","");
-            telemetry.addData("Press LB to WAIT, RB to VROOM VROOM","");
+            telemetry.addData("Press LB for IN, RB to OUT","");
+            telemetry.addData("Press LT to WAIT, RT to ZOOM","");
             telemetry.update();
         }
 
@@ -85,14 +95,19 @@ public class AutonClose extends LinearOpMode {
 
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
-                tagHeading = Math.toRadians(100);
+                tagHeading = tagMid;
+                tagScoreYOffset = 0; //Center Pos. Offset not required
+
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
-                tagHeading = Math.toRadians(130); //130
+                tagHeading = tagLeft;
+                tagScoreYOffset = tagScoreYOffset * 1; //Add Some Y for Left
+
             } else {
-                tagHeading = Math.toRadians(60); //60
+                tagHeading = tagRight;
+                tagScoreYOffset = tagScoreYOffset * -1; //Remove Y for Right
             }
 
-            //SCORE SPIKE MARK PIXEL & DRIVE TO BACKDROP
+            //SCORE PRELOAD PIXELS
             Action spikeMark = drive.actionBuilder(drive.pose)
                     //SCORE MARK PIXEL
                     .afterTime(0, robot.spikeExtend())
@@ -100,55 +115,55 @@ public class AutonClose extends LinearOpMode {
                     .afterTime(1.25, robot.fingerHome())
                     .afterTime(1.5, robot.home())
 
-                    //PREPARE BACKDROP PIXEL
-                    .afterTime(3, robot.low())
+                    //SCORE BACKDROP PIXEL
+                    .afterTime(3.5, robot.low())
+                    .afterTime(4.5, robot.mid())
+                    .afterTime(5, robot.home())
 
-                    //THE HEADING IS CONTROLLED BY THE VISION CODE
+                    //DRIVE TO SPIKE MARK
                     .lineToYLinearHeading(55, tagHeading)
-                    .waitSeconds(0.5)
-                    .splineToLinearHeading(new Pose2d(36, 38, Math.toRadians(180)), Math.toRadians(tagHeading))
+                    .waitSeconds(0.75)
+
+                    //DRIVE TO BACKBOARD
+                    .strafeToLinearHeading(new Vector2d(27, 42 + tagScoreYOffset), Math.toRadians(180))
+                    .turnTo(Math.toRadians(180))
+
+                    //PUSH AND SCORE
+                    .lineToX(43)
+                    .waitSeconds(5)
+                    .endTrajectory()
                     .build();
 
             Actions.runBlocking(spikeMark);
             drive.updatePoseEstimate();
+            break;
 
-            //SCORE BACKDROP PIXEL
-            Action backDrop = drive.actionBuilder(drive.pose)
-                    //CLEAR PIXEL AFTER SCORING
-                    .afterTime(0.5, robot.mid())
-                    //PUSH INTO BACKDROP & SCORE
-                    .lineToX(44)
-                    .build();
+//            //WAIT FOR PARTNER
+//            if (waitBool) {
+//                sleep(waitDuration);
+//            }
+//
+//            //CYCLE PIXEL STACK
+//            if (cycleStack) {
+//                Action cyclePixel = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, Math.toRadians(180)))
+//                        //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
+//                        .afterTime(0, robot.home())
+//                        .afterTime(1.75, robot.intakeLevel5())
+//                        .afterTime(3.25, robot.intakeUp())
+//                        .afterTime(4, robot.transfer())
+//                        .afterTime(5, robot.mid())
+//
+//                        //GOTO STACK AND RETURN
+//                        .lineToX(-55)
+//                        .waitSeconds(0.75)
+//                        .lineToX(42)
+//                        .waitSeconds(0.5)
+//                        .build();
+//
+//                Actions.runBlocking(cyclePixel);
+//                drive.updatePoseEstimate();
+//            }
 
-            Actions.runBlocking(backDrop);
-            drive.updatePoseEstimate();
-
-            //WAIT FOR PARTNER
-            if (waitBool) {
-                sleep(waitDuration);
-            }
-
-            //CYCLE PIXEL STACK
-            if (cycleStack) {
-                Action cyclePixel = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, Math.toRadians(180)))
-                        //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
-                        .afterTime(0, robot.home())
-                        .afterTime(1.75, robot.intakeLevel5())
-                        .afterTime(3.25, robot.intakeUp())
-                        .afterTime(4, robot.transfer())
-                        .afterTime(5, robot.mid())
-
-                        //GOTO STACK AND RETURN
-                        .lineToX(-55)
-                        .waitSeconds(0.75)
-                        .lineToX(42)
-                        .waitSeconds(0.5)
-                        .build();
-
-                Actions.runBlocking(cyclePixel);
-                drive.updatePoseEstimate();
-                break;
-            }
         }
     }
 }
