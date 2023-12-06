@@ -128,6 +128,7 @@ public class BaseRobotMethods{
     public class Home implements Action{ //(double power)
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            extend.setPower(0.8);
             extend.setTargetPosition(0);
             climbl.setTargetPosition(5);
             climbr.setTargetPosition(5);
@@ -139,6 +140,18 @@ public class BaseRobotMethods{
     public Action home(){
         return new Home();
     }
+
+    public class IntakeStop implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            intake.setPower(0); //stop intake
+            return false;
+        }
+    }
+    public Action intakeStop() {
+        return new IntakeStop();
+    }
+
     public class IntakeGround implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
@@ -170,7 +183,10 @@ public class BaseRobotMethods{
     public class Transfer implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            while(!elevatorLimit.isPressed())
+            ElapsedTime t = new ElapsedTime();
+            t.reset();
+            t.startTime();
+            while(!elevatorLimit.isPressed() || t.seconds() > 1)
             {
                 extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 extend.setPower(-0.5);//set 50% speed elevator in
@@ -234,6 +250,7 @@ public class BaseRobotMethods{
     public class Low implements Action { //(int extendTarget)
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            extend.setPower(0.65);
             extend.setTargetPosition(350);
             climbl.setTargetPosition(260);
             climbr.setTargetPosition(260);
@@ -247,6 +264,7 @@ public class BaseRobotMethods{
     public class Mid implements Action{ //(int extendTarget)
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            extend.setPower(0.65);
             extend.setTargetPosition(450);
             climbl.setTargetPosition(525);
             climbr.setTargetPosition(525);
