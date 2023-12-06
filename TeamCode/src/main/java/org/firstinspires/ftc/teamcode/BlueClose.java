@@ -8,15 +8,15 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous
-public class AutonClose_v2 extends LinearOpMode {
+public class BlueClose extends LinearOpMode {
     //VARIABLES---------------------------------------------------------------------------------------------------------------
     public String fieldSide = "Blue";
     public boolean cycleStack = true;
 
-    public boolean insideRoute = false;
+    public boolean insideRoute = true;
 
     public boolean waitBool = false;
-    public int waitDuration = 1000; //how long to wait on partner alliance in ms!
+    public int waitDuration; //how long to wait on partner alliance in seconds. set below.
 
     //START POS
     double startPosX = 12;
@@ -37,58 +37,51 @@ public class AutonClose_v2 extends LinearOpMode {
         robot.telemetry = this.telemetry;
         robot.parent = this;
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(startPosX, startPosY, startHeading));
-
         //CAMERA INITIALIZATION --------------------------------------------------------------------
-        telemetry.addData("Placement: ", robot.visionProcessor.getSelection());
+        telemetry.addData("Cam Place: ", robot.visionProcessor.getSelection());
         telemetry.update();
 
         //WAIT FOR START CODE ----------------------------------------------------------------------
         while (!opModeIsActive() && !isStopRequested())
         {
-            //SIDE SELECT
-            if(gamepad1.x) {
-                fieldSide = "Blue";
-                startHeading = Math.toRadians(90);
-            } else if(gamepad1.b) {
-                fieldSide = "Red";
-            }
-
             //CYCLE PIXELS SELECT
-            if(gamepad1.a) {
+            if(gamepad1.x) {
                 cycleStack = true;
-            } else if(gamepad1.y) {
+            } else if(gamepad1.b) {
                 cycleStack = false;
             }
 
             //INSIDE CYCLE OR OUTSIDE?
-            if(gamepad1.left_bumper) {
+            if(gamepad1.a) {
                 insideRoute = true;
-            } else if(gamepad1.right_bumper) {
+            } else if(gamepad1.y) {
                 insideRoute = false;
             }
 
             //WAIT ON ALLIANCE?
-            if(gamepad1.left_trigger > 0.1) {
+            if(gamepad1.left_bumper) {
                 waitBool = true;
-            } else if(gamepad1.right_trigger > 0.1) {
+                waitDuration = 2;
+            } else if(gamepad1.right_bumper) {
                 waitBool = false;
+                waitDuration = 0;
             }
 
-            telemetry.addData("-- FAR AUTO --","");
-            telemetry.addData("Placement: ", robot.visionProcessor.getSelection());
-            telemetry.addData("Side: ", fieldSide);
+            telemetry.addData("-- BLUE CLOSE AUTO --","");
+            telemetry.addData("","");
+            telemetry.addData("Cam Place: ", robot.visionProcessor.getSelection());
             telemetry.addData("Cycle Stack?: ", cycleStack);
             telemetry.addData("Inside Route?: ", insideRoute);
             telemetry.addData("Wait on Partner?: ", waitBool);
             telemetry.addData("","");
 
-            telemetry.addData("Press X for BLUE, B for RED","");
-            telemetry.addData("Press A to CYCLE, Y to NOT CYCLE","");
-            telemetry.addData("Press LB for IN, RB to OUT","");
-            telemetry.addData("Press LT to WAIT, RT to ZOOM","");
+            telemetry.addData("Press X to CYCLE, B to NOT CYCLE","");
+            telemetry.addData("Press A for INSIDE ROUTE, Y for OUT","");
+            telemetry.addData("Press LB to WAIT, RB to ZOOM ZOOM","");
             telemetry.update();
         }
+
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(startPosX, startPosY, startHeading));
 
         //EXECUTE ACTIONS -----------------------------------------------------------------
         while (opModeIsActive() && !isStopRequested()) {
@@ -100,11 +93,11 @@ public class AutonClose_v2 extends LinearOpMode {
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
-                tagScoreYOffset = tagScoreYOffset * 1; //Add Some Y for Left
+                tagScoreYOffset = tagScoreYOffset * 1; //+Y for Left
 
             } else {
                 tagHeading = tagRight;
-                tagScoreYOffset = tagScoreYOffset * -1; //Remove Y for Right
+                tagScoreYOffset = tagScoreYOffset * -1; //-Y for Right
             }
 
             //SCORE PRELOAD PIXELS
@@ -118,10 +111,11 @@ public class AutonClose_v2 extends LinearOpMode {
                     //SCORE BACKDROP PIXEL
                     .afterTime(3.5, robot.low())
                     .afterTime(4.5, robot.mid())
-                    .afterTime(5, robot.home())
+                    .afterTime(5.0, robot.home())
+
 
                     //DRIVE TO SPIKE MARK
-                    .lineToYLinearHeading(55, tagHeading)
+                    .lineToYLinearHeading(54.5, tagHeading)
                     .waitSeconds(0.75)
 
                     //DRIVE TO BACKBOARD
@@ -130,40 +124,68 @@ public class AutonClose_v2 extends LinearOpMode {
 
                     //PUSH AND SCORE
                     .lineToX(43)
-                    .waitSeconds(5)
                     .endTrajectory()
                     .build();
 
             Actions.runBlocking(spikeMark);
             drive.updatePoseEstimate();
-            break;
 
-//            //WAIT FOR PARTNER
-//            if (waitBool) {
-//                sleep(waitDuration);
-//            }
-//
-//            //CYCLE PIXEL STACK
-//            if (cycleStack) {
-//                Action cyclePixel = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, Math.toRadians(180)))
-//                        //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
-//                        .afterTime(0, robot.home())
-//                        .afterTime(1.75, robot.intakeLevel5())
-//                        .afterTime(3.25, robot.intakeUp())
-//                        .afterTime(4, robot.transfer())
-//                        .afterTime(5, robot.mid())
-//
-//                        //GOTO STACK AND RETURN
-//                        .lineToX(-55)
-//                        .waitSeconds(0.75)
-//                        .lineToX(42)
-//                        .waitSeconds(0.5)
-//                        .build();
-//
-//                Actions.runBlocking(cyclePixel);
-//                drive.updatePoseEstimate();
-//            }
+            //CYCLE PIXEL STACK
+            if (cycleStack) {
+                if (insideRoute){
+                    Action inCycle1 = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, Math.toRadians(180)))
+                            //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
+                            .afterTime(2.5, robot.intakeLevel5())
+                            .afterTime(4.5, robot.intakeUp())
+                            .afterTime(5, robot.transfer())
+                            .afterTime(6 + waitDuration, robot.mid())
+                            .afterTime(8 + waitDuration, robot.home())
+                            .afterTime(8, robot.intakeStop())
 
+                            //CENTER ROBOT
+                            .strafeToLinearHeading(new Vector2d(25, 44), Math.toRadians(180))
+                            .waitSeconds(0.1)
+
+                            //GOTO STACK AND WAIT IF NEEDED
+                            .lineToX(-55)
+                            .waitSeconds(0.75 + waitDuration)
+
+                            //RETURN AND SCORE
+                            .lineToX(44)
+                            .waitSeconds(1)
+                            .build();
+
+                    Actions.runBlocking(inCycle1);
+                    drive.updatePoseEstimate();
+
+                    Action inCycle2 = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, Math.toRadians(180)))
+                            //TUCK IN SCORE BUCKET & WHIP OUT INTAKE
+                            .afterTime(2, robot.intakeGround())
+                            .afterTime(4, robot.intakeUp())
+                            .afterTime(4.5, robot.transfer())
+                            .afterTime(5.5, robot.mid())
+                            .afterTime(7.5, robot.home())
+                            .afterTime(7.5, robot.intakeStop())
+
+                            //GOTO STACK
+                            .lineToX(-58)
+                            .waitSeconds(0.75)
+
+                            //RETURN AND SCORE
+                            .lineToX(44)
+                            .waitSeconds(2)
+                            .build();
+
+                    Actions.runBlocking(inCycle2);
+                    drive.updatePoseEstimate();
+
+                }
+                else{
+
+                }
+            }
+
+        break;
         }
     }
 }
