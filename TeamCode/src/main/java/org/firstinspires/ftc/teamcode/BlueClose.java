@@ -30,14 +30,14 @@ public class BlueClose extends LinearOpMode {
     double tagMid = Math.toRadians(100);
     double tagRight = Math.toRadians(72);
 
-    double tagScorePosX = 43; //center preload tag score pos X
+    double tagScorePosX = 48; //center preload tag score pos X
     double tagScorePoxY = 42; //center preload tag score pos Y
     double tagScoreOffsetY; //controls left-right preload displacement
     double tagScoreHeading = Math.toRadians(180);
 
 
     //CYCLING POS
-    double pixelStackPosX = -55; //how far into back wall to drive
+    double pixelStackPosX = -65; //how far into back wall to drive
     double pixelStackOffsetX = -2.5;
     double pixelStackPosY = 41;
     double cycleScorePosX = 45; //push in more than tag score
@@ -141,9 +141,9 @@ public class BlueClose extends LinearOpMode {
                     .afterTime(1.5, robot.home())
 
                     //SCORE BACKDROP PIXEL
-                    .afterTime(3.5, robot.low())
+                    .afterTime(3, robot.low())
                     .afterTime(4.5, robot.mid())
-                    .afterTime(5.0, robot.retract())
+                    .afterTime(6.0, robot.retract())
 
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
