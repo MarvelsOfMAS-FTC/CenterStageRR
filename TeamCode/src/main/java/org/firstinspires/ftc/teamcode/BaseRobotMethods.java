@@ -94,11 +94,11 @@ public class BaseRobotMethods{
         score.setPosition(scoreHome);
 
         //SERVO POS
-        elbowl.setPosition(0.29 + elbowHome);
-        elbowr.setPosition(0.25 + elbowHome);
-        wrist.setPosition(0.725);
-        finger.setPosition(0.44);
-        droneLaunch.setPosition(0.4);
+        elbowl.setPosition(0.55 + elbowHome);
+        elbowr.setPosition(0.30 + elbowHome);
+        //wrist.setPosition(0.725);
+        finger.setPosition(0.825);
+        droneLaunch.setPosition(0.3);
 
 
         //CAMERA INIT
@@ -172,9 +172,9 @@ public class BaseRobotMethods{
     public class IntakeGround implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            elbowl.setPosition(0.5973);//  INTAKE DOWN and TURN ON
-            elbowr.setPosition(0.5574);
-            wrist.setPosition(0.32);
+            elbowl.setPosition(0.786);//  INTAKE DOWN and TURN ON
+            elbowr.setPosition(0.536);
+            wrist.setPosition(0.343);
             intake.setPower(-1.0); //turn intake on full speed
             passiveIntake = true;
             return false;
@@ -186,9 +186,9 @@ public class BaseRobotMethods{
     public class IntakeLevel5 implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            elbowl.setPosition(0.555);//  INTAKE DOWN and TURN ON
-            elbowr.setPosition(0.5153);
-            wrist.setPosition(0.34);
+            elbowl.setPosition(0.4484);//  INTAKE DOWN and TURN ON
+            elbowr.setPosition(0.777);
+            wrist.setPosition(0.5273);
             intake.setPower(-1.0); //turn intake on full speed
             passiveIntake = true;
             return false;
@@ -216,9 +216,9 @@ public class BaseRobotMethods{
     public class IntakeUp implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            elbowl.setPosition(0.34122 + elbowHome);
-            elbowr.setPosition(0.30122 + elbowHome);
-            wrist.setPosition(0.744);
+            elbowl.setPosition(0.55 + elbowHome);
+            elbowr.setPosition(0.30 + elbowHome);
+            wrist.setPosition(0.83);
             return false;
         }
     }
@@ -251,7 +251,7 @@ public class BaseRobotMethods{
     public class FingerHome implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            finger.setPosition(0.84);
+            finger.setPosition(0.825);
             return false;
         }
     }
@@ -262,10 +262,10 @@ public class BaseRobotMethods{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setPower(0.65);
-            extend.setTargetPosition(400);
-            climbl.setTargetPosition(300); //260
-            climbr.setTargetPosition(300);
-            score.setPosition(0.4);
+            extend.setTargetPosition(0);
+            climbl.setTargetPosition(0); //260
+            climbr.setTargetPosition(0);
+            score.setPosition(scoreHome);
             return false;
         }
     }
