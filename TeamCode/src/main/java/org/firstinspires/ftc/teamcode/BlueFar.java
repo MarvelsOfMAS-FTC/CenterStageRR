@@ -31,7 +31,7 @@ public class BlueFar extends LinearOpMode {
     double tagRight = Math.toRadians(72);
 
     double tagScorePosX = 45; //center preload tag score pos X
-    double tagScorePoxY = 34; //center preload tag score pos Y
+    double tagScorePoxY = 38; //center preload tag score pos Y
     double tagScoreOffsetY; //controls left-right preload displacement
     double tagScoreHeading = Math.toRadians(180);
 
@@ -44,8 +44,8 @@ public class BlueFar extends LinearOpMode {
     double cycleScoreOffsetX = 1;
     double cycleScorePosY = 44; //used to dodge right pixel on transit
 
-    double routeOffsetY; //how far from center tag to move for outside cycle run
-    double routeWait; //need more time for outside route
+    double routeOffsetY  = -22; //how far from center tag to move for outside cycle run
+    double routeWait = 0.5; //need more time for outside route
 
     //PARK POS
     double parkPosX = 55;
@@ -75,13 +75,12 @@ public class BlueFar extends LinearOpMode {
             //OUTSIDE CYCLE OR INSIDE?
             if(gamepad1.a) {
                 outsideRoute = true;
-                routeOffsetY = 0;
-                routeWait = 0;
-            } else if(gamepad1.y) {
-                outsideRoute = false;
                 routeOffsetY = -26;
                 routeWait = 0.5;
-
+            } else if(gamepad1.y) {
+                outsideRoute = false;
+                routeOffsetY = 0;
+                routeWait = 0;
                 waitBool = false; //no time to wait on outside route
                 waitDuration = 0;
             }
@@ -94,7 +93,6 @@ public class BlueFar extends LinearOpMode {
                 waitBool = false;
                 waitDuration = 0;
             }
-
             telemetry.addData("-- BLUE FAR AUTO --","");
             telemetry.addData("","");
             telemetry.addData("Cam Place: ", robot.visionProcessor.getSelection());
@@ -152,8 +150,8 @@ public class BlueFar extends LinearOpMode {
 
                     //DRIVE OUTSIDE TURN & DRIVE TO BACKBOARD
                     .turnTo(startHeading)
-                    .lineToYLinearHeading(18, startHeading)
-                    .strafeToLinearHeading(new Vector2d(24, 18), tagScoreHeading)
+                    .lineToYLinearHeading(20, startHeading)
+                    .strafeToLinearHeading(new Vector2d(24, 20), tagScoreHeading)
                     .strafeToLinearHeading(new Vector2d(36, tagScorePoxY + tagScoreOffsetY), tagScoreHeading)
 
                     //PUSH IN AND SCORE
