@@ -8,18 +8,18 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous
-public class BlueClose extends LinearOpMode {
+public class BlueFar extends LinearOpMode {
     //VARIABLES---------------------------------------------------------------------------------------------------------------
     public String fieldSide = "Blue";
     public boolean cycleStack = true;
 
-    public boolean insideRoute = true;
+    public boolean outsideRoute = true;
 
     public boolean waitBool = false;
     public int waitDuration; //how long to wait on partner alliance in seconds
 
     //START POS
-    double startPosX = 12 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
+    double startPosX = -36 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
     double startPosY = 72 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
     double startHeading = Math.toRadians(90);
 
@@ -30,8 +30,8 @@ public class BlueClose extends LinearOpMode {
     double tagMid = Math.toRadians(100);
     double tagRight = Math.toRadians(72);
 
-    double tagScorePosX = 43; //center preload tag score pos X
-    double tagScorePoxY = 42; //center preload tag score pos Y
+    double tagScorePosX = 45; //center preload tag score pos X
+    double tagScorePoxY = 34; //center preload tag score pos Y
     double tagScoreOffsetY; //controls left-right preload displacement
     double tagScoreHeading = Math.toRadians(180);
 
@@ -48,8 +48,8 @@ public class BlueClose extends LinearOpMode {
     double routeWait; //need more time for outside route
 
     //PARK POS
-    double parkPosX = 46;
-    double parkPosY = 68;
+    double parkPosX = 55;
+    double parkPosY = 18;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -72,14 +72,14 @@ public class BlueClose extends LinearOpMode {
                 cycleStack = false;
             }
 
-            //INSIDE CYCLE OR OUTSIDE?
+            //OUTSIDE CYCLE OR INSIDE?
             if(gamepad1.a) {
-                insideRoute = true;
+                outsideRoute = true;
                 routeOffsetY = 0;
                 routeWait = 0;
             } else if(gamepad1.y) {
-                insideRoute = false;
-                routeOffsetY = -26.5;
+                outsideRoute = false;
+                routeOffsetY = -26;
                 routeWait = 0.5;
 
                 waitBool = false; //no time to wait on outside route
@@ -95,11 +95,11 @@ public class BlueClose extends LinearOpMode {
                 waitDuration = 0;
             }
 
-            telemetry.addData("-- BLUE CLOSE AUTO --","");
+            telemetry.addData("-- BLUE FAR AUTO --","");
             telemetry.addData("","");
             telemetry.addData("Cam Place: ", robot.visionProcessor.getSelection());
             telemetry.addData("Cycle Stack?: ", cycleStack);
-            telemetry.addData("Inside Route?: ", insideRoute);
+            telemetry.addData("Outside Route?: ", outsideRoute);
             telemetry.addData("Wait on Partner?: ", waitBool);
             telemetry.addData("","");
 
@@ -141,18 +141,20 @@ public class BlueClose extends LinearOpMode {
                     .afterTime(1.5, robot.home())
 
                     //SCORE BACKDROP PIXEL
-                    .afterTime(3.5, robot.low())
-                    .afterTime(4.5, robot.mid())
-                    .afterTime(5.0, robot.retract())
+                    .afterTime(7.5, robot.low())
+                    .afterTime(8.5, robot.mid())
+                    .afterTime(9.0, robot.retract())
 
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
                     .lineToYLinearHeading(55 + spikeMarkOffsetY, tagHeading)
                     .waitSeconds(0.75)
 
-                    //TURN TO BACKBOARD
-                    .strafeToLinearHeading(new Vector2d(27, tagScorePoxY + tagScoreOffsetY), tagScoreHeading)
-                    .turnTo(Math.toRadians(180))
+                    //DRIVE OUTSIDE TURN & DRIVE TO BACKBOARD
+                    .turnTo(startHeading)
+                    .lineToYLinearHeading(18, startHeading)
+                    .strafeToLinearHeading(new Vector2d(24, 18), tagScoreHeading)
+                    .strafeToLinearHeading(new Vector2d(36, tagScorePoxY + tagScoreOffsetY), tagScoreHeading)
 
                     //PUSH IN AND SCORE
                     .lineToX(tagScorePosX)
