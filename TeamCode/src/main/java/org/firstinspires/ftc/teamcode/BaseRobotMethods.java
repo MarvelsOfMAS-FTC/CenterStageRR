@@ -97,7 +97,7 @@ public class BaseRobotMethods{
         elbowl.setPosition(0.55 + elbowHome);
         elbowr.setPosition(0.30 + elbowHome);
         //wrist.setPosition(0.725);
-        finger.setPosition(0.825);
+        finger.setPosition(0.388);
         droneLaunch.setPosition(0.3);
 
 
@@ -186,9 +186,9 @@ public class BaseRobotMethods{
     public class IntakeLevel5 implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            elbowl.setPosition(0.4484);//  INTAKE DOWN and TURN ON
-            elbowr.setPosition(0.777);
-            wrist.setPosition(0.5273);
+            elbowl.setPosition(0.783);//  INTAKE DOWN and TURN ON
+            elbowr.setPosition(0.533);
+            wrist.setPosition(0.438);
             intake.setPower(-1.0); //turn intake on full speed
             passiveIntake = true;
             return false;
@@ -203,7 +203,7 @@ public class BaseRobotMethods{
             extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             extend.setPower(-0.5);//set 50% speed elevator in
             //then transfer and reset elevator encoder
-            intake.setPower(0.75);
+            intake.setPower(0.5);
             extend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             extend.setTargetPosition(0);
             extend.setPower(1.0);
@@ -227,9 +227,7 @@ public class BaseRobotMethods{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setTargetPosition(300);
-            while (extend.isBusy()) {
-                finger.setPosition(-0.00007 * extend.getCurrentPosition() + 0.44);
-            }
+            finger.setPosition(0.388);
             return false;
         }
         // (int extendticks)
