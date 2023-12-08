@@ -31,7 +31,7 @@ public class BlueFar extends LinearOpMode {
     double tagRight = Math.toRadians(72);
 
     double tagScorePosX = 45; //center preload tag score pos X
-    double tagScorePoxY = 38; //center preload tag score pos Y
+    double tagScorePoxY = 38; //center preload tag score pos Y -- THIS NEEDS TO BE DEAD CENTER FOR MIDDLE PLACEMENT ON BACK DROP --
     double tagScoreOffsetY; //controls left-right preload displacement
     double tagScoreHeading = Math.toRadians(180);
 
@@ -149,14 +149,17 @@ public class BlueFar extends LinearOpMode {
                     .waitSeconds(0.75)
 
                     //DRIVE OUTSIDE TURN & DRIVE TO BACKBOARD
-                    .turnTo(startHeading)
+                    .turnTo(startHeading) //required to keep robot moving straight
                     .lineToYLinearHeading(20, startHeading)
                     .strafeToLinearHeading(new Vector2d(24, 20), tagScoreHeading)
-                    .strafeToLinearHeading(new Vector2d(36, tagScorePoxY + tagScoreOffsetY), tagScoreHeading)
+                    .strafeToLinearHeading(new Vector2d(36, tagScorePoxY + tagScoreOffsetY), tagScoreHeading) //tagScorePosY should be dead center on backdrop. tune until it is.
 
                     //PUSH IN AND SCORE
-                    .lineToX(tagScorePosX)
-                    .waitSeconds(0.01)
+                    .waitSeconds(0.01) //wait needed between strafe and line movement to seperate direction. roadrunner auto merges the two for some reason
+                    //.turnTo(tagScoreHeading) //if the wait doesn't work try this. remove if not needed
+                    //.lineToXLinearHeading(tagScorePosX, tagScoreHeading) //if the wait and turn doesn't work, try this. remove if not needed
+                    .lineToX(tagScorePosX) //this should be a vertical move into the back drop. watch dashboard and make sure this is the case
+
                     .endTrajectory()
                     .build();
 
