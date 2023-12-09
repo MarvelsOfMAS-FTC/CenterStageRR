@@ -129,7 +129,7 @@ public class BaseRobotMethods{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setPower(1);
-            extend.setTargetPosition(0);
+            extend.setTargetPosition(-50);
             climbl.setTargetPosition(5);
             climbr.setTargetPosition(5);
             score.setPosition(scoreHome);
