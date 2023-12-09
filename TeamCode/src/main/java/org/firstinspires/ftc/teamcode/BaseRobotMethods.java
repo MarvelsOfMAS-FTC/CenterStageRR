@@ -97,7 +97,7 @@ public class BaseRobotMethods{
         elbowl.setPosition(0.29 + elbowHome);
         elbowr.setPosition(0.25 + elbowHome);
         wrist.setPosition(0.725);
-        finger.setPosition(0.44);
+        finger.setPosition(0.409);
         droneLaunch.setPosition(0.4);
 
 
@@ -186,9 +186,9 @@ public class BaseRobotMethods{
     public class IntakeLevel5 implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            elbowl.setPosition(0.555);//  INTAKE DOWN and TURN ON
-            elbowr.setPosition(0.5153);
-            wrist.setPosition(0.34);
+            elbowl.setPosition(0.574);//  INTAKE DOWN and TURN ON
+            elbowr.setPosition(0.534);
+            wrist.setPosition(0.427);
             intake.setPower(-1.0); //turn intake on full speed
             passiveIntake = true;
             return false;
@@ -197,6 +197,25 @@ public class BaseRobotMethods{
     public Action intakeLevel5() {
         return new IntakeLevel5();
     }
+
+
+    public class IntakeLevel3 implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            elbowl.setPosition(0.584);//  INTAKE DOWN and TURN ON
+            elbowr.setPosition(0.544);
+            wrist.setPosition(0.395);
+            intake.setPower(-1.0); //turn intake on full speed
+            passiveIntake = true;
+            return false;
+        }
+    }
+    public Action intakeLevel3() {
+        return new IntakeLevel3();
+    }
+
+
+
     public class Transfer implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
@@ -276,9 +295,9 @@ public class BaseRobotMethods{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setPower(0.65);
-            extend.setTargetPosition(450);
-            climbl.setTargetPosition(400); //525
-            climbr.setTargetPosition(400);
+            extend.setTargetPosition(460);
+            climbl.setTargetPosition(435); //525
+            climbr.setTargetPosition(435);
             score.setPosition(0.34);
             return false;
         }

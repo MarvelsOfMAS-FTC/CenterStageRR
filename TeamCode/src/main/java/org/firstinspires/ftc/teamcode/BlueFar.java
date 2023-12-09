@@ -31,16 +31,16 @@ public class BlueFar extends LinearOpMode {
     double tagRight = Math.toRadians(72);
 
     double tagScorePosX = 45; //center preload tag score pos X
-    double tagScorePoxY = 38; //center preload tag score pos Y -- THIS NEEDS TO BE DEAD CENTER FOR MIDDLE PLACEMENT ON BACK DROP --
+    double tagScorePoxY = 42; //center preload tag score pos Y -- THIS NEEDS TO BE DEAD CENTER FOR MIDDLE PLACEMENT ON BACK DROP --
     double tagScoreOffsetY; //controls left-right preload displacement
     double tagScoreHeading = Math.toRadians(180);
 
 
     //CYCLING POS
-    double pixelStackPosX = -55; //how far into back wall to drive
+    double pixelStackPosX = -53.5; //how far into back wall to drive
     double pixelStackOffsetX = -2.5;
     double pixelStackPosY = 41;
-    double cycleScorePosX = 45; //push in more than tag score
+    double cycleScorePosX = 44; //push in more than tag score
     double cycleScoreOffsetX = 1;
     double cycleScorePosY = 44; //used to dodge right pixel on transit
 
@@ -115,17 +115,17 @@ public class BlueFar extends LinearOpMode {
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagHeading = tagMid;
-                tagScoreOffsetY = 0;
+                tagScoreOffsetY = 5;
                 spikeMarkOffsetY = 0;
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
-                tagScoreOffsetY = 5;
+                tagScoreOffsetY = 10;
                 spikeMarkOffsetY = -1;
 
             } else {
                 tagHeading = tagRight;
-                tagScoreOffsetY = -5.5;
+                tagScoreOffsetY = 0;
                 spikeMarkOffsetY = -1;
             }
 
@@ -149,15 +149,15 @@ public class BlueFar extends LinearOpMode {
                     .waitSeconds(0.75)
 
                     //DRIVE OUTSIDE TURN & DRIVE TO BACKBOARD
-                    .turnTo(startHeading) //required to keep robot moving straight
+                    .turnTo(startHeading-0.0001) //required to keep robot moving straight
                     .lineToYLinearHeading(20, startHeading)
                     .strafeToLinearHeading(new Vector2d(24, 20), tagScoreHeading)
                     .strafeToLinearHeading(new Vector2d(36, tagScorePoxY + tagScoreOffsetY), tagScoreHeading) //tagScorePosY should be dead center on backdrop. tune until it is.
 
                     //PUSH IN AND SCORE
                     .waitSeconds(0.01) //wait needed between strafe and line movement to seperate direction. roadrunner auto merges the two for some reason
-                    //.turnTo(tagScoreHeading) //if the wait doesn't work try this. remove if not needed
-                    //.lineToXLinearHeading(tagScorePosX, tagScoreHeading) //if the wait and turn doesn't work, try this. remove if not needed
+                    .turnTo(tagScoreHeading+0.00001) //if the wait doesn't work try this. remove if not needed
+                    .lineToXLinearHeading(tagScorePosX, tagScoreHeading) //if the wait and turn doesn't work, try this. remove if not needed
                     .lineToX(tagScorePosX) //this should be a vertical move into the back drop. watch dashboard and make sure this is the case
 
                     .endTrajectory()
@@ -175,12 +175,13 @@ public class BlueFar extends LinearOpMode {
 
                         //WHIP OUT INTAKE & FEED
                         .afterTime(2.5 + routeWait, robot.intakeLevel5())
+                        .afterTime(3.9 + routeWait, robot.intakeGround())
                         .afterTime(4.5 + routeWait, robot.intakeUp())
 
                         //TRANSFER & SCORE
                         .afterTime(5 + routeWait, robot.transfer())
-                        .afterTime(6.5 + routeWait, robot.intakeStop())
-                        .afterTime(7 + (routeWait * 2) + waitDuration, robot.mid())
+                        .afterTime(6.9 + routeWait, robot.intakeStop())
+                        .afterTime(6 + (routeWait * 2) + waitDuration, robot.mid())
                         .afterTime(9 + routeWait + waitDuration, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
@@ -198,6 +199,7 @@ public class BlueFar extends LinearOpMode {
                         .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.01)
                         .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(cycleScorePosX+3, cycleScorePosY), tagScoreHeading)
                         .waitSeconds(1)
                         .build();
 
@@ -226,9 +228,9 @@ public class BlueFar extends LinearOpMode {
                         .waitSeconds(0.01)
 
                         //GOTO STACK AND WAIT IF NEEDED
-                        .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY-0.85 + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.01) //added to make approach more gentle
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY-0.85 + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.5)
 
                         //RETURN TO BACKBOARD AND SCORE
