@@ -123,12 +123,12 @@ public class RedClose extends LinearOpMode {
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
                 tagScoreOffsetY = 5;
-                spikeMarkOffsetY = -1;
+                spikeMarkOffsetY = -2;
 
             } else {
                 tagHeading = tagRight;
                 tagScoreOffsetY = -5.2;
-                spikeMarkOffsetY = -1;
+                spikeMarkOffsetY = -2;
             }
 
             //SCORE PRELOAD PIXELS
