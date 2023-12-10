@@ -117,18 +117,18 @@ public class RedFar extends LinearOpMode {
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagHeading = tagMid;
-                tagScoreOffsetY = 0;
-                spikeMarkOffsetY = 2;//positive towards wall
+                tagScoreOffsetY = -43.5;
+                spikeMarkOffsetY = -1.5;//positive towards wall
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
-                tagScoreOffsetY = -6;
-                spikeMarkOffsetY = 9;
+                tagScoreOffsetY = -37;
+                spikeMarkOffsetY = 1;
 
             } else {
                 tagHeading = tagRight;
-                tagScoreOffsetY = 6.75;
-                spikeMarkOffsetY = 10;
+                tagScoreOffsetY = -50;
+                spikeMarkOffsetY = -10;
             }
 
             //SCORE PRELOAD PIXELS
@@ -141,9 +141,7 @@ public class RedFar extends LinearOpMode {
                     .afterTime(2.5, robot.home())
 
                     //SCORE BACKDROP PIXEL
-                    .afterTime(7.75, robot.extraMid())
-                    .afterTime(9.25, robot.mid())
-                    .afterTime(10.0, robot.retract())
+
 
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
@@ -151,16 +149,11 @@ public class RedFar extends LinearOpMode {
                     .waitSeconds(1.75)//keep this 1.75
 
                     //DRIVE OUTSIDE TURN & DRIVE TO BACKBOARD
-                    .turnTo(startHeading-0.0001) //required to keep robot moving straight
-                    .lineToYLinearHeading(20, startHeading)
-                    .strafeToLinearHeading(new Vector2d(24, 20), tagScoreHeading)
-                    .strafeToLinearHeading(new Vector2d(36, tagScorePoxY + tagScoreOffsetY), tagScoreHeading) //tagScorePosY should be dead center on backdrop. tune until it is.
-
-                    //PUSH IN AND SCORE
-                    .waitSeconds(0.01) //wait needed between strafe and line movement to seperate direction. roadrunner auto merges the two for some reason
-                    .turnTo(tagScoreHeading+0.00001) //if the wait doesn't work try this. remove if not needed
-                    .lineToXLinearHeading(tagScorePosX, tagScoreHeading) //if the wait and turn doesn't work, try this. remove if not needed
-                    .lineToX(tagScorePosX) //this should be a vertical move into the back drop. watch dashboard and make sure this is the case
+                    .turnTo(Math.toRadians(269)) //required to keep robot moving straight
+                    .lineToY(-20)
+                    .strafeToLinearHeading(new Vector2d(37.5, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                    .waitSeconds(0.01)
+                    .strafeTo(new Vector2d(37.5, tagScoreOffsetY))
 
                     .endTrajectory()
                     .build();
@@ -258,7 +251,7 @@ public class RedFar extends LinearOpMode {
                     .endTrajectory()
                     .build();
 
-            Actions.runBlocking(parkBot);
+            //Actions.runBlocking(parkBot);
             drive.updatePoseEstimate();
             break;
         }

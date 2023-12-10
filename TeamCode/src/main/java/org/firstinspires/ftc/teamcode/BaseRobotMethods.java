@@ -249,7 +249,7 @@ public class BaseRobotMethods{
     public class SpikeExtend implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setPower(0.2);
+            extend.setPower(0.19);
             extend.setTargetPosition(300);
            // climbl.setTargetPosition(300);
            // climbr.setTargetPosition(300);
