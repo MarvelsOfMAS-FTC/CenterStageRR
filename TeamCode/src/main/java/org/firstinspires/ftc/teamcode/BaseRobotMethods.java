@@ -94,10 +94,14 @@ public class BaseRobotMethods{
         score.setPosition(scoreHome);
 
         //SERVO POS
-        elbowl.setPosition(0.29 + elbowHome);
-        elbowr.setPosition(0.25 + elbowHome);
-        wrist.setPosition(0.725);
-        finger.setPosition(0.409);
+        elbowl.setPosition(0.34122 + elbowHome);
+        elbowr.setPosition(0.30122 + elbowHome);
+        wrist.setPosition(0.744);
+
+        //elbowl.setPosition(0.29 + elbowHome);
+        //elbowr.setPosition(0.25 + elbowHome);
+        //wrist.setPosition(0.725);
+        finger.setPosition(0.162);
         droneLaunch.setPosition(0.4);
 
 
@@ -186,9 +190,9 @@ public class BaseRobotMethods{
     public class IntakeLevel5 implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            elbowl.setPosition(0.574);//  INTAKE DOWN and TURN ON
-            elbowr.setPosition(0.534);
-            wrist.setPosition(0.427);
+            elbowl.setPosition(0.58);//  INTAKE DOWN and TURN ON
+            elbowr.setPosition(0.54);
+            wrist.setPosition(0.422);
             intake.setPower(-1.0); //turn intake on full speed
             passiveIntake = true;
             return false;
@@ -245,10 +249,12 @@ public class BaseRobotMethods{
     public class SpikeExtend implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            extend.setPower(0.05);
             extend.setTargetPosition(300);
-            while (extend.isBusy()) {
-                finger.setPosition(-0.00007 * extend.getCurrentPosition() + 0.44);
-            }
+           // climbl.setTargetPosition(300);
+           // climbr.setTargetPosition(300);
+
+
             return false;
         }
         // (int extendticks)
@@ -259,8 +265,7 @@ public class BaseRobotMethods{
     public class SpikeScore implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            climbl.setTargetPosition(300);
-            climbr.setTargetPosition(300);
+            finger.setPosition(0.435);
             return false;
         }
     }
@@ -296,14 +301,29 @@ public class BaseRobotMethods{
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setPower(0.65);
             extend.setTargetPosition(460);
-            climbl.setTargetPosition(435); //525
-            climbr.setTargetPosition(435);
+            climbl.setTargetPosition(480); //525
+            climbr.setTargetPosition(480);
             score.setPosition(0.34);
             return false;
         }
     }
     public Action mid(){
         return new Mid();
+    }
+
+    public class ExtraMid implements Action{ //(int extendTarget)
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            extend.setPower(0.65);
+            extend.setTargetPosition(460);
+            climbl.setTargetPosition(370); //525
+            climbr.setTargetPosition(370);
+            score.setPosition(0.34);
+            return false;
+        }
+    }
+    public Action extraMid(){
+        return new ExtraMid();
     }
     public static double Tiles(double amt_of_tiles){
         return (double) amt_of_tiles*24;

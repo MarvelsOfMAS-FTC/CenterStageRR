@@ -26,11 +26,11 @@ public class BlueFar extends LinearOpMode {
     //PRELOAD POS
     double spikeMarkOffsetY; //change spike mark tape forward movement
     double tagHeading;
-    double tagLeft = Math.toRadians(119);
+    double tagLeft = Math.toRadians(140);
     double tagMid = Math.toRadians(100);
-    double tagRight = Math.toRadians(72);
+    double tagRight = Math.toRadians(40);
 
-    double tagScorePosX = 45; //center preload tag score pos X
+    double tagScorePosX = 52; //center preload tag score pos X
     double tagScorePoxY = 42; //center preload tag score pos Y -- THIS NEEDS TO BE DEAD CENTER FOR MIDDLE PLACEMENT ON BACK DROP --
     double tagScoreOffsetY; //controls left-right preload displacement
     double tagScoreHeading = Math.toRadians(180);
@@ -115,18 +115,18 @@ public class BlueFar extends LinearOpMode {
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagHeading = tagMid;
-                tagScoreOffsetY = 5;
-                spikeMarkOffsetY = 0;
+                tagScoreOffsetY = 3;
+                spikeMarkOffsetY = -11;
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
                 tagScoreOffsetY = 10;
-                spikeMarkOffsetY = -1;
+                spikeMarkOffsetY = 12;
 
             } else {
                 tagHeading = tagRight;
                 tagScoreOffsetY = 0;
-                spikeMarkOffsetY = -1;
+                spikeMarkOffsetY = -12;
             }
 
             //SCORE PRELOAD PIXELS
@@ -135,13 +135,12 @@ public class BlueFar extends LinearOpMode {
                     //SCORE MARK PIXEL
                     .afterTime(0, robot.spikeExtend())
                     .afterTime(1, robot.spikeScore())
-                    .afterTime(1.25, robot.fingerHome())
-                    .afterTime(1.5, robot.home())
+                    .afterTime(1.5, robot.fingerHome())
+                    .afterTime(2.5, robot.home())
 
                     //SCORE BACKDROP PIXEL
-                    .afterTime(7.5, robot.low())
-                    .afterTime(8.5, robot.mid())
-                    .afterTime(9.0, robot.retract())
+                    .afterTime(7, robot.extraMid())
+                    .afterTime(9.5, robot.retract())
 
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
@@ -171,18 +170,18 @@ public class BlueFar extends LinearOpMode {
                 Action pixelCycle1 = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, tagScoreHeading))
                         //ACTIONS --------------------------------------------------------------
                         //RETRACT
-                        .afterTime(0, robot.home())
+                        .afterTime(1, robot.home())
 
                         //WHIP OUT INTAKE & FEED
-                        .afterTime(2.5 + routeWait, robot.intakeLevel5())
-                        .afterTime(3.9 + routeWait, robot.intakeGround())
-                        .afterTime(4.5 + routeWait, robot.intakeUp())
+                        .afterTime(3 + routeWait, robot.intakeLevel5())
+                        .afterTime(4.9 + routeWait, robot.intakeGround())
+                        .afterTime(5 + routeWait, robot.intakeUp())
 
                         //TRANSFER & SCORE
-                        .afterTime(5 + routeWait, robot.transfer())
-                        .afterTime(6.9 + routeWait, robot.intakeStop())
-                        .afterTime(6 + (routeWait * 2) + waitDuration, robot.mid())
-                        .afterTime(9 + routeWait + waitDuration, robot.retract())
+                        .afterTime(5.5 + routeWait, robot.transfer())
+                        .afterTime(6.4 + routeWait, robot.intakeStop())
+                        .afterTime(6.5 + (routeWait * 2) + waitDuration, robot.mid())
+                        .afterTime(9.5 + routeWait + waitDuration, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
@@ -219,7 +218,7 @@ public class BlueFar extends LinearOpMode {
                         //TRANSFER & SCORE
                         .afterTime(5.5 + routeWait, robot.transfer())
                         .afterTime(6.5 + routeWait, robot.intakeStop())
-                        .afterTime(7 + (routeWait * 2), robot.mid())
+                        .afterTime(6.5 + (routeWait * 2), robot.mid())
                         .afterTime(9 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
