@@ -187,7 +187,7 @@ public class BaseRobotMethods{
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             elbowl.setPosition(0.756908);//  INTAKE DOWN and TURN ON
             elbowr.setPosition(0.506908);
-            wrist.setPosition(0.411420);
+            wrist.setPosition(0.411420-0.04);
             intake.setPower(-1.0); //turn intake on full speed
             passiveIntake = true;
             return false;
