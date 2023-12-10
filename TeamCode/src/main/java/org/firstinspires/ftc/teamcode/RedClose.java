@@ -196,7 +196,7 @@ public class RedClose extends LinearOpMode {
                         //RETURN TO BACKBOARD AND SCORE
                         .strafeToLinearHeading(new Vector2d(45, cycleScorePosY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.01)
-                        .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading)
+                       // .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading)
                         .waitSeconds(1.5)
                         .build();
 
