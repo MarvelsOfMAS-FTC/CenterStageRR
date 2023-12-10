@@ -27,7 +27,7 @@ public class RedClose extends LinearOpMode {
     double spikeMarkOffsetY; //change spike mark tape forward movement
     double tagHeading;
     double tagLeft = Math.toRadians(119+180);
-    double tagMid = Math.toRadians(100+180);
+    double tagMid = Math.toRadians(110+180);
     double tagRight = Math.toRadians(72+180);
 
     double tagScorePosX = 43; //center preload tag score pos X
@@ -117,13 +117,13 @@ public class RedClose extends LinearOpMode {
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagHeading = tagMid;
-                tagScoreOffsetY = 0.4;
-                spikeMarkOffsetY = 0;
+                tagScoreOffsetY = 0;
+                spikeMarkOffsetY = 2;
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
                 tagScoreOffsetY = 5;
-                spikeMarkOffsetY = 4;
+                spikeMarkOffsetY = -8.6;
 
             } else {
                 tagHeading = tagRight;
@@ -143,7 +143,7 @@ public class RedClose extends LinearOpMode {
 
                     //SCORE BACKDROP PIXEL
                     .afterTime(5, robot.low())
-                    .afterTime(6, robot.mid())
+                    .afterTime(5.7, robot.mid())
                     .afterTime(6.5, robot.retract())
 
                     //MOVEMENT ---------------------------------------------------------------------
@@ -178,7 +178,7 @@ public class RedClose extends LinearOpMode {
                         //TRANSFER & SCORE
                         .afterTime(5 + routeWait, robot.transfer())
                         .afterTime(6.5 + routeWait, robot.intakeStop())
-                        .afterTime( 7 + routeWait + waitDuration, robot.mid())
+                        .afterTime( 6.8 + routeWait + waitDuration, robot.mid())
                         .afterTime(8 + routeWait + waitDuration, robot.retract())
                         .afterTime(8.33 + routeWait + waitDuration, robot.home())
 
@@ -203,6 +203,7 @@ public class RedClose extends LinearOpMode {
 
                 Actions.runBlocking(pixelCycle1);
                 drive.updatePoseEstimate();
+                Actions.runBlocking(pixelCycle1);
 
                 Action pixelCycle2 = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, tagScoreHeading))
                         //ACTIONS --------------------------------------------------------------
@@ -210,13 +211,13 @@ public class RedClose extends LinearOpMode {
                         .afterTime(0, robot.home())
 
                         //WHIP OUT INTAKE & FEED
-                        .afterTime(.5 + routeWait, robot.intakeGround())
-                        .afterTime(1.5 + routeWait, robot.intakeUp())
+                        .afterTime(2 + routeWait, robot.intakeGround())
+                        .afterTime(4.5 + routeWait, robot.intakeUp())
 
                         //TRANSFER & SCORE
-                        .afterTime(5.5 + routeWait, robot.transfer())
-                        .afterTime(6.5 + routeWait, robot.intakeStop())
-                        .afterTime(7 + (routeWait * 2), robot.mid())
+                        .afterTime(5.3 + routeWait, robot.transfer())
+                        .afterTime(6.3 + routeWait, robot.intakeStop())
+                        .afterTime(6.8 + (routeWait * 2), robot.mid())
                         .afterTime(9 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
@@ -228,12 +229,12 @@ public class RedClose extends LinearOpMode {
                         .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.01) //added to make approach more gentle
                         .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY + routeOffsetY), tagScoreHeading)
-                        .waitSeconds(0.5)
+                        .waitSeconds(0.75)
 
                         //RETURN TO BACKBOARD AND SCORE
-                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(45, cycleScorePosY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.01)
-                        .strafeToLinearHeading(new Vector2d(cycleScorePosX + cycleScoreOffsetX, cycleScorePosY), tagScoreHeading)
+                        //.strafeToLinearHeading(new Vector2d(cycleScorePosX + cycleScoreOffsetX-12, cycleScorePosY), tagScoreHeading)
                         .waitSeconds(1)
                         .build();
 
