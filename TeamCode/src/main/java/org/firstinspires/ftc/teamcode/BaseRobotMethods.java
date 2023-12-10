@@ -1,4 +1,3 @@
-
 package org.firstinspires.ftc.teamcode;
 import android.util.Size;
 import androidx.annotation.NonNull;
@@ -96,10 +95,9 @@ public class BaseRobotMethods{
         //SERVO POS
         elbowl.setPosition(0.55 + elbowHome);
         elbowr.setPosition(0.30 + elbowHome);
-        //wrist.setPosition(0.725);
-        finger.setPosition(0.130039);
-        droneLaunch.setPosition(0.3);
-        //0.130039 is the spike holder
+        wrist.setPosition(0.725);
+        finger.setPosition(0.1299);
+        droneLaunch.setPosition(0.4);
 
 
         //CAMERA INIT
@@ -129,8 +127,8 @@ public class BaseRobotMethods{
     public class Home implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setPower(0.4);
-            extend.setTargetPosition(0);
+            extend.setPower(1);
+            extend.setTargetPosition(-50);
             climbl.setTargetPosition(5);
             climbr.setTargetPosition(5);
             score.setPosition(scoreHome);
@@ -187,9 +185,9 @@ public class BaseRobotMethods{
     public class IntakeLevel5 implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            elbowl.setPosition(0.783);//  INTAKE DOWN and TURN ON
-            elbowr.setPosition(0.533);
-            wrist.setPosition(0.438);
+            elbowl.setPosition(0.7816145008);//  INTAKE DOWN and TURN ON
+            elbowr.setPosition(0.5316145008);
+            wrist.setPosition(0.49);
             intake.setPower(-1.0); //turn intake on full speed
             passiveIntake = true;
             return false;
@@ -198,13 +196,32 @@ public class BaseRobotMethods{
     public Action intakeLevel5() {
         return new IntakeLevel5();
     }
+
+
+    public class IntakeLevel3 implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            elbowl.setPosition(0.584);//  INTAKE DOWN and TURN ON
+            elbowr.setPosition(0.544);
+            wrist.setPosition(0.395);
+            intake.setPower(-1.0); //turn intake on full speed
+            passiveIntake = true;
+            return false;
+        }
+    }
+    public Action intakeLevel3() {
+        return new IntakeLevel3();
+    }
+
+
+
     public class Transfer implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             extend.setPower(-0.5);//set 50% speed elevator in
             //then transfer and reset elevator encoder
-            intake.setPower(0.5);
+            intake.setPower(0.75);
             extend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             extend.setTargetPosition(0);
             extend.setPower(1.0);
@@ -224,15 +241,14 @@ public class BaseRobotMethods{
         }
     }
     public Action intakeUp(){return new IntakeUp();}
-
-    //0.130039 is the spike holder
-    //0.41 is to score the spike
     public class SpikeExtend implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setPower(0.3);
+            extend.setPower(0.2);
             extend.setTargetPosition(300);
-          //  finger.setPosition(0.388);
+//            while (extend.isBusy()) {
+//                finger.setPosition(-0.00007 * extend.getCurrentPosition() + 0.44);
+//            }
             return false;
         }
         // (int extendticks)
@@ -251,25 +267,12 @@ public class BaseRobotMethods{
     public Action spikeScore(){
         return new SpikeScore();
     }
-    public class FingerHome implements Action{
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            finger.setPosition(0.825);
-            return false;
-        }
-    }
-    public Action fingerHome(){
-        return new FingerHome();
-    }
-
-
-
 
     public class fingerScore implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             finger.setPosition(0.41);
-            //0.41 is to score the spike
+
             return false;
         }
     }
@@ -278,17 +281,24 @@ public class BaseRobotMethods{
     }
 
 
-
-
-
+    public class FingerHome implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            finger.setPosition(0.84);
+            return false;
+        }
+    }
+    public Action fingerHome(){
+        return new FingerHome();
+    }
     public class Low implements Action { //(int extendTarget)
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setPower(0.65);
-            extend.setTargetPosition(0);
-            climbl.setTargetPosition(0); //260
-            climbr.setTargetPosition(0);
-            score.setPosition(scoreHome);
+            extend.setTargetPosition(400);
+            climbl.setTargetPosition(300); //260
+            climbr.setTargetPosition(300);
+            score.setPosition(0.4);
             return false;
         }
     }
@@ -299,9 +309,9 @@ public class BaseRobotMethods{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setPower(0.65);
-            extend.setTargetPosition(450);
-            climbl.setTargetPosition(400); //525
-            climbr.setTargetPosition(400);
+            extend.setTargetPosition(460);
+            climbl.setTargetPosition(435); //525
+            climbr.setTargetPosition(435);
             score.setPosition(0.34);
             return false;
         }

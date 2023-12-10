@@ -30,14 +30,14 @@ public class BlueClose extends LinearOpMode {
     double tagMid = Math.toRadians(100);
     double tagRight = Math.toRadians(72);
 
-    double tagScorePosX = 48; //center preload tag score pos X
+    double tagScorePosX = 43; //center preload tag score pos X
     double tagScorePoxY = 42; //center preload tag score pos Y
     double tagScoreOffsetY; //controls left-right preload displacement
     double tagScoreHeading = Math.toRadians(180);
 
 
     //CYCLING POS
-    double pixelStackPosX = -65; //how far into back wall to drive
+    double pixelStackPosX = -55; //how far into back wall to drive
     double pixelStackOffsetX = -2.5;
     double pixelStackPosY = 41;
     double cycleScorePosX = 45; //push in more than tag score
@@ -83,7 +83,7 @@ public class BlueClose extends LinearOpMode {
                 routeWait = 0.5;
 
                 waitBool = false; //no time to wait on outside route
-                waitDuration = 0;
+                waitDuration = 1;
             }
 
             //WAIT ON ALLIANCE?
@@ -127,7 +127,7 @@ public class BlueClose extends LinearOpMode {
 
             } else {
                 tagHeading = tagRight;
-                tagScoreOffsetY = -5.5;
+                tagScoreOffsetY = -5.2;
                 spikeMarkOffsetY = -1;
             }
 
@@ -139,17 +139,17 @@ public class BlueClose extends LinearOpMode {
                     .afterTime(1, robot.fingerScore())
                     .afterTime(1.5, robot.spikeScore())
                     .afterTime(1.75, robot.fingerHome())
-                    .afterTime(1.75, robot.home())
+                    .afterTime(2, robot.home())
 
                     //SCORE BACKDROP PIXEL
-                    .afterTime(3, robot.low())
-                    .afterTime(4.5, robot.mid())
-                    .afterTime(6.0, robot.retract())
+                    .afterTime(5, robot.low())
+                    .afterTime(6, robot.mid())
+                    .afterTime(6.5, robot.retract())
 
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
                     .lineToYLinearHeading(55 + spikeMarkOffsetY, tagHeading)
-                    .waitSeconds(1.25)
+                    .waitSeconds(1.75+0.5)
 
                     //TURN TO BACKBOARD
                     .strafeToLinearHeading(new Vector2d(27, tagScorePoxY + tagScoreOffsetY), tagScoreHeading)
