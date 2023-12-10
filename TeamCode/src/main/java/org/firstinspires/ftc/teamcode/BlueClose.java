@@ -136,9 +136,10 @@ public class BlueClose extends LinearOpMode {
                     //ACTIONS ----------------------------------------------------------------------
                     //SCORE MARK PIXEL
                     .afterTime(0, robot.spikeExtend())
-                    .afterTime(1, robot.spikeScore())
-                    .afterTime(1.25, robot.fingerHome())
-                    .afterTime(1.5, robot.home())
+                    .afterTime(1, robot.fingerScore())
+                    .afterTime(1.5, robot.spikeScore())
+                    .afterTime(1.75, robot.fingerHome())
+                    .afterTime(1.75, robot.home())
 
                     //SCORE BACKDROP PIXEL
                     .afterTime(3, robot.low())
@@ -148,7 +149,7 @@ public class BlueClose extends LinearOpMode {
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
                     .lineToYLinearHeading(55 + spikeMarkOffsetY, tagHeading)
-                    .waitSeconds(0.75)
+                    .waitSeconds(1.25)
 
                     //TURN TO BACKBOARD
                     .strafeToLinearHeading(new Vector2d(27, tagScorePoxY + tagScoreOffsetY), tagScoreHeading)
