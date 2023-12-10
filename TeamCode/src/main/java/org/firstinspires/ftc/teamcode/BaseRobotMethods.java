@@ -241,6 +241,30 @@ public class BaseRobotMethods{
         }
     }
     public Action intakeUp(){return new IntakeUp();}
+
+
+
+
+
+
+
+
+    public class extraMid implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            elbowl.setPosition(0.55 + elbowHome);
+            elbowr.setPosition(0.30 + elbowHome);
+            wrist.setPosition(0.83);
+            return false;
+        }
+    }
+    public Action extraMid(){return new extraMid();}
+
+
+
+
+
+
     public class SpikeExtend implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
