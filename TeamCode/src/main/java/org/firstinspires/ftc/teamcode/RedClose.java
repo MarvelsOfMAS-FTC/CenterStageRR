@@ -8,9 +8,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous
-public class BlueClose extends LinearOpMode {
+public class RedClose extends LinearOpMode {
     //VARIABLES---------------------------------------------------------------------------------------------------------------
-    public String fieldSide = "Blue";
+    public String fieldSide = "Red";
     public boolean cycleStack = true;
 
     public boolean insideRoute = true;
@@ -20,18 +20,18 @@ public class BlueClose extends LinearOpMode {
 
     //START POS
     double startPosX = 12 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
-    double startPosY = 72 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
-    double startHeading = Math.toRadians(90);
+    double startPosY = -72 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
+    double startHeading = Math.toRadians(270);
 
     //PRELOAD POS
     double spikeMarkOffsetY; //change spike mark tape forward movement
     double tagHeading;
-    double tagLeft = Math.toRadians(119);
-    double tagMid = Math.toRadians(100);
-    double tagRight = Math.toRadians(72);
+    double tagLeft = Math.toRadians(119+180);
+    double tagMid = Math.toRadians(100+180);
+    double tagRight = Math.toRadians(72+180);
 
     double tagScorePosX = 43; //center preload tag score pos X
-    double tagScorePoxY = 42; //center preload tag score pos Y
+    double tagScorePoxY = -42; //center preload tag score pos Y
     double tagScoreOffsetY; //controls left-right preload displacement
     double tagScoreHeading = Math.toRadians(180);
 
@@ -39,17 +39,17 @@ public class BlueClose extends LinearOpMode {
     //CYCLING POS
     double pixelStackPosX = -55; //how far into back wall to drive
     double pixelStackOffsetX = -2.5;
-    double pixelStackPosY = 41;
-    double cycleScorePosX = 45; //push in more than tag score
+    double pixelStackPosY = -41;
+    double cycleScorePosX = -45; //push in more than tag score
     double cycleScoreOffsetX = 1;
-    double cycleScorePosY = 44; //used to dodge right pixel on transit
+    double cycleScorePosY = -44; //used to dodge right pixel on transit
 
     double routeOffsetY; //how far from center tag to move for outside cycle run
     double routeWait; //need more time for outside route
 
     //PARK POS
     double parkPosX = 46;
-    double parkPosY = 68;
+    double parkPosY = -68;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -79,7 +79,7 @@ public class BlueClose extends LinearOpMode {
                 routeWait = 0;
             } else if(gamepad1.y) {
                 insideRoute = false;
-                routeOffsetY = -26.5;
+                routeOffsetY = 26.5;
                 routeWait = 0.5;
 
                 waitBool = false; //no time to wait on outside route
@@ -89,7 +89,7 @@ public class BlueClose extends LinearOpMode {
             //WAIT ON ALLIANCE?
             if(gamepad1.left_bumper) {
                 waitBool = true;
-                waitDuration = 1;
+                waitDuration = 2;
             } else if(gamepad1.right_bumper) {
                 waitBool = false;
                 waitDuration = 0;
@@ -117,7 +117,7 @@ public class BlueClose extends LinearOpMode {
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagHeading = tagMid;
-                tagScoreOffsetY = 0;
+                tagScoreOffsetY = 0.4;
                 spikeMarkOffsetY = 0;
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
@@ -148,7 +148,7 @@ public class BlueClose extends LinearOpMode {
 
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
-                    .lineToYLinearHeading(55 + spikeMarkOffsetY, tagHeading)
+                    .lineToYLinearHeading(-55 + spikeMarkOffsetY, tagHeading)
                     .waitSeconds(1.75+0.5)
 
                     //TURN TO BACKBOARD
@@ -176,9 +176,9 @@ public class BlueClose extends LinearOpMode {
                         .afterTime(4.5 + routeWait, robot.intakeUp())
 
                         //TRANSFER & SCORE
-                        .afterTime(5.25 + routeWait, robot.transfer())
-                        .afterTime(6.75 + routeWait, robot.intakeStop())
-                        .afterTime(7 + (routeWait * 2) + waitDuration, robot.mid())
+                        .afterTime(5 + routeWait, robot.transfer())
+                        .afterTime(6.5 + routeWait, robot.intakeStop())
+                        .afterTime( 7 + routeWait + waitDuration, robot.mid())
                         .afterTime(9 + routeWait + waitDuration, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
@@ -193,7 +193,7 @@ public class BlueClose extends LinearOpMode {
                         .waitSeconds(0.5 + waitDuration)
 
                         //RETURN TO BACKBOARD AND SCORE
-                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(25+18, cycleScorePosY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.01)
                         .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading)
                         .waitSeconds(1)
@@ -213,8 +213,8 @@ public class BlueClose extends LinearOpMode {
                         .afterTime(5 + routeWait, robot.intakeUp())
 
                         //TRANSFER & SCORE
-                        .afterTime(5.75 + routeWait, robot.transfer())
-                        .afterTime(6.75 + routeWait, robot.intakeStop())
+                        .afterTime(5.5 + routeWait, robot.transfer())
+                        .afterTime(6.5 + routeWait, robot.intakeStop())
                         .afterTime(7 + (routeWait * 2), robot.mid())
                         .afterTime(9 + routeWait, robot.retract())
 
