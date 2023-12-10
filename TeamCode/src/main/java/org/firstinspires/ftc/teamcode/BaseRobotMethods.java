@@ -249,7 +249,7 @@ public class BaseRobotMethods{
     public class SpikeExtend implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setPower(0.05);
+            extend.setPower(0.2);
             extend.setTargetPosition(300);
            // climbl.setTargetPosition(300);
            // climbr.setTargetPosition(300);
@@ -262,10 +262,25 @@ public class BaseRobotMethods{
     public Action spikeExtend(){
         return new SpikeExtend();
     }
+
+    public class SpikeUp implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            climbl.setTargetPosition(300);
+            climbr.setTargetPosition(300);
+
+
+            return false;
+        }
+        // (int extendticks)
+    }
+    public Action spikeUp(){
+        return new SpikeUp();
+    }
     public class SpikeScore implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            finger.setPosition(0.435);
+            finger.setPosition(0.45);
             return false;
         }
     }
@@ -307,8 +322,21 @@ public class BaseRobotMethods{
             return false;
         }
     }
-    public Action mid(){
-        return new Mid();
+    public Action mid(){return new Mid();}
+
+    public class High implements Action{ //(int extendTarget)
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            extend.setPower(0.65);
+            extend.setTargetPosition(460);
+            climbl.setTargetPosition(700); //525
+            climbr.setTargetPosition(700);
+            score.setPosition(0.34);
+            return false;
+        }
+    }
+    public Action high(){
+        return new High();
     }
 
     public class ExtraMid implements Action{ //(int extendTarget)
