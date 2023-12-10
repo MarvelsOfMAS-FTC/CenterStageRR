@@ -117,12 +117,12 @@ public class BlueFar extends LinearOpMode {
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagHeading = tagMid;
-                tagScoreOffsetY = 0;
+                tagScoreOffsetY = 4;
                 spikeMarkOffsetY = 4.5;//positive towards wall
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
-                tagScoreOffsetY = -6;
+                tagScoreOffsetY = -3;
                 spikeMarkOffsetY = 9;
 
             } else {
