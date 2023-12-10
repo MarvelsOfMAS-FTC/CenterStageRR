@@ -26,7 +26,7 @@ public class RedClose extends LinearOpMode {
     //PRELOAD POS
     double spikeMarkOffsetY; //change spike mark tape forward movement
     double tagHeading;
-    double tagLeft = Math.toRadians(119+180);
+    double tagLeft = Math.toRadians(129+180);
     double tagMid = Math.toRadians(110+180);
     double tagRight = Math.toRadians(72+180);
 
@@ -123,7 +123,7 @@ public class RedClose extends LinearOpMode {
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
                 tagScoreOffsetY = 5;
-                spikeMarkOffsetY = -8.6;
+                spikeMarkOffsetY = -5.6;
 
             } else {
                 tagHeading = tagRight;
