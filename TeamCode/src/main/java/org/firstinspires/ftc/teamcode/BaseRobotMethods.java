@@ -97,8 +97,9 @@ public class BaseRobotMethods{
         elbowl.setPosition(0.55 + elbowHome);
         elbowr.setPosition(0.30 + elbowHome);
         //wrist.setPosition(0.725);
-        finger.setPosition(0.388);
+        finger.setPosition(0.130039);
         droneLaunch.setPosition(0.3);
+        //0.130039 is the spike holder
 
 
         //CAMERA INIT
@@ -128,7 +129,7 @@ public class BaseRobotMethods{
     public class Home implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setPower(1);
+            extend.setPower(0.4);
             extend.setTargetPosition(0);
             climbl.setTargetPosition(5);
             climbr.setTargetPosition(5);
@@ -223,11 +224,15 @@ public class BaseRobotMethods{
         }
     }
     public Action intakeUp(){return new IntakeUp();}
+
+    //0.130039 is the spike holder
+    //0.41 is to score the spike
     public class SpikeExtend implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            extend.setPower(0.3);
             extend.setTargetPosition(300);
-            finger.setPosition(0.388);
+          //  finger.setPosition(0.388);
             return false;
         }
         // (int extendticks)
@@ -256,6 +261,26 @@ public class BaseRobotMethods{
     public Action fingerHome(){
         return new FingerHome();
     }
+
+
+
+
+    public class fingerScore implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            finger.setPosition(0.41);
+            //0.41 is to score the spike
+            return false;
+        }
+    }
+    public Action fingerScore(){
+        return new fingerScore();
+    }
+
+
+
+
+
     public class Low implements Action { //(int extendTarget)
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
