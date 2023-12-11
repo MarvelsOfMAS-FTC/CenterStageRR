@@ -164,7 +164,7 @@ public class RedFar extends LinearOpMode {
                     .afterTime(0, robot.low())
                     .afterTime(1, robot.mid())
                     .afterTime(1.5,robot.retract())
-                    .afterTime(1.7,robot.home())4
+                    .afterTime(1.7,robot.home())
                     .waitSeconds(1.2)
                     .endTrajectory()
                     .build();
@@ -190,13 +190,13 @@ public class RedFar extends LinearOpMode {
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
-                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(31, cycleScorePosY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.01)
 
                         //GOTO STACK AND WAIT IF NEEDED
                         .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.01) //added to make approach more gentle
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + 1 + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.5 + waitDuration)
 
                         //RETURN TO BACKBOARD AND SCORE
@@ -204,7 +204,6 @@ public class RedFar extends LinearOpMode {
                         .waitSeconds(0.01)
                         .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading)
                         .strafeToLinearHeading(new Vector2d(cycleScorePosX+3, cycleScorePosY), tagScoreHeading)
-                        .waitSeconds(1)
                         .build();
 
 
@@ -228,7 +227,7 @@ public class RedFar extends LinearOpMode {
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
-                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(31, cycleScorePosY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.01)
 
                         //GOTO STACK AND WAIT IF NEEDED
