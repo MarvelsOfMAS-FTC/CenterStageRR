@@ -136,7 +136,7 @@ public class RedClose extends LinearOpMode {
                     //ACTIONS ----------------------------------------------------------------------
                     //SCORE MARK PIXEL
                     .afterTime(0, robot.spikeExtend())
-                    .afterTime(1, robot.fingerScore())
+                    .afterTime(0.75, robot.fingerScore())
                     .afterTime(1.5, robot.spikeScore())
                     .afterTime(1.75, robot.fingerHome())
                     .afterTime(2, robot.home())

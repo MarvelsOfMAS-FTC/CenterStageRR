@@ -258,7 +258,7 @@ public class BaseRobotMethods{
     public class SpikeExtend implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setPower(0.2);
+            extend.setPower(0.4);
             extend.setTargetPosition(300);
 //            while (extend.isBusy()) {
 //                finger.setPosition(-0.00007 * extend.getCurrentPosition() + 0.44);
