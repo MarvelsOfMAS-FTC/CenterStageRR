@@ -121,13 +121,13 @@ public class BlueFar extends LinearOpMode {
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.RIGHT) {
                 tagHeading = tagRight;
-                tagScoreOffsetY = 3;
+                tagScoreOffsetY = 6;
                 spikeMarkOffsetY = -5.6;
 
             } else {
                 tagHeading = tagLeft;
                 tagScoreOffsetY = -5.2;
-                spikeMarkOffsetY = 6;
+                spikeMarkOffsetY = -13;
             }
 
             //SCORE PRELOAD PIXELSsq
@@ -152,8 +152,8 @@ public class BlueFar extends LinearOpMode {
 
                     //DRIVE OUTSIDE TURN & DRIVE TO BACKBOARD
                     .turnTo(startHeading-0.0001) //required to keep robot moving straight
-                    .lineToYLinearHeading(20, startHeading)
-                    .strafeToLinearHeading(new Vector2d(24, 20), tagScoreHeading)
+                    .lineToYLinearHeading(20, startHeading, drive.fasterVelConstraint)
+                    .strafeToLinearHeading(new Vector2d(24, 20), tagScoreHeading, drive.fasterVelConstraint)
                     .strafeToLinearHeading(new Vector2d(36, tagScorePoxY + tagScoreOffsetY), tagScoreHeading) //tagScorePosY should be dead center on backdrop. tune until it is.
 
                     //PUSH IN AND SCORE
@@ -215,14 +215,14 @@ public class BlueFar extends LinearOpMode {
                         .afterTime(0, robot.home())
 
                         //WHIP OUT INTAKE & FEED
-                        .afterTime(2.5 + routeWait, robot.intakeGround())
-                        .afterTime(5.5 + routeWait, robot.intakeUp())
+                        .afterTime(2.0 + routeWait, robot.intakeGround())
+                        .afterTime(5.0 + routeWait, robot.intakeUp())
 
                         //TRANSFER & SCORE
-                        .afterTime(6.5 + routeWait, robot.transfer())
-                        .afterTime(7.5 + routeWait, robot.intakeStop())
-                        .afterTime(7.5 + (routeWait * 2), robot.mid())
-                        .afterTime(9 + routeWait, robot.retract())
+                        .afterTime(6.0 + routeWait, robot.transfer())
+                        .afterTime(6.5 + routeWait, robot.intakeStop())
+                        .afterTime(6.5 + (routeWait * 2), robot.mid())
+                        .afterTime(8.75 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
@@ -230,13 +230,13 @@ public class BlueFar extends LinearOpMode {
                         .waitSeconds(0.01)
 
                         //GOTO STACK AND WAIT IF NEEDED
-                        .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY-0.85 + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY-0.85 + routeOffsetY), tagScoreHeading, drive.fasterVelConstraint, drive.fastAccelConstraint)
                         .waitSeconds(0.01) //added to make approach more gentle
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY+1 + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY+1 + routeOffsetY), tagScoreHeading, drive.slowerVelConstraint)
                         .waitSeconds(0.5)
 
                         //RETURN TO BACKBOARD AND SCORE
-                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fasterVelConstraint, drive.fastAccelConstraint)
                         .waitSeconds(0.01)
                         .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading)
                         .strafeToLinearHeading(new Vector2d(cycleScorePosX+3, cycleScorePosY), tagScoreHeading)
