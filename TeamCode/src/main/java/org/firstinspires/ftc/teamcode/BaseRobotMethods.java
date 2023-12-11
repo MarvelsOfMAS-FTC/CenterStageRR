@@ -322,7 +322,7 @@ public class BaseRobotMethods{
     public class Mid implements Action{ //(int extendTarget)
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setPower(0.55);
+            extend.setPower(0.45);
             extend.setTargetPosition(460);
             climbl.setTargetPosition(435); //525
             climbr.setTargetPosition(435);
