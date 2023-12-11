@@ -189,8 +189,8 @@ public class BlueClose extends LinearOpMode {
                         //GOTO STACK AND WAIT IF NEEDED
                         .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fasterVelConstraint, drive.fastAccelConstraint)
                         .waitSeconds(0.01) //added to make approach more gentle
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + 1 + routeOffsetY), tagScoreHeading, drive.slowerVelConstraint)
-                        .waitSeconds(0.5 + waitDuration)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + 2.2 + routeOffsetY), tagScoreHeading, drive.slowerVelConstraint)
+                        .waitSeconds(0.75 + waitDuration)
 
                         //RETURN TO BACKBOARD AND SCORE
                         .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fasterVelConstraint, drive.fastAccelConstraint)
