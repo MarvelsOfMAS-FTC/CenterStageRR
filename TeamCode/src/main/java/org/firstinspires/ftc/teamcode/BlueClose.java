@@ -137,9 +137,9 @@ public class BlueClose extends LinearOpMode {
                     //SCORE MARK PIXEL
                     .afterTime(0, robot.spikeExtend())
                     .afterTime(1, robot.fingerScore())
-                    .afterTime(1.5, robot.spikeScore())
-                    .afterTime(1.75, robot.fingerHome())
-                    .afterTime(2, robot.home())
+                    .afterTime(1.75, robot.spikeScore())
+                    .afterTime(2, robot.fingerHome())
+                    .afterTime(2.25, robot.home())
 
                     //SCORE BACKDROP PIXEL
                     .afterTime(5, robot.low())

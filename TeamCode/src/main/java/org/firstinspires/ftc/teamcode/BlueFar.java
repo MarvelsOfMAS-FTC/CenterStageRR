@@ -26,9 +26,9 @@ public class BlueFar extends LinearOpMode {
     //PRELOAD POS
     double spikeMarkOffsetY; //change spike mark tape forward movement
     double tagHeading;
-    double tagLeft = Math.toRadians(118);
-    double tagMid = Math.toRadians(94);
-    double tagRight = Math.toRadians(75);
+    double tagLeft = Math.toRadians(122);
+    double tagMid = Math.toRadians(91);
+    double tagRight = Math.toRadians(72);
 
     double tagScorePosX = 48; //center preload tag score pos X
     double tagScorePoxY = 42; //center preload tag score pos Y -- THIS NEEDS TO BE DEAD CENTER FOR MIDDLE PLACEMENT ON BACK DROP --
@@ -114,31 +114,31 @@ public class BlueFar extends LinearOpMode {
         //EXECUTE ACTIONS -----------------------------------------------------------------
         while (opModeIsActive() && !isStopRequested()) {
 
-            //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagHeading = tagMid;
-                tagScoreOffsetY = 4;
-                spikeMarkOffsetY = 4.5;//positive towards wall
+                tagScoreOffsetY = 0;
+                spikeMarkOffsetY = 2.5;
 
-            } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
-                tagHeading = tagLeft;
-                tagScoreOffsetY = -3;
-                spikeMarkOffsetY = 9;
+            } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.RIGHT) {
+                tagHeading = tagRight;
+                tagScoreOffsetY = 3;
+                spikeMarkOffsetY = -5.6;
 
             } else {
-                tagHeading = tagRight;
-                tagScoreOffsetY = 6.75;
-                spikeMarkOffsetY = 10;
+                tagHeading = tagLeft;
+                tagScoreOffsetY = -5.2;
+                spikeMarkOffsetY = 6;
             }
 
-            //SCORE PRELOAD PIXELS
+            //SCORE PRELOAD PIXELSsq
             Action spikeMark = drive.actionBuilder(drive.pose)
                     //ACTIONS ----------------------------------------------------------------------
                     //SCORE MARK PIXEL
                     .afterTime(0, robot.spikeExtend())
+                    .afterTime(0.75, robot.fingerScore())
                     .afterTime(1.5, robot.spikeScore())
-                    .afterTime(2, robot.fingerHome())
-                    .afterTime(2.5, robot.home())
+                    .afterTime(1.75, robot.fingerHome())
+                    .afterTime(2, robot.home())
 
                     //SCORE BACKDROP PIXEL
                     .afterTime(7.75, robot.extraMid())
