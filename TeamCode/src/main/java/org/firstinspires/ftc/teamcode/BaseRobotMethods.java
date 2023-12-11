@@ -132,7 +132,7 @@ public class BaseRobotMethods{
     public class Home implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setPower(1);
+            extend.setPower(0.5);
             extend.setTargetPosition(-50);
             climbl.setTargetPosition(5);
             climbr.setTargetPosition(5);

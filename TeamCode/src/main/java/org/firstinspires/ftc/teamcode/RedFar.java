@@ -151,15 +151,24 @@ public class RedFar extends LinearOpMode {
                     //DRIVE OUTSIDE TURN & DRIVE TO BACKBOARD
                     .turnTo(Math.toRadians(269)) //required to keep robot moving straight
                     .lineToY(-20)
-                    .strafeToLinearHeading(new Vector2d(37.5, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                    .strafeToLinearHeading(new Vector2d(44, cycleScorePosY + routeOffsetY), tagScoreHeading)
                     .waitSeconds(0.01)
-                    .strafeTo(new Vector2d(37.5, tagScoreOffsetY))
+                    .strafeTo(new Vector2d(44, tagScoreOffsetY))
 
                     .endTrajectory()
                     .build();
 
             Actions.runBlocking(spikeMark);
             drive.updatePoseEstimate();
+            Action score = drive.actionBuilder(drive.pose)
+                    .afterTime(0, robot.low())
+                    .afterTime(1, robot.mid())
+                    .afterTime(1.5,robot.retract())
+                    .afterTime(1.7,robot.home())4
+                    .waitSeconds(1.2)
+                    .endTrajectory()
+                    .build();
+            Actions.runBlocking(score);
 
             //CYCLE PIXEL STACK
             if (cycleStack) {
