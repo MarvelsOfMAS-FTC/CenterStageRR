@@ -192,13 +192,13 @@ public class BlueFar extends LinearOpMode {
                         .waitSeconds(0.01)
 
                         //GOTO STACK AND WAIT IF NEEDED
-                        .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fasterVelConstraint, drive.fastAccelConstraint)
                         .waitSeconds(0.01) //added to make approach more gentle
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + 1 + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + 1 + routeOffsetY), tagScoreHeading, drive.slowerVelConstraint)
                         .waitSeconds(0.5 + waitDuration)
 
                         //RETURN TO BACKBOARD AND SCORE
-                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fasterVelConstraint, drive.fastAccelConstraint)
                         .waitSeconds(0.01)
                         .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading)
                         .strafeToLinearHeading(new Vector2d(cycleScorePosX+3, cycleScorePosY), tagScoreHeading)

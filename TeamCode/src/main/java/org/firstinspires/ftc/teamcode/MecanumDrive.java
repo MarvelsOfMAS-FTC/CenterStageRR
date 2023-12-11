@@ -72,8 +72,10 @@ public final class MecanumDrive {
         public double maxWheelVel = 50;
 
         public double slowWheelVel = 10;
+
+        public double fastWheelVel = 100;
         public double minProfileAccel = -45;
-        public double maxProfileAccel = 45;
+        public double maxProfileAccel = 60;
 
         // turn profile parameters (in radians)
         public double maxAngVel = Math.PI; // shared with path
@@ -107,7 +109,15 @@ public final class MecanumDrive {
                     kinematics.new WheelVelConstraint(PARAMS.slowWheelVel),
                     new AngularVelConstraint(PARAMS.maxAngVel)
             ));
+    public final VelConstraint fasterVelConstraint =
+            new MinVelConstraint(Arrays.asList(
+                    kinematics.new WheelVelConstraint(PARAMS.fastWheelVel),
+                    new AngularVelConstraint(PARAMS.maxAngVel)
+            ));
     public final AccelConstraint defaultAccelConstraint =
+            new ProfileAccelConstraint(PARAMS.minProfileAccel, PARAMS.maxProfileAccel);
+
+    public final AccelConstraint fastAccelConstraint =
             new ProfileAccelConstraint(PARAMS.minProfileAccel, PARAMS.maxProfileAccel);
 
     public final DcMotorEx leftFront, leftBack, rightBack, rightFront;
