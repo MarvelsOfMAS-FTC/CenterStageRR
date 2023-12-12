@@ -142,9 +142,9 @@ public class BlueFar extends LinearOpMode {
                     .afterTime(2, robot.home())
 
                     //SCORE BACKDROP PIXEL
-                    .afterTime(7.75, robot.extraMid())
-                    .afterTime(9.25, robot.mid())
-                    .afterTime(10.0, robot.retract())
+                    .afterTime(7.75 + waitDuration, robot.extraMid())
+                    .afterTime(9.25 + waitDuration, robot.mid())
+                    .afterTime(10.0 + waitDuration, robot.retract())
 
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
@@ -155,6 +155,7 @@ public class BlueFar extends LinearOpMode {
                     .turnTo(startHeading-0.0001) //required to keep robot moving straight
                     .lineToYLinearHeading(20, startHeading, drive.fasterVelConstraint)
                     .strafeToLinearHeading(new Vector2d(24, 20), tagScoreHeading, drive.fasterVelConstraint)
+                    .waitSeconds(waitDuration)
                     .strafeToLinearHeading(new Vector2d(36, tagScorePoxY + tagScoreOffsetY), tagScoreHeading) //tagScorePosY should be dead center on backdrop. tune until it is.
 
                     //PUSH IN AND SCORE
@@ -184,8 +185,8 @@ public class BlueFar extends LinearOpMode {
                         //TRANSFER & SCORE
                         .afterTime(5.5 + routeWait, robot.transfer())
                         .afterTime(6.4 + routeWait, robot.intakeStop())
-                        .afterTime(6.5 + (routeWait * 2) + waitDuration, robot.mid())
-                        .afterTime(9.5 + routeWait + waitDuration, robot.retract())
+                        .afterTime(6.5 + (routeWait * 2), robot.mid())
+                        .afterTime(9.5 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
@@ -196,7 +197,7 @@ public class BlueFar extends LinearOpMode {
                         .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fasterVelConstraint, drive.fastAccelConstraint)
                         .waitSeconds(0.01) //added to make approach more gentle
                         .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading, drive.slowerVelConstraint)
-                        .waitSeconds(0.5 + waitDuration)
+                        .waitSeconds(0.5)
 
                         //RETURN TO BACKBOARD AND SCORE
                         .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fasterVelConstraint, drive.fastAccelConstraint)
