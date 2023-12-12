@@ -23,6 +23,7 @@ public class RedFar extends LinearOpMode {
     double startHeading = Math.toRadians(270);
 
     //PRELOAD POS
+    double spikeMarkPosY = -55;
     double spikeMarkOffsetY; //change spike mark tape forward movement
     double tagHeading;
     double tagLeft = Math.toRadians(118 + 180);
@@ -148,7 +149,7 @@ public class RedFar extends LinearOpMode {
 
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
-                    .lineToYLinearHeading(-55 + spikeMarkOffsetY, tagHeading)
+                    .lineToYLinearHeading(spikeMarkPosY + spikeMarkOffsetY, tagHeading)
                     .waitSeconds(1.1)//keep this 1.75
 
                     //DRIVE OUTSIDE TURN & DRIVE TO BACKBOARD
