@@ -195,7 +195,7 @@ public class RedCloseFast extends LinearOpMode {
                         .waitSeconds(0.5 + waitDuration)
 
                         //RETURN TO BACKBOARD AND SCORE
-                        .strafeToLinearHeading(new Vector2d(48+10, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.speedyVelConstraint, drive.fastAccelConstraint)
+                        .strafeToLinearHeading(new Vector2d(48+6, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.speedyVelConstraint, drive.fastAccelConstraint)
                         .waitSeconds(0.01)
                        // .strafeToLinearHeading(new Vector2d(cycleScorePosX-2, cycleScorePosY), tagScoreHeading, drive.speedyVelConstraint, drive.fastAccelConstraint)
                         .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading, drive.slightlySlowerVelConstraint)
@@ -234,7 +234,7 @@ public class RedCloseFast extends LinearOpMode {
                         .waitSeconds(0.75)
 
                         //RETURN TO BACKBOARD AND SCORE
-                        .strafeToLinearHeading(new Vector2d(48+10, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.speedyVelConstraint, drive.fastAccelConstraint)
+                        .strafeToLinearHeading(new Vector2d(48+6, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.speedyVelConstraint, drive.fastAccelConstraint)
                         .waitSeconds(0.01)
                         .strafeToLinearHeading(new Vector2d(cycleScorePosX + cycleScoreOffsetX-12, cycleScorePosY), tagScoreHeading)
                         .waitSeconds(1)
