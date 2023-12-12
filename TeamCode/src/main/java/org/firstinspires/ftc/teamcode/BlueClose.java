@@ -10,7 +10,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @Autonomous
 public class BlueClose extends LinearOpMode {
     //VARIABLES---------------------------------------------------------------------------------------------------------------
-    public String fieldSide = "Blue";
     public boolean cycleStack = true;
 
     public boolean insideRoute = true;
@@ -39,7 +38,8 @@ public class BlueClose extends LinearOpMode {
     //CYCLING POS
     double pixelStackPosX = -55; //how far into back wall to drive
     double pixelStackOffsetX = -2.5;
-    double pixelStackPosY = 41;
+    double pixelStackPosY = 43.2;
+    double pixelStackOffsetY = -2.2;
     double cycleScorePosX = 45; //push in more than tag score
     double cycleScoreOffsetX = 1;
     double cycleScorePosY = 44; //used to dodge right pixel on transit
@@ -189,7 +189,7 @@ public class BlueClose extends LinearOpMode {
                         //GOTO STACK AND WAIT IF NEEDED
                         .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fasterVelConstraint, drive.fastAccelConstraint)
                         .waitSeconds(0.01) //added to make approach more gentle
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + 2.2 + routeOffsetY), tagScoreHeading, drive.slowerVelConstraint)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading, drive.slowerVelConstraint)
                         .waitSeconds(0.75 + waitDuration)
 
                         //RETURN TO BACKBOARD AND SCORE
@@ -226,7 +226,7 @@ public class BlueClose extends LinearOpMode {
                         //GOTO STACK AND WAIT IF NEEDED
                         .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.01) //added to make approach more gentle
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY + pixelStackOffsetY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.5)
 
                         //RETURN TO BACKBOARD AND SCORE
