@@ -39,7 +39,7 @@ public class RedFar extends LinearOpMode {
     //CYCLING POS
     double pixelStackPosX = -55.15; //how far into back wall to drive
     double pixelStackOffsetX = -2.5;
-    double pixelStackPosY = -41;
+    double pixelStackPosY = -42;
     double cycleScorePosX = 46; //push in more than tag score
     double cycleScoreOffsetX = 1;
     double cycleScorePosY = -44; //used to dodge right pixel on transit
@@ -123,7 +123,7 @@ public class RedFar extends LinearOpMode {
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
-                tagScoreOffsetY = -37;
+                tagScoreOffsetY = -38;
                 spikeMarkOffsetY = 1;
 
             } else {
@@ -198,7 +198,8 @@ public class RedFar extends LinearOpMode {
                         .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.lastHope)
                         .waitSeconds(0.01) //added to make approach more gentle
                         .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading)
-                        .waitSeconds(0.5 + waitDuration)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + 2, pixelStackPosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading)
 
                         //RETURN TO BACKBOARD AND SCORE
                         .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.lastHope)
