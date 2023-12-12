@@ -23,6 +23,7 @@ public class BlueClose extends LinearOpMode {
     double startHeading = Math.toRadians(90);
 
     //PRELOAD POS
+    double spikeMarkPosY = 55;
     double spikeMarkOffsetY; //change spike mark tape forward movement
     double tagHeading;
     double tagLeft = Math.toRadians(119);
@@ -148,7 +149,7 @@ public class BlueClose extends LinearOpMode {
 
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
-                    .lineToYLinearHeading(55 + spikeMarkOffsetY, tagHeading)
+                    .lineToYLinearHeading(spikeMarkPosY + spikeMarkOffsetY, tagHeading)
                     .waitSeconds(1.75+0.5)
 
                     //TURN TO BACKBOARD

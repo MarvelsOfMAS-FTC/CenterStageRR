@@ -23,6 +23,7 @@ public class BlueFar extends LinearOpMode {
     double startHeading = Math.toRadians(90);
 
     //PRELOAD POS
+    double spikeMarkPosY = 55;
     double spikeMarkOffsetY; //change spike mark tape forward movement
     double tagHeading;
     double tagLeft = Math.toRadians(122);
@@ -148,7 +149,7 @@ public class BlueFar extends LinearOpMode {
 
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
-                    .lineToYLinearHeading(55 + spikeMarkOffsetY, tagHeading)
+                    .lineToYLinearHeading(spikeMarkPosY + spikeMarkOffsetY, tagHeading)
                     .waitSeconds(1.75)//keep this 1.75
 
                     //DRIVE OUTSIDE TURN & DRIVE TO BACKBOARD

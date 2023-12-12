@@ -23,6 +23,7 @@ public class RedCloseFast extends LinearOpMode {
     double startHeading = Math.toRadians(270);
 
     //PRELOAD POS
+    double spikeMarkPosY = -55;
     double spikeMarkOffsetY; //change spike mark tape forward movement
     double tagHeading;
     double tagLeft = Math.toRadians(129+180);
@@ -148,7 +149,7 @@ public class RedCloseFast extends LinearOpMode {
 
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
-                    .lineToYLinearHeading(-55 + spikeMarkOffsetY, tagHeading, drive.speedyVelConstraint)
+                    .lineToYLinearHeading(spikeMarkPosY + spikeMarkOffsetY, tagHeading, drive.speedyVelConstraint)
                     .waitSeconds(2.25)
 
                     //TURN TO BACKBOARD
