@@ -173,14 +173,14 @@ public class RedCloseFast extends LinearOpMode {
 
                         //WHIP OUT INTAKE & FEED
                         .afterTime(2.5 + routeWait, robot.intakeLevel5())
-                        .afterTime(4.5 + routeWait, robot.intakeUp())
+                        .afterTime(3.7 + routeWait, robot.intakeUp())
 
                         //TRANSFER & SCORE
-                        .afterTime(5 + routeWait, robot.transfer())
-                        .afterTime(6.4 + routeWait, robot.intakeStop())
-                        .afterTime( 6.4 + routeWait + waitDuration, robot.mid())
-                        .afterTime(8 + routeWait + waitDuration, robot.retract())
-                        .afterTime(8.33 + routeWait + waitDuration, robot.home())
+                        .afterTime(4.5 + routeWait, robot.transfer())
+                        .afterTime(5.4 + routeWait, robot.intakeStop())
+                        .afterTime( 4.9 + routeWait + waitDuration, robot.mid())
+                        .afterTime(5.7 + routeWait + waitDuration, robot.retract())
+                        .afterTime(6.0 + routeWait + waitDuration, robot.home())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
@@ -219,7 +219,7 @@ public class RedCloseFast extends LinearOpMode {
                         //TRANSFER & SCORE
                         .afterTime(5.3 + routeWait, robot.transfer())
                         .afterTime(6.3 + routeWait, robot.intakeStop())
-                        .afterTime(6.8 + (routeWait * 2), robot.mid())
+                        .afterTime(5.8 + (routeWait * 2), robot.mid())
                         .afterTime(9 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
@@ -230,7 +230,7 @@ public class RedCloseFast extends LinearOpMode {
                         //GOTO STACK AND WAIT IF NEEDED
                         .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fasterVelConstraint, drive.fastAccelConstraint)
                         .waitSeconds(0.01) //added to make approach more gentle
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY + routeOffsetY), tagScoreHeading, drive.slowerVelConstraint)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY + routeOffsetY+3), tagScoreHeading, drive.slowerVelConstraint)
                         .waitSeconds(0.75)
 
                         //RETURN TO BACKBOARD AND SCORE

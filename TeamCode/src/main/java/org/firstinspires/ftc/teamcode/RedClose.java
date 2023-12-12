@@ -178,7 +178,7 @@ public class RedClose extends LinearOpMode {
                         //TRANSFER & SCORE
                         .afterTime(5 + routeWait, robot.transfer())
                         .afterTime(6.4 + routeWait, robot.intakeStop())
-                        .afterTime( 6.4 + routeWait + waitDuration, robot.mid())
+                        .afterTime( 6.0 + routeWait + waitDuration, robot.mid())
                         .afterTime(8 + routeWait + waitDuration, robot.retract())
                         .afterTime(8.33 + routeWait + waitDuration, robot.home())
 
@@ -218,7 +218,7 @@ public class RedClose extends LinearOpMode {
                         //TRANSFER & SCORE
                         .afterTime(5.3 + routeWait, robot.transfer())
                         .afterTime(6.3 + routeWait, robot.intakeStop())
-                        .afterTime(6.8 + (routeWait * 2), robot.mid())
+                        .afterTime(6.4 + (routeWait * 2), robot.mid())
                         .afterTime(9 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
