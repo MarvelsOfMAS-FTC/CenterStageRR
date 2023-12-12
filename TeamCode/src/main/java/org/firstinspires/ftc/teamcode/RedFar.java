@@ -37,7 +37,7 @@ public class RedFar extends LinearOpMode {
 
 
     //CYCLING POS
-    double pixelStackPosX = -55.5; //how far into back wall to drive
+    double pixelStackPosX = -55.15; //how far into back wall to drive
     double pixelStackOffsetX = -2.5;
     double pixelStackPosY = -41;
     double cycleScorePosX = 46; //push in more than tag score
@@ -128,7 +128,7 @@ public class RedFar extends LinearOpMode {
 
             } else {
                 tagHeading = tagRight;
-                tagScoreOffsetY = -50;
+                tagScoreOffsetY = -51;
                 spikeMarkOffsetY = -10;
             }
 
@@ -137,7 +137,7 @@ public class RedFar extends LinearOpMode {
                     //ACTIONS ----------------------------------------------------------------------
                     //SCORE MARK PIXEL
                     .afterTime(0, robot.spikeExtend())
-                    .afterTime(1.5, robot.spikeScore())
+                    .afterTime(1.6, robot.spikeScore())
                     .afterTime(2, robot.fingerHome())
                     .afterTime(2.5, robot.home())
 
@@ -147,7 +147,7 @@ public class RedFar extends LinearOpMode {
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
                     .lineToYLinearHeading(-55 + spikeMarkOffsetY, tagHeading)
-                    .waitSeconds(1)//keep this 1.75
+                    .waitSeconds(1.1)//keep this 1.75
 
                     //DRIVE OUTSIDE TURN & DRIVE TO BACKBOARD
                     .turnTo(Math.toRadians(269)) //required to keep robot moving straight
@@ -163,9 +163,9 @@ public class RedFar extends LinearOpMode {
             drive.updatePoseEstimate();
             Action score = drive.actionBuilder(drive.pose)
                     .afterTime(0, robot.low())
-                    .afterTime(1, robot.mid())
-                    .afterTime(1.5,robot.retract())
-                    .afterTime(1.7,robot.home())
+                    .afterTime(0.5, robot.mid())
+                    .afterTime(1,robot.retract())
+                    .afterTime(1.2,robot.home())
                     .waitSeconds(1.2)
                     .endTrajectory()
                     .build();
@@ -224,7 +224,7 @@ public class RedFar extends LinearOpMode {
                         .afterTime(6.5 + routeWait, robot.transfer())
                         .afterTime(7.5 + routeWait, robot.intakeStop())
                         .afterTime(7.5 + routeWait, robot.mid())
-                        .afterTime(9 + routeWait, robot.retract())
+                        .afterTime(9.5 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
@@ -235,6 +235,8 @@ public class RedFar extends LinearOpMode {
                         .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading,drive.lastHope)
                         .waitSeconds(0.01) //added to make approach more gentle
                         .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY+1 + routeOffsetY), tagScoreHeading)
+                        .waitSeconds(0.01)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY-3 + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.5)
 
                         //RETURN TO BACKBOARD AND SCORE
