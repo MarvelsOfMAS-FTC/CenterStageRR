@@ -164,6 +164,10 @@ public class BlueClose extends LinearOpMode {
             Actions.runBlocking(spikeMark);
             drive.updatePoseEstimate();
 
+            if(waitBool){
+                sleep(waitDuration * 1000);
+            }
+
             //CYCLE PIXEL STACK
             if (cycleStack) {
                 Action pixelCycle1 = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, tagScoreHeading))
@@ -178,8 +182,8 @@ public class BlueClose extends LinearOpMode {
                         //TRANSFER & SCORE
                         .afterTime(5.25 + routeWait, robot.transfer())
                         .afterTime(6.75 + routeWait, robot.intakeStop())
-                        .afterTime(6.5 + (routeWait * 2) + waitDuration, robot.mid())
-                        .afterTime(9 + routeWait + waitDuration, robot.retract())
+                        .afterTime(6.5 + (routeWait * 2), robot.mid())
+                        .afterTime(9 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
@@ -190,7 +194,7 @@ public class BlueClose extends LinearOpMode {
                         .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fasterVelConstraint, drive.fastAccelConstraint)
                         .waitSeconds(0.01) //added to make approach more gentle
                         .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading, drive.slowerVelConstraint)
-                        .waitSeconds(0.75 + waitDuration)
+                        .waitSeconds(0.75)
 
                         //RETURN TO BACKBOARD AND SCORE
                         .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fasterVelConstraint, drive.fastAccelConstraint)
@@ -215,8 +219,8 @@ public class BlueClose extends LinearOpMode {
                         //TRANSFER & SCORE
                         .afterTime(5.25 + routeWait, robot.transfer())
                         .afterTime(6.75 + routeWait, robot.intakeStop())
-                        .afterTime(6.5 + (routeWait * 2) + waitDuration, robot.mid())
-                        .afterTime(9 + routeWait + waitDuration, robot.retract())
+                        .afterTime(6.5 + (routeWait * 2), robot.mid())
+                        .afterTime(9 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK

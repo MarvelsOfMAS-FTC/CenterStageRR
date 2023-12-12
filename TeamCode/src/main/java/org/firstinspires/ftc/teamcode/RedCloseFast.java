@@ -83,7 +83,7 @@ public class RedCloseFast extends LinearOpMode {
                 routeWait = 0.5;
 
                 waitBool = false; //no time to wait on outside route
-                waitDuration = 1;
+                waitDuration = 0;
             }
 
             //WAIT ON ALLIANCE?
@@ -149,7 +149,7 @@ public class RedCloseFast extends LinearOpMode {
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
                     .lineToYLinearHeading(-55 + spikeMarkOffsetY, tagHeading, drive.speedyVelConstraint)
-                    .waitSeconds(1.75+0.5)
+                    .waitSeconds(2.25)
 
                     //TURN TO BACKBOARD
                     .strafeToLinearHeading(new Vector2d(27, tagScorePoxY + tagScoreOffsetY), tagScoreHeading, drive.speedyVelConstraint, drive.fastAccelConstraint)
@@ -163,6 +163,10 @@ public class RedCloseFast extends LinearOpMode {
 
             Actions.runBlocking(spikeMark);
             drive.updatePoseEstimate();
+
+            if(waitBool){
+                sleep(waitDuration * 1000);
+            }
 
             //CYCLE PIXEL STACK
             if (cycleStack) {
@@ -178,9 +182,9 @@ public class RedCloseFast extends LinearOpMode {
                         //TRANSFER & SCORE
                         .afterTime(4.5 + routeWait, robot.transfer())
                         .afterTime(5.4 + routeWait, robot.intakeStop())
-                        .afterTime( 4.9 + routeWait + waitDuration, robot.mid())
-                        .afterTime(5.7 + routeWait + waitDuration, robot.retract())
-                        .afterTime(6.0 + routeWait + waitDuration, robot.home())
+                        .afterTime( 4.9 + routeWait, robot.mid())
+                        .afterTime(5.7 + routeWait, robot.retract())
+                        .afterTime(6.0 + routeWait, robot.home())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
@@ -191,10 +195,10 @@ public class RedCloseFast extends LinearOpMode {
                         .strafeToLinearHeading(new Vector2d(-51.5, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.speedyVelConstraint, drive.fastAccelConstraint)
                         .waitSeconds(0.01) //added to make approach more gentle
                         .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading, drive.slowerVelConstraint)
-                        .waitSeconds(0.5 + waitDuration)
+                        .waitSeconds(0.5)
 
                         //RETURN TO BACKBOARD AND SCORE
-                        .strafeToLinearHeading(new Vector2d(48+6, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.speedyVelConstraint, drive.fastAccelConstraint)
+                        .strafeToLinearHeading(new Vector2d(54, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.speedyVelConstraint, drive.fastAccelConstraint)
                         .waitSeconds(0.01)
                         .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading, drive.slightlySlowerVelConstraint)
                         .waitSeconds(1.2)
@@ -232,7 +236,7 @@ public class RedCloseFast extends LinearOpMode {
                         .waitSeconds(0.75)
 
                         //RETURN TO BACKBOARD AND SCORE
-                        .strafeToLinearHeading(new Vector2d(48+6, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.speedyVelConstraint, drive.fastAccelConstraint)
+                        .strafeToLinearHeading(new Vector2d(54, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.speedyVelConstraint, drive.fastAccelConstraint)
                         .waitSeconds(0.01)
                         .strafeToLinearHeading(new Vector2d(cycleScorePosX + cycleScoreOffsetX, cycleScorePosY), tagScoreHeading)
                         .waitSeconds(1)

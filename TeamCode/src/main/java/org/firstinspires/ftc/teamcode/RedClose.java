@@ -83,7 +83,7 @@ public class RedClose extends LinearOpMode {
                 routeWait = 0.5;
 
                 waitBool = false; //no time to wait on outside route
-                waitDuration = 1;
+                waitDuration = 0;
             }
 
             //WAIT ON ALLIANCE?
@@ -164,6 +164,10 @@ public class RedClose extends LinearOpMode {
             Actions.runBlocking(spikeMark);
             drive.updatePoseEstimate();
 
+            if(waitBool){
+                sleep(waitDuration * 1000);
+            }
+
             //CYCLE PIXEL STACK
             if (cycleStack) {
                 Action pixelCycle1 = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, tagScoreHeading))
@@ -178,9 +182,9 @@ public class RedClose extends LinearOpMode {
                         //TRANSFER & SCORE
                         .afterTime(5 + routeWait, robot.transfer())
                         .afterTime(6.4 + routeWait, robot.intakeStop())
-                        .afterTime( 6.0 + routeWait + waitDuration, robot.mid())
-                        .afterTime(8 + routeWait + waitDuration, robot.retract())
-                        .afterTime(8.33 + routeWait + waitDuration, robot.home())
+                        .afterTime( 6.0 + routeWait, robot.mid())
+                        .afterTime(8 + routeWait, robot.retract())
+                        .afterTime(8.33 + routeWait, robot.home())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
@@ -191,7 +195,7 @@ public class RedClose extends LinearOpMode {
                         .strafeToLinearHeading(new Vector2d(-51.5, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fasterVelConstraint, drive.fastAccelConstraint)
                         .waitSeconds(0.01) //added to make approach more gentle
                         .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading, drive.slowerVelConstraint)
-                        .waitSeconds(0.5 + waitDuration)
+                        .waitSeconds(0.5)
 
                         //RETURN TO BACKBOARD AND SCORE
                         .strafeToLinearHeading(new Vector2d(44, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fasterVelConstraint, drive.fastAccelConstraint)
