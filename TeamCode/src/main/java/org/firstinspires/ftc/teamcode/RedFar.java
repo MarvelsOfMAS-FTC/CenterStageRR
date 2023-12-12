@@ -163,6 +163,7 @@ public class RedFar extends LinearOpMode {
 
             Actions.runBlocking(spikeMark);
             drive.updatePoseEstimate();
+
             Action score = drive.actionBuilder(drive.pose)
                     .afterTime(0, robot.low())
                     .afterTime(0.5, robot.mid())
@@ -188,8 +189,8 @@ public class RedFar extends LinearOpMode {
                         //TRANSFER & SCORE
                         .afterTime(5.5 + routeWait, robot.transfer())
                         .afterTime(6.4 + routeWait, robot.intakeStop())
-                        .afterTime(6.5 + (routeWait * 2) + waitDuration, robot.mid())
-                        .afterTime(9.5 + routeWait + waitDuration, robot.retract())
+                        .afterTime(6.5 + (routeWait * 2), robot.mid())
+                        .afterTime(9.5 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK

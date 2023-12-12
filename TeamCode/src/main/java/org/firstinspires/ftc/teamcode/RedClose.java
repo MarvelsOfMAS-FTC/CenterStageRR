@@ -166,6 +166,10 @@ public class RedClose extends LinearOpMode {
             Actions.runBlocking(spikeMark);
             drive.updatePoseEstimate();
 
+            if(waitBool){
+                sleep(waitDuration * 1000);
+            }
+
             //CYCLE PIXEL STACK
             if (cycleStack) {
                 Action pixelCycle1 = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, tagScoreHeading))
@@ -180,8 +184,8 @@ public class RedClose extends LinearOpMode {
                         //TRANSFER & SCORE
                         .afterTime(5 + routeWait, robot.transfer())
                         .afterTime(6.5 + routeWait, robot.intakeStop())
-                        .afterTime(7 + (routeWait * 2) + waitDuration, robot.mid())
-                        .afterTime(9 + routeWait + waitDuration, robot.retract())
+                        .afterTime(7 + (routeWait * 2), robot.mid())
+                        .afterTime(9 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
@@ -192,7 +196,7 @@ public class RedClose extends LinearOpMode {
                         .strafeToLinearHeading(new Vector2d(-48, + cycleScorePosY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.01) //added to make approach more gentle
                         .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading)
-                        .waitSeconds(0.5 + waitDuration)
+                        .waitSeconds(0.5)
 
                         //RETURN TO BACKBOARD AND SCORE
                         .strafeToLinearHeading(new Vector2d(25, + cycleScorePosY + routeOffsetY), tagScoreHeading)
