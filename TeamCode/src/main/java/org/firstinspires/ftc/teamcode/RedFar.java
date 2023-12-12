@@ -37,7 +37,7 @@ public class RedFar extends LinearOpMode {
 
 
     //CYCLING POS
-    double pixelStackPosX = -53.5; //how far into back wall to drive
+    double pixelStackPosX = -55.5; //how far into back wall to drive
     double pixelStackOffsetX = -2.5;
     double pixelStackPosY = -41;
     double cycleScorePosX = 46; //push in more than tag score
@@ -73,6 +73,7 @@ public class RedFar extends LinearOpMode {
             } else if(gamepad1.b) {
                 cycleStack = false;
             }
+
 
             //OUTSIDE CYCLE OR INSIDE?
             if(gamepad1.a) {
@@ -146,7 +147,7 @@ public class RedFar extends LinearOpMode {
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
                     .lineToYLinearHeading(-55 + spikeMarkOffsetY, tagHeading)
-                    .waitSeconds(1.75)//keep this 1.75
+                    .waitSeconds(1)//keep this 1.75
 
                     //DRIVE OUTSIDE TURN & DRIVE TO BACKBOARD
                     .turnTo(Math.toRadians(269)) //required to keep robot moving straight
@@ -190,19 +191,19 @@ public class RedFar extends LinearOpMode {
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
-                        .strafeToLinearHeading(new Vector2d(36, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fast)
+                        .strafeToLinearHeading(new Vector2d(36, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.lastHope)
                         .waitSeconds(0.01)
 
                         //GOTO STACK AND WAIT IF NEEDED
-                        .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.lastHope)
                         .waitSeconds(0.01) //added to make approach more gentle
                         .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.5 + waitDuration)
 
                         //RETURN TO BACKBOARD AND SCORE
-                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fast)
+                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.lastHope)
                         .waitSeconds(0.01)
-                        .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading, drive.fast)
+                        .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading, drive.lastHope)
                         .strafeToLinearHeading(new Vector2d(cycleScorePosX+3, cycleScorePosY), tagScoreHeading, drive.fast)
                         .build();
 
@@ -222,24 +223,24 @@ public class RedFar extends LinearOpMode {
                         //TRANSFER & SCORE
                         .afterTime(6.5 + routeWait, robot.transfer())
                         .afterTime(7.5 + routeWait, robot.intakeStop())
-                        .afterTime(7.5 + (routeWait * 2), robot.mid())
+                        .afterTime(7.5 + routeWait, robot.mid())
                         .afterTime(9 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
-                        .strafeToLinearHeading(new Vector2d(38, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fast)
+                        .strafeToLinearHeading(new Vector2d(36, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.lastHope)
                         .waitSeconds(0.01)
 
                         //GOTO STACK AND WAIT IF NEEDED
-                        .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY-0.85 + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading,drive.lastHope)
                         .waitSeconds(0.01) //added to make approach more gentle
                         .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY+1 + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.5)
 
                         //RETURN TO BACKBOARD AND SCORE
-                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fast)
+                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.lastHope)
                         .waitSeconds(0.01)
-                        .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading, drive.fast)
+                        .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading, drive.lastHope)
                         .strafeToLinearHeading(new Vector2d(cycleScorePosX+3, cycleScorePosY), tagScoreHeading, drive.fast)
                         .waitSeconds(1)
                         .build();
