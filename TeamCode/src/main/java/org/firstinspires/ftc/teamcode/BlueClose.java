@@ -185,7 +185,7 @@ public class BlueClose extends LinearOpMode {
                         .afterTime(5.25 + routeWait, robot.transfer())
                         .afterTime(6 + routeWait, robot.intakeStop())
                         .afterTime(6.5 + (routeWait * 2), robot.mid())
-                        .afterTime(7.5 + routeWait, robot.retract())
+                        .afterTime(8 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
@@ -222,7 +222,7 @@ public class BlueClose extends LinearOpMode {
                         .afterTime(5.25 + routeWait, robot.transfer())
                         .afterTime(6 + routeWait, robot.intakeStop())
                         .afterTime(6.5 + (routeWait * 2), robot.mid())
-                        .afterTime(7.5 + routeWait, robot.retract())
+                        .afterTime(8.5 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
