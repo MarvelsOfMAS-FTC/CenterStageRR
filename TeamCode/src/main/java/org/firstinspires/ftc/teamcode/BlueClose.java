@@ -26,11 +26,11 @@ public class BlueClose extends LinearOpMode {
     double spikeMarkPosY = 55;
     double spikeMarkOffsetY; //change spike mark tape forward movement
     double tagHeading;
-    double tagLeft = Math.toRadians(119);
+    double tagLeft = Math.toRadians(120);
     double tagMid = Math.toRadians(100);
     double tagRight = Math.toRadians(72);
 
-    double tagScorePosX = 43; //center preload tag score pos X
+    double tagScorePosX = 48; //center preload tag score pos X
     double tagScorePoxY = 42; //center preload tag score pos Y
     double tagScoreOffsetY; //controls left-right preload displacement
     double tagScoreHeading = Math.toRadians(180);
@@ -41,7 +41,8 @@ public class BlueClose extends LinearOpMode {
     double pixelStackOffsetX = -2.5;
     double pixelStackPosY = 43.2;
     double pixelStackOffsetY = -2.2;
-    double cycleScorePosX = 45; //push in more than tag score
+
+    double cycleScorePosX = 48; //push in more than tag score
     double cycleScoreOffsetX = 1;
     double cycleScorePosY = 44; //used to dodge right pixel on transit
 
@@ -124,12 +125,12 @@ public class BlueClose extends LinearOpMode {
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
                 tagScoreOffsetY = 5;
-                spikeMarkOffsetY = -1;
+                spikeMarkOffsetY = -3.5;
 
             } else {
                 tagHeading = tagRight;
                 tagScoreOffsetY = -5.2;
-                spikeMarkOffsetY = -1;
+                spikeMarkOffsetY = 6;
             }
 
             //SCORE PRELOAD PIXELS
@@ -182,9 +183,9 @@ public class BlueClose extends LinearOpMode {
 
                         //TRANSFER & SCORE
                         .afterTime(5.25 + routeWait, robot.transfer())
-                        .afterTime(6.75 + routeWait, robot.intakeStop())
+                        .afterTime(6 + routeWait, robot.intakeStop())
                         .afterTime(6.5 + (routeWait * 2), robot.mid())
-                        .afterTime(9 + routeWait, robot.retract())
+                        .afterTime(7.5 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
@@ -219,9 +220,9 @@ public class BlueClose extends LinearOpMode {
 
                         //TRANSFER & SCORE
                         .afterTime(5.25 + routeWait, robot.transfer())
-                        .afterTime(6.75 + routeWait, robot.intakeStop())
+                        .afterTime(6 + routeWait, robot.intakeStop())
                         .afterTime(6.5 + (routeWait * 2), robot.mid())
-                        .afterTime(9 + routeWait, robot.retract())
+                        .afterTime(7.5 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
