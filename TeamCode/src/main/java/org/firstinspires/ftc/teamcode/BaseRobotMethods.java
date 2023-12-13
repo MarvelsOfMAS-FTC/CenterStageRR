@@ -166,6 +166,10 @@ public class BaseRobotMethods{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             intake.setPower(0); //stop intake
+            extend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            extend.setTargetPosition(0);
+            extend.setPower(1.0);
+            extend.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             return false;
         }
     }
@@ -223,14 +227,9 @@ public class BaseRobotMethods{
     public class Transfer implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            extend.setPower(-0.5);//set 50% speed elevator in
+
             //then transfer and reset elevator encoder
-            intake.setPower(0.75);
-            extend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            extend.setTargetPosition(0);
-            extend.setPower(1.0);
-            extend.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            intake.setPower(1.0);
             return false;
         }
     }
@@ -239,6 +238,8 @@ public class BaseRobotMethods{
     public class IntakeUp implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            extend.setPower(-0.5);//set 50% speed elevator in
             elbowl.setPosition(0.34 + elbowHome);
             elbowr.setPosition(0.3 + elbowHome);
             wrist.setPosition(.762);
