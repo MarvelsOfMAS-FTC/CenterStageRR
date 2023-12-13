@@ -41,10 +41,12 @@ public class BlueFar extends LinearOpMode {
     double pixelStackOffsetX = -2.5;
     double pixelStackPosY = 42;
     double pixelStackOffsetY = 0;
+
     double cycleScorePosX = 49; //push in more than tag score
     double cycleScoreOffsetX = 0;
     double cycleScorePosY = 44; //used to dodge right pixel on transit
     double cycleScoreOffsetY = -0.85;
+
 
     double routeOffsetY  = -25; //how far from center tag to move for outside cycle run
     double routeWait = 0.5; //need more time for outside route

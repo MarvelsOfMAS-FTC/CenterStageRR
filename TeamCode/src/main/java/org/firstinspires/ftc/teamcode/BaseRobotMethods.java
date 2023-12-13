@@ -245,9 +245,9 @@ public class BaseRobotMethods{
     public class extraMid implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setPower(0.65);
+            extend.setPower(1);
             extend.setTargetPosition(460);
-            climbl.setTargetPosition(370); //525
+            climbl.setTargetPosition(370);
             climbr.setTargetPosition(370);
             score.setPosition(0.34);
             return false;
@@ -310,7 +310,7 @@ public class BaseRobotMethods{
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setPower(0.65);
             extend.setTargetPosition(400);
-            climbl.setTargetPosition(300); //260
+            climbl.setTargetPosition(300);
             climbr.setTargetPosition(300);
             score.setPosition(0.4);
             return false;
@@ -322,9 +322,9 @@ public class BaseRobotMethods{
     public class Mid implements Action{ //(int extendTarget)
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setPower(0.45);
+            extend.setPower(1);
             extend.setTargetPosition(460);
-            climbl.setTargetPosition(525); //525
+            climbl.setTargetPosition(525);
             climbr.setTargetPosition(525);
             score.setPosition(0.34);
             return false;

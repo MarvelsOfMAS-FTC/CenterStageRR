@@ -23,12 +23,12 @@ public class RedClose extends LinearOpMode {
     double startHeading = Math.toRadians(270);
 
     //PRELOAD POS
-    double spikeMarkPosY = -55;
+    double spikeMarkPosY = -55; //initial move
     double spikeMarkOffsetY; //change spike mark tape forward movement
     double tagHeading;
-    double tagLeft = Math.toRadians(129+180);
-    double tagMid = Math.toRadians(110+180);
-    double tagRight = Math.toRadians(72+180);
+    double tagLeft = Math.toRadians(304);
+    double tagMid = Math.toRadians(284);
+    double tagRight = Math.toRadians(252);
 
     double tagScorePosX = 43; //center preload tag score pos X
     double tagScorePoxY = -42; //center preload tag score pos Y
@@ -118,18 +118,18 @@ public class RedClose extends LinearOpMode {
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagHeading = tagMid;
-                tagScoreOffsetY = 0;
+                tagScoreOffsetY = -5;
                 spikeMarkOffsetY = 2;
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
-                tagScoreOffsetY = 5;
+                tagScoreOffsetY = 4.2;
                 spikeMarkOffsetY = -5.6;
 
             } else {
                 tagHeading = tagRight;
                 tagScoreOffsetY = -5.2;
-                spikeMarkOffsetY = 4;
+                spikeMarkOffsetY = 2.5;
             }
 
             //SCORE PRELOAD PIXELS
