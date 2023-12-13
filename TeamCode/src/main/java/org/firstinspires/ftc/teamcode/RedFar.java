@@ -140,6 +140,7 @@ public class RedFar extends LinearOpMode {
                     //ACTIONS ----------------------------------------------------------------------
                     //SCORE MARK PIXEL
                     .afterTime(0, robot.spikeExtend())
+                    .afterTime(1.3, robot.spikeUp())
                     .afterTime(1.6, robot.spikeScore())
                     .afterTime(2, robot.fingerHome())
                     .afterTime(2.5, robot.home())
@@ -209,7 +210,7 @@ public class RedFar extends LinearOpMode {
                         .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.lastHope)
                         .waitSeconds(0.01)
                         .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading, drive.lastHope)
-                        .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading, drive.fast)
+                        //.strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading, drive.fast)
                         .build();
 
 
@@ -248,7 +249,7 @@ public class RedFar extends LinearOpMode {
                         .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.lastHope)
                         .waitSeconds(0.01)
                         .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading, drive.lastHope)
-                        .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading, drive.fast)
+                        //.strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading, drive.fast)
                         .waitSeconds(1)
                         .build();
 

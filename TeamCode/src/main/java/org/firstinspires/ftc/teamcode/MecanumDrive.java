@@ -64,6 +64,7 @@ public final class MecanumDrive {
         public double trackWidthTicks = 743.1812201833369;
         public  double fastMove = 100;
         public double lastHope = 150;
+        public double slowMove = 25;
 
         // feedforward parameters (in tick units)
         public double kS = 0.0;
@@ -109,6 +110,11 @@ public final class MecanumDrive {
     public final VelConstraint lastHope =
             new MinVelConstraint(Arrays.asList(
                     kinematics.new WheelVelConstraint(PARAMS.lastHope),
+                    new AngularVelConstraint(PARAMS.maxAngVel)
+            ));
+    public final VelConstraint slow =
+            new MinVelConstraint(Arrays.asList(
+                    kinematics.new WheelVelConstraint(PARAMS.slowMove),
                     new AngularVelConstraint(PARAMS.maxAngVel)
             ));
     public final AccelConstraint defaultAccelConstraint =
