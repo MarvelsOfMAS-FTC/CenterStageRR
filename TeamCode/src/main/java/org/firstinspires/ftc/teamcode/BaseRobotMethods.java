@@ -96,7 +96,7 @@ public class BaseRobotMethods{
         elbowl.setPosition(0.55 + elbowHome);
         elbowr.setPosition(0.30 + elbowHome);
         wrist.setPosition(0.725);
-        finger.setPosition(0.1299);
+        finger.setPosition(0.3);
         droneLaunch.setPosition(0.4);
 
 
@@ -270,7 +270,7 @@ public class BaseRobotMethods{
     public Action spikeExtend(){
         return new SpikeExtend();
     }
-    public class SpikeScore implements Action{
+    public class SpikeScore implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             climbl.setTargetPosition(300);
@@ -278,27 +278,28 @@ public class BaseRobotMethods{
             return false;
         }
     }
-    public Action spikeScore(){
+
+    public Action spikeScore() {
         return new SpikeScore();
     }
 
-    public class fingerScore implements Action{
+    public Action spikeUp() {
+        return new SpikeUp();
+    }
+
+    public class SpikeUp implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            finger.setPosition(0.41);
-
+            climbl.setTargetPosition((300));
+            climbr.setTargetPosition((300));
             return false;
         }
     }
-    public Action fingerScore(){
-        return new fingerScore();
-    }
-
 
     public class FingerHome implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            finger.setPosition(0.84);
+            finger.setPosition(0.8);
             return false;
         }
     }

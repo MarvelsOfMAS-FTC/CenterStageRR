@@ -124,13 +124,13 @@ public class BlueClose extends LinearOpMode {
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
-                tagScoreOffsetY = 5;
+                tagScoreOffsetY = 4.8;
                 spikeMarkOffsetY = -3.5;
 
             } else {
                 tagHeading = tagRight;
-                tagScoreOffsetY = -5.2;
-                spikeMarkOffsetY = 6;
+                tagScoreOffsetY = -5.3;
+                spikeMarkOffsetY = 10;
             }
 
             //SCORE PRELOAD PIXELS
@@ -138,7 +138,7 @@ public class BlueClose extends LinearOpMode {
                     //ACTIONS ----------------------------------------------------------------------
                     //SCORE MARK PIXEL
                     .afterTime(0, robot.spikeExtend())
-                    .afterTime(1, robot.fingerScore())
+                    .afterTime(1, robot.spikeUp())
                     .afterTime(1.75, robot.spikeScore())
                     .afterTime(2, robot.fingerHome())
                     .afterTime(2.25, robot.home())
@@ -196,7 +196,7 @@ public class BlueClose extends LinearOpMode {
                         .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fasterVelConstraint, drive.fastAccelConstraint)
                         .waitSeconds(0.01) //added to make approach more gentle
                         .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading, drive.slowerVelConstraint)
-                        .waitSeconds(0.75)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + 5, pixelStackPosY + routeOffsetY), tagScoreHeading, drive.slowerVelConstraint)
 
                         //RETURN TO BACKBOARD AND SCORE
                         .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fasterVelConstraint, drive.fastAccelConstraint)
