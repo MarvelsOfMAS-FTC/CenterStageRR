@@ -95,7 +95,8 @@ public class BaseRobotMethods{
         //SERVO POS
         elbowl.setPosition(0.55 + elbowHome);
         elbowr.setPosition(0.30 + elbowHome);
-        wrist.setPosition(0.725);
+        wrist.setPosition(0.83);
+        finger.setPosition(0.32);
         finger.setPosition(0.3);
         droneLaunch.setPosition(0.4);
 
@@ -160,7 +161,7 @@ public class BaseRobotMethods{
     public class IntakeStop implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            intake.setPower(0); //stop intake
+            intake.setPower(0.2); //stop intake
             return false;
         }
     }
@@ -185,9 +186,9 @@ public class BaseRobotMethods{
     public class IntakeLevel5 implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            elbowl.setPosition(0.756908);//  INTAKE DOWN and TURN ON
-            elbowr.setPosition(0.506908);
-            wrist.setPosition(0.411420-0.07);
+            elbowl.setPosition(0.74838);//  INTAKE DOWN and TURN ON
+            elbowr.setPosition(0.498);
+            wrist.setPosition(0.33);
             intake.setPower(-1.0); //turn intake on full speed
             passiveIntake = true;
             return false;
@@ -218,14 +219,9 @@ public class BaseRobotMethods{
     public class Transfer implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            extend.setPower(-0.5);//set 50% speed elevator in
+
             //then transfer and reset elevator encoder
-            intake.setPower(0.75);
-            extend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            extend.setTargetPosition(0);
-            extend.setPower(1.0);
-            extend.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            intake.setPower(1.0);
             return false;
         }
     }
@@ -234,6 +230,8 @@ public class BaseRobotMethods{
     public class IntakeUp implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            extend.setPower(-0.5);//set 50% speed elevator in
             elbowl.setPosition(0.55 + elbowHome);
             elbowr.setPosition(0.30 + elbowHome);
             wrist.setPosition(0.83);
@@ -290,6 +288,8 @@ public class BaseRobotMethods{
     public class SpikeUp implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            finger.setPosition(0.32);
+
             climbl.setTargetPosition((300));
             climbr.setTargetPosition((300));
             return false;
@@ -323,6 +323,7 @@ public class BaseRobotMethods{
     public class Mid implements Action{ //(int extendTarget)
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            extend.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             extend.setPower(1);
             extend.setTargetPosition(460);
             climbl.setTargetPosition(525);
