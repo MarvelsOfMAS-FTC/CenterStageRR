@@ -251,7 +251,7 @@ public class BaseRobotMethods{
             implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setPower(1);
+            extend.setPower(0.75);
             extend.setTargetPosition(300);
            // climbl.setTargetPosition(300);
            // climbr.setTargetPosition(300);
@@ -301,12 +301,11 @@ public class BaseRobotMethods{
         return new FingerHome();
     }
     public class Low implements Action { //(int extendTarget)
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+        @Override        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setPower(0.65);
             extend.setTargetPosition(400);
-            climbl.setTargetPosition(300); //260
-            climbr.setTargetPosition(300);
+            climbl.setTargetPosition(400); //260
+            climbr.setTargetPosition(400);
             score.setPosition(0.4);
             return false;
         }

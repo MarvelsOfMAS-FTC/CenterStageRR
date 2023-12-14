@@ -26,9 +26,9 @@ public class BlueFar extends LinearOpMode {
     double spikeMarkPosY = 55;
     double spikeMarkOffsetY; //change spike mark tape forward movement
     double tagHeading;
-    double tagLeft = Math.toRadians(118);
+    double tagLeft = Math.toRadians(120);
     double tagMid = Math.toRadians(94);
-    double tagRight = Math.toRadians(75);
+    double tagRight = Math.toRadians(76);
 
     double tagScorePosX = 48; //center preload tag score pos X
     double tagScorePoxY = 42; //center preload tag score pos Y -- THIS NEEDS TO BE DEAD CENTER FOR MIDDLE PLACEMENT ON BACK DROP --
@@ -121,18 +121,18 @@ public class BlueFar extends LinearOpMode {
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagHeading = tagMid;
-                tagScoreOffsetY = 0;
-                spikeMarkOffsetY = 4.5;//positive towards wall
+                tagScoreOffsetY = 0.75;
+                spikeMarkOffsetY = 1.75;//positive towards wall
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
-                tagScoreOffsetY = -5;
+                tagScoreOffsetY = 9.5;
                 spikeMarkOffsetY = 9;
 
             } else {
                 tagHeading = tagRight;
-                tagScoreOffsetY = 6;
-                spikeMarkOffsetY = 10;
+                tagScoreOffsetY = -5;
+                spikeMarkOffsetY = 1;
             }
 
             //SCORE PRELOAD PIXELS
@@ -146,9 +146,9 @@ public class BlueFar extends LinearOpMode {
                     .afterTime(2.5, robot.home())
 
                     //SCORE BACKDROP PIXEL
-                    .afterTime(7.75 + waitDuration, robot.extraMid())
-                    .afterTime(9.25 + waitDuration, robot.mid())
-                    .afterTime(10.0 + waitDuration, robot.retract())
+                    .afterTime(8.5 + waitDuration, robot.extraMid())
+                    .afterTime(10 + waitDuration, robot.mid())
+                    .afterTime(10.5 + waitDuration, robot.retract())
 
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
@@ -158,9 +158,9 @@ public class BlueFar extends LinearOpMode {
                     //DRIVE OUTSIDE TURN & DRIVE TO BACKBOARD
                     .turnTo(startHeading-0.0001) //required to keep robot moving straight
                     .lineToYLinearHeading(20, startHeading)
-                    .strafeToLinearHeading(new Vector2d(24, 20), tagScoreHeading)
+                    .strafeToLinearHeading(new Vector2d(30, 20), tagScoreHeading)
                     .waitSeconds(waitDuration)
-                    .strafeToLinearHeading(new Vector2d(36, tagScorePoxY + tagScoreOffsetY), tagScoreHeading) //tagScorePosY should be dead center on backdrop. tune until it is.
+                    .strafeToLinearHeading(new Vector2d(38, tagScorePoxY + tagScoreOffsetY), tagScoreHeading) //tagScorePosY should be dead center on backdrop. tune until it is.
 
                     //PUSH IN AND SCORE
                     .waitSeconds(0.01) //wait needed between strafe and line movement to seperate direction. roadrunner auto merges the two for some reason

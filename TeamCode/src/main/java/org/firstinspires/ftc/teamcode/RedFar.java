@@ -26,7 +26,7 @@ public class RedFar extends LinearOpMode {
     double spikeMarkPosY = -55;
     double spikeMarkOffsetY; //change spike mark tape forward movement
     double tagHeading;
-    double tagLeft = Math.toRadians(118 + 180);
+    double tagLeft = Math.toRadians(120.5 + 180);
     double tagMid = Math.toRadians(94 + 180);
     double tagRight = Math.toRadians(75 + 180);
 
@@ -42,7 +42,7 @@ public class RedFar extends LinearOpMode {
     double pixelStackPosY = -42;
     double pixelStackOffsetY = -3;
 
-    double cycleScorePosX = 49; //push in more than tag score
+    double cycleScorePosX = 46; //push in more than tag score
     double cycleScoreOffsetX = 1;
     double cycleScorePosY = -44; //used to dodge right pixel on
     double cycleScoreOffsetY = 0;
@@ -121,17 +121,15 @@ public class RedFar extends LinearOpMode {
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagHeading = tagMid;
-                tagScoreOffsetY = -43.5;
+                tagScoreOffsetY = -45;
                 spikeMarkOffsetY = -1.5;//positive towards wall
-
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
-                tagScoreOffsetY = -38;
+                tagScoreOffsetY = -40;
                 spikeMarkOffsetY = 1;
-
             } else {
                 tagHeading = tagRight;
-                tagScoreOffsetY = -51;
+                tagScoreOffsetY = -50.5;
                 spikeMarkOffsetY = -10;
             }
 
@@ -156,9 +154,6 @@ public class RedFar extends LinearOpMode {
                     //DRIVE OUTSIDE TURN & DRIVE TO BACKBOARD
                     .turnTo(Math.toRadians(269)) //required to keep robot moving straight
                     .lineToY(-20)
-                    .strafeToLinearHeading(new Vector2d(44, cycleScorePosY + routeOffsetY), tagScoreHeading)
-                    .waitSeconds(0.01)
-                    .strafeTo(new Vector2d(44, tagScoreOffsetY))
 
                     .endTrajectory()
                     .build();
@@ -167,11 +162,14 @@ public class RedFar extends LinearOpMode {
             drive.updatePoseEstimate();
 
             Action score = drive.actionBuilder(drive.pose)
-                    .afterTime(0, robot.low())
-                    .afterTime(0.5, robot.mid())
-                    .afterTime(1,robot.retract())
-                    .afterTime(1.2,robot.home())
-                    .waitSeconds(1.2)
+                    .afterTime(3.5, robot.low())
+                    .afterTime(6, robot.mid())
+                    .afterTime(6.5,robot.retract())
+                    .afterTime(6.7,robot.home())
+                    .strafeToLinearHeading(new Vector2d(34, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                    .waitSeconds(0.01)
+                    .strafeTo(new Vector2d(40, tagScoreOffsetY))
+                    .strafeTo(new Vector2d(48, tagScoreOffsetY))
                     .endTrajectory()
                     .build();
             Actions.runBlocking(score);
