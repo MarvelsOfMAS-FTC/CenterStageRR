@@ -29,8 +29,8 @@ public class RedClose extends LinearOpMode {
     double spikeMarkOffsetX;
     double tagHeading;
     double tagLeft = Math.toRadians(300);
-    double tagMid = Math.toRadians(280);
-    double tagRight = Math.toRadians(255);
+    double tagMid = Math.toRadians(280 - 15);
+    double tagRight = Math.toRadians(255 - 15);
 
     double tagScorePosX = 48; //center preload tag score pos X
     double tagScorePoxY = -42; //center preload tag score pos Y
@@ -128,8 +128,8 @@ public class RedClose extends LinearOpMode {
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
-                tagScoreOffsetY = 6.5;
-                spikeMarkOffsetY = -6;
+                tagScoreOffsetY = 8;
+                spikeMarkOffsetY = -5.5;
                 spikeMarkOffsetX = 6;
 
 
@@ -155,7 +155,7 @@ public class RedClose extends LinearOpMode {
 
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
-                    .strafeToLinearHeading(new Vector2d(startPosX+spikeMarkOffsetX, spikeMarkPosY + spikeMarkOffsetY), tagHeading+30)
+                    .strafeToLinearHeading(new Vector2d(startPosX+spikeMarkOffsetX, spikeMarkPosY + spikeMarkOffsetY), tagHeading+Math.toRadians(15))
                     .waitSeconds(1.75+0.5)
 
                     //TURN TO BACKBOARD
@@ -200,7 +200,7 @@ public class RedClose extends LinearOpMode {
                         //GOTO STACK AND WAIT IF NEEDED
                         .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fasterVelConstraint, drive.fastAccelConstraint)
                         .waitSeconds(0.01) //added to make approach more gentle
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading, drive.slowerVelConstraint)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX - 3, pixelStackPosY + 3 + routeOffsetY), tagScoreHeading, drive.slowerVelConstraint)
                         .waitSeconds(0.75)
 
                         //RETURN TO BACKBOARD AND SCORE
@@ -237,7 +237,7 @@ public class RedClose extends LinearOpMode {
                         //GOTO STACK AND WAIT IF NEEDED
                         .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.01) //added to make approach more gentle
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY + pixelStackOffsetY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY + 3 + pixelStackOffsetY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.5)
 
                         //RETURN TO BACKBOARD AND SCORE
