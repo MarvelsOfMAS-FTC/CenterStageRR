@@ -96,7 +96,7 @@ public class BaseRobotMethods{
         elbowl.setPosition(0.55 + elbowHome);
         elbowr.setPosition(0.30 + elbowHome);
         wrist.setPosition(0.725);
-        finger.setPosition(0.1299);
+        finger.setPosition(0.32);
         droneLaunch.setPosition(0.4);
 
 
@@ -285,7 +285,7 @@ public class BaseRobotMethods{
     public class fingerScore implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            finger.setPosition(0.41);
+            finger.setPosition(0.32);
 
             return false;
         }
