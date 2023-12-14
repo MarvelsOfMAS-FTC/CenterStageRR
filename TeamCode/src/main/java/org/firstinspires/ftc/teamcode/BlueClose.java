@@ -125,12 +125,12 @@ public class BlueClose extends LinearOpMode {
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
                 tagScoreOffsetY = 5;
-                spikeMarkOffsetY = -3.5;
+                spikeMarkOffsetY = -1;
 
             } else {
                 tagHeading = tagRight;
-                tagScoreOffsetY = -5.2;
-                spikeMarkOffsetY = 6;
+                tagScoreOffsetY = -5.8;
+                spikeMarkOffsetY = 8.5;
             }
 
             //SCORE PRELOAD PIXELS
@@ -138,13 +138,12 @@ public class BlueClose extends LinearOpMode {
                     //ACTIONS ----------------------------------------------------------------------
                     //SCORE MARK PIXEL
                     .afterTime(0, robot.spikeExtend())
-                    .afterTime(1, robot.fingerScore())
-                    .afterTime(1.75, robot.spikeScore())
-                    .afterTime(2, robot.fingerHome())
-                    .afterTime(2.25, robot.home())
+                    .afterTime(1, robot.spikeScore())
+                    .afterTime(1.5, robot.fingerHome())
+                    .afterTime(2, robot.home())
 
                     //SCORE BACKDROP PIXEL
-                    .afterTime(5, robot.low())
+                    .afterTime(4, robot.low())
                     .afterTime(6, robot.mid())
                     .afterTime(6.5, robot.retract())
 
