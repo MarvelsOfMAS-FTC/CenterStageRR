@@ -146,8 +146,8 @@ public class BaseRobotMethods{
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setPower(0.75);
             extend.setTargetPosition(75);
-            climbl.setTargetPosition(450);
-            climbr.setTargetPosition(450);
+            //climbl.setTargetPosition(450);
+            //climbr.setTargetPosition(450);
             score.setPosition(scoreHome);
             finger.setPosition(0.84);
             return false;

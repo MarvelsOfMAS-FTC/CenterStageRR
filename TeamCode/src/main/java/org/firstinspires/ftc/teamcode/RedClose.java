@@ -217,7 +217,7 @@ public class RedClose extends LinearOpMode {
                 Action pixelCycle2 = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, tagScoreHeading))
                         //ACTIONS --------------------------------------------------------------
                         //RETRACT
-                        .afterTime(0, robot.home())
+                        .afterTime(0.5, robot.home())
 
                         //WHIP OUT INTAKE & FEED
                         .afterTime(2.5 + routeWait, robot.intakeGround())
@@ -257,7 +257,7 @@ public class RedClose extends LinearOpMode {
             //PARK THE ROBOT
             Action parkBot = drive.actionBuilder(drive.pose)
                     //ACTIONS ----------------------------------------------------------------------
-                    .afterTime(0, robot.home())
+                    .afterTime(0.5, robot.home())
 
                     //MOVEMENT ---------------------------------------------------------------------
                     .strafeToLinearHeading(new Vector2d(parkPosX, parkPosY), tagScoreHeading)
