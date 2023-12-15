@@ -29,7 +29,7 @@ public class BaseRobotMethods{
     private VisionPortal visionPortalBack;
     private VisionPortal visionPortalApril;
     DcMotorEx intake, climbl, climbr, extend, fl, fr, bl, br;
-    Servo wrist, elbowl, elbowr, lhook, rhook, score, finger, droneLaunch;
+    Servo wrist, elbowl, elbowr, lhook, rhook, score, finger;
     private ElapsedTime runtime = new ElapsedTime();
     boolean passiveIntake = false;
     TouchSensor elevatorLimit;
@@ -87,7 +87,6 @@ public class BaseRobotMethods{
         lhook = hardwareMap.get(Servo.class, "lhook");
         rhook = hardwareMap.get(Servo.class, "rhook");
         score = hardwareMap.get(Servo.class, "score");
-        droneLaunch = hardwareMap.get(Servo.class, "launch");
         finger = hardwareMap.get(Servo.class, "finger");
         elevatorLimit = hardwareMap.get(TouchSensor.class, "elevatorLimit");
 
@@ -102,8 +101,6 @@ public class BaseRobotMethods{
         //elbowr.setPosition(0.25 + elbowHome);
         //wrist.setPosition(0.725);
         finger.setPosition(0.402);
-        droneLaunch.setPosition(0.4);
-
 
         //CAMERA INIT
         visionProcessor = new FirstVisionProcessor();
@@ -137,7 +134,7 @@ public class BaseRobotMethods{
             climbl.setTargetPosition(5);
             climbr.setTargetPosition(5);
             score.setPosition(scoreHome);
-            finger.setPosition(0.84);
+            finger.setPosition(0.9);
             return false;
         }
     }
@@ -153,7 +150,7 @@ public class BaseRobotMethods{
             climbl.setTargetPosition(450);
             climbr.setTargetPosition(450);
             score.setPosition(scoreHome);
-            finger.setPosition(0.84);
+            finger.setPosition(0.9);
             return false;
         }
     }
@@ -239,7 +236,7 @@ public class BaseRobotMethods{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            extend.setPower(-0.5);//set 50% speed elevator in
+            extend.setPower(-0.6);//set 50% speed elevator in
             elbowl.setPosition(0.34 + elbowHome);
             elbowr.setPosition(0.3 + elbowHome);
             wrist.setPosition(.762);
@@ -292,7 +289,7 @@ public class BaseRobotMethods{
     public class FingerHome implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            finger.setPosition(0.84);
+            finger.setPosition(0.9);
 
             return false;
         }
@@ -320,7 +317,7 @@ public class BaseRobotMethods{
             extend.setTargetPosition(460);
             climbl.setTargetPosition(480); //525
             climbr.setTargetPosition(480);
-            score.setPosition(0.34);
+            score.setPosition(0.32);
             return false;
         }
     }
@@ -346,9 +343,9 @@ public class BaseRobotMethods{
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setPower(0.65);
             extend.setTargetPosition(460);
-            climbl.setTargetPosition(370); //525
-            climbr.setTargetPosition(370);
-            score.setPosition(0.34);
+            climbl.setTargetPosition(450); //525
+            climbr.setTargetPosition(450);
+            score.setPosition(0.33);
             return false;
         }
     }

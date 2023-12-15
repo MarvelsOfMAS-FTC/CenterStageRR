@@ -37,15 +37,15 @@ public class BlueFar extends LinearOpMode {
 
 
     //CYCLING POS
-    double pixelStackPosX = -53.5; //how far into back wall to drive
+    double pixelStackPosX = -55; //how far into back wall to drive
     double pixelStackOffsetX = -2.5;
-    double pixelStackPosY = 42;
+    double pixelStackPosY = 43;
     double pixelStackOffsetY = 0;
 
     double cycleScorePosX = 49; //push in more than tag score
     double cycleScoreOffsetX = 0;
     double cycleScorePosY = 44; //used to dodge right pixel on transit
-    double cycleScoreOffsetY = -0.85;
+    double cycleScoreOffsetY = -0.5;
 
 
     double routeOffsetY  = -25; //how far from center tag to move for outside cycle run
@@ -121,17 +121,17 @@ public class BlueFar extends LinearOpMode {
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagHeading = tagMid;
-                tagScoreOffsetY = 0.75;
+                tagScoreOffsetY = 0.5;
                 spikeMarkOffsetY = 1.75;//positive towards wall
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
-                tagScoreOffsetY = 9.5;
+                tagScoreOffsetY = 8.5;
                 spikeMarkOffsetY = 9;
 
             } else {
                 tagHeading = tagRight;
-                tagScoreOffsetY = -5;
+                tagScoreOffsetY = -6;
                 spikeMarkOffsetY = 1;
             }
 
@@ -146,7 +146,7 @@ public class BlueFar extends LinearOpMode {
                     .afterTime(2.5, robot.home())
 
                     //SCORE BACKDROP PIXEL
-                    .afterTime(8.5 + waitDuration, robot.extraMid())
+                    .afterTime(8.5 + waitDuration, robot.low())
                     .afterTime(10 + waitDuration, robot.mid())
                     .afterTime(10.5 + waitDuration, robot.retract())
 
@@ -187,10 +187,11 @@ public class BlueFar extends LinearOpMode {
                         .afterTime(5 + routeWait, robot.intakeUp())
 
                         //TRANSFER & SCORE
-                        .afterTime(5.5 + routeWait, robot.transfer())
-                        .afterTime(6.4 + routeWait, robot.intakeStop())
+                        .afterTime(5.75 + routeWait, robot.transfer())
+                        .afterTime(6.5 + routeWait, robot.intakeStop())
                         .afterTime(6.5 + (routeWait * 2), robot.mid())
-                        .afterTime(9.5 + routeWait, robot.retract())
+                        .afterTime(8.6 + routeWait, robot.retract())
+
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
@@ -200,14 +201,14 @@ public class BlueFar extends LinearOpMode {
                         //GOTO STACK AND WAIT IF NEEDED
                         .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.01) //added to make approach more gentle
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading, drive.slow)
-                        .waitSeconds(0.5)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading)
 
                         //RETURN TO BACKBOARD AND SCORE
-                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.lastHope)
                         .waitSeconds(0.01)
-                        .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading)
-                        .waitSeconds(1)
+                        .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading, drive.lastHope)
                         .build();
 
 
@@ -224,26 +225,29 @@ public class BlueFar extends LinearOpMode {
                         .afterTime(5.5 + routeWait, robot.intakeUp())
 
                         //TRANSFER & SCORE
-                        .afterTime(6.5 + routeWait, robot.transfer())
-                        .afterTime(7.5 + routeWait, robot.intakeStop())
-                        .afterTime(7.5 + (routeWait * 2), robot.mid())
-                        .afterTime(9 + routeWait, robot.retract())
+                        .afterTime(6.25 + routeWait, robot.transfer())
+                        .afterTime(7 + routeWait, robot.intakeStop())
+                        .afterTime(7.1 + routeWait, robot.mid())
+                        .afterTime(8.5 + routeWait, robot.retract())
+
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
-                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.lastHope)
                         .waitSeconds(0.01)
 
                         //GOTO STACK AND WAIT IF NEEDED
-                        .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + cycleScoreOffsetY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + cycleScoreOffsetY + routeOffsetY), tagScoreHeading, drive.lastHope)
                         .waitSeconds(0.01) //added to make approach more gentle
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY + pixelStackOffsetY + routeOffsetY), tagScoreHeading, drive.slow)
-                        .waitSeconds(0.5)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX + 2, pixelStackPosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY + pixelStackOffsetY + routeOffsetY), tagScoreHeading)
+                        //.waitSeconds(0.5)
 
                         //RETURN TO BACKBOARD AND SCORE
-                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.lastHope)
                         .waitSeconds(0.01)
-                        .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(cycleScorePosX+2, cycleScorePosY), tagScoreHeading, drive.lastHope)
                       //  .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading)
                         .waitSeconds(1)
                         .build();
