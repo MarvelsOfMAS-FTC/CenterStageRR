@@ -121,7 +121,7 @@ public class BlueFar extends LinearOpMode {
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagHeading = tagMid;
-                tagScoreOffsetY = 0.5;
+                tagScoreOffsetY = 1.25;
                 spikeMarkOffsetY = 1.75;//positive towards wall
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
@@ -190,6 +190,7 @@ public class BlueFar extends LinearOpMode {
                         .afterTime(5.75 + routeWait, robot.transfer())
                         .afterTime(6.5 + routeWait, robot.intakeStop())
                         .afterTime(6.5 + (routeWait * 2), robot.mid())
+                        .afterTime(8.45 + routeWait, robot.high())
                         .afterTime(8.6 + routeWait, robot.retract())
 
 
@@ -202,7 +203,7 @@ public class BlueFar extends LinearOpMode {
                         .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.01) //added to make approach more gentle
                         .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading)
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + 2, pixelStackPosY + routeOffsetY), tagScoreHeading)
                         .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading)
 
                         //RETURN TO BACKBOARD AND SCORE
@@ -218,7 +219,7 @@ public class BlueFar extends LinearOpMode {
                 Action pixelCycle2 = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, tagScoreHeading))
                         //ACTIONS --------------------------------------------------------------
                         //RETRACT
-                        .afterTime(0, robot.home())
+                        .afterTime(0.5, robot.home())
 
                         //WHIP OUT INTAKE & FEED
                         .afterTime(2.5 + routeWait, robot.intakeGround())
@@ -228,6 +229,7 @@ public class BlueFar extends LinearOpMode {
                         .afterTime(6.25 + routeWait, robot.transfer())
                         .afterTime(7 + routeWait, robot.intakeStop())
                         .afterTime(7.1 + routeWait, robot.mid())
+                        .afterTime(8.35 + routeWait, robot.high())
                         .afterTime(8.5 + routeWait, robot.retract())
 
 
@@ -260,7 +262,7 @@ public class BlueFar extends LinearOpMode {
             //PARK THE ROBOT
             Action parkBot = drive.actionBuilder(drive.pose)
                     //ACTIONS ----------------------------------------------------------------------
-                    .afterTime(0, robot.home())
+                    .afterTime(0.5, robot.home())
 
                     //MOVEMENT ---------------------------------------------------------------------
                     .strafeToLinearHeading(new Vector2d(parkPosX, parkPosY), tagScoreHeading)
