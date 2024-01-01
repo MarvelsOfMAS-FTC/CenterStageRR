@@ -8,7 +8,7 @@
 //import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 //
 //@Autonomous
-//public class BlueClose extends LinearOpMode {
+//public class RedClose extends LinearOpMode {
 //    //VARIABLES---------------------------------------------------------------------------------------------------------------
 //    public boolean cycleStack = true;
 //
@@ -19,19 +19,19 @@
 //
 //    //START POS
 //    double startPosX = 12 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
-//    double startPosY = 72 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
-//    double startHeading = Math.toRadians(90);
+//    double startPosY = -72 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
+//    double startHeading = Math.toRadians(270);
 //
 //    //PRELOAD POS
-//    double spikeMarkPosY = 55;
+//    double spikeMarkPosY = -55;
 //    double spikeMarkOffsetY; //change spike mark tape forward movement
 //    double tagHeading;
-//    double tagLeft = Math.toRadians(119);
-//    double tagMid = Math.toRadians(100);
-//    double tagRight = Math.toRadians(72);
+//    double tagLeft = Math.toRadians(299);
+//    double tagMid = Math.toRadians(280);
+//    double tagRight = Math.toRadians(252);
 //
 //    double tagScorePosX = 43; //center preload tag score pos X
-//    double tagScorePoxY = 42; //center preload tag score pos Y
+//    double tagScorePoxY = -42; //center preload tag score pos Y
 //    double tagScoreOffsetY; //controls left-right preload displacement
 //    double tagScoreHeading = Math.toRadians(180);
 //
@@ -44,7 +44,7 @@
 //
 //    double cycleScorePosX = 45; //push in more than tag score
 //    double cycleScoreOffsetX = 1;
-//    double cycleScorePosY = 44; //used to dodge right pixel on transit
+//    double cycleScorePosY = -44; //used to dodge right pixel on transit
 //    double cycleScoreOffsetY = 0;
 //
 //
@@ -53,7 +53,7 @@
 //
 //    //PARK POS
 //    double parkPosX = 46;
-//    double parkPosY = 68;
+//    double parkPosY = -68;
 //
 //    @Override
 //    public void runOpMode() throws InterruptedException {
@@ -83,7 +83,7 @@
 //                routeWait = 0;
 //            } else if(gamepad1.y) {
 //                insideRoute = false;
-//                routeOffsetY = -26.5;
+//                routeOffsetY = 26.5;
 //                routeWait = 0.5;
 //
 //                waitBool = false; //no time to wait on outside route
@@ -99,7 +99,7 @@
 //                waitDuration = 0;
 //            }
 //
-//            telemetry.addData("-- BLUE CLOSE AUTO --","");
+//            telemetry.addData("-- RED CLOSE AUTO --","");
 //            telemetry.addData("","");
 //            telemetry.addData("Cam Place: ", robot.visionProcessor.getSelection());
 //            telemetry.addData("Cycle Stack?: ", cycleStack);
@@ -126,12 +126,12 @@
 //
 //            } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
 //                tagHeading = tagLeft;
-//                tagScoreOffsetY = 5;
+//                tagScoreOffsetY = -5;
 //                spikeMarkOffsetY = -1;
 //
 //            } else {
 //                tagHeading = tagRight;
-//                tagScoreOffsetY = -5.5;
+//                tagScoreOffsetY = 5.5;
 //                spikeMarkOffsetY = -1;
 //            }
 //
@@ -155,7 +155,7 @@
 //                    .waitSeconds(0.75)
 //
 //                    //TURN TO BACKBOARD
-//                    .strafeToLinearHeading(new Vector2d(27, tagScorePoxY + tagScoreOffsetY), tagScoreHeading)
+//                    .strafeToLinearHeading(new Vector2d(27, + tagScorePoxY + tagScoreOffsetY), tagScoreHeading)
 //                    .turnTo(Math.toRadians(180))
 //
 //                    //PUSH IN AND SCORE
@@ -190,17 +190,17 @@
 //
 //                        //MOVEMENT -------------------------------------------------------------
 //                        //CENTER ROBOT ON PIXEL STACK
-//                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading)
+//                        .strafeToLinearHeading(new Vector2d(25, + cycleScorePosY + routeOffsetY), tagScoreHeading)
 //                        .waitSeconds(0.01)
 //
 //                        //GOTO STACK AND WAIT IF NEEDED
-//                        .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading)
+//                        .strafeToLinearHeading(new Vector2d(-48, + cycleScorePosY + routeOffsetY), tagScoreHeading)
 //                        .waitSeconds(0.01) //added to make approach more gentle
 //                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading)
 //                        .waitSeconds(0.5)
 //
 //                        //RETURN TO BACKBOARD AND SCORE
-//                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading)
+//                        .strafeToLinearHeading(new Vector2d(25, + cycleScorePosY + routeOffsetY), tagScoreHeading)
 //                        .waitSeconds(0.01)
 //                        .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading)
 //                        .waitSeconds(1)
@@ -227,17 +227,17 @@
 //
 //                        //MOVEMENT -------------------------------------------------------------
 //                        //CENTER ROBOT ON PIXEL STACK
-//                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading)
+//                        .strafeToLinearHeading(new Vector2d(25, + cycleScorePosY + routeOffsetY), tagScoreHeading)
 //                        .waitSeconds(0.01)
 //
 //                        //GOTO STACK AND WAIT IF NEEDED
-//                        .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading)
+//                        .strafeToLinearHeading(new Vector2d(-48, + cycleScorePosY + routeOffsetY), tagScoreHeading)
 //                        .waitSeconds(0.01) //added to make approach more gentle
 //                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY + pixelStackOffsetY + routeOffsetY), tagScoreHeading)
 //                        .waitSeconds(0.5)
 //
 //                        //RETURN TO BACKBOARD AND SCORE
-//                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading)
+//                        .strafeToLinearHeading(new Vector2d(25, + cycleScorePosY + routeOffsetY), tagScoreHeading)
 //                        .waitSeconds(0.01)
 //                        .strafeToLinearHeading(new Vector2d(cycleScorePosX + cycleScoreOffsetX, cycleScorePosY), tagScoreHeading)
 //                        .waitSeconds(1)
