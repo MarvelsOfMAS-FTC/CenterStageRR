@@ -38,14 +38,6 @@ public class BaseRobotMethods {
         wrist.setDirection(Servo.Direction.REVERSE);
     }
 
-    public void rightclaw() {
-        rightclaw.setPosition(-0.7); // Open right claw
-        rightclose = false;
-        //telemetry.update();
-
-
-    }
-
     public class OpenClaw implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
@@ -127,7 +119,7 @@ public class BaseRobotMethods {
         }
     }
 
-    public Action CloseLeftClaw() {
+    public Action closeLeftClaw() {
         return new CloseLeftClaw();
     }
 
@@ -135,12 +127,16 @@ public class BaseRobotMethods {
 
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            sliders.setTargetPosition(2000);
-            sliders.setPower(1);
+            sliders.setTargetPosition($.LOW);
+            sliders.setPower($.LOW_SPEED);
             sliders.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             return false;
         }
     }
+    public Action Low(){
+        return  new Low();
+    }
+
 }
 
 
