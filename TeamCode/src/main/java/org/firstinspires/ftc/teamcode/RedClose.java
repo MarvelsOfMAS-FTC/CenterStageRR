@@ -156,7 +156,7 @@
 //
 //                    //TURN TO BACKBOARD
 //                    .strafeToLinearHeading(new Vector2d(27, + tagScorePoxY + tagScoreOffsetY), tagScoreHeading)
-//                    .turnTo(Math.toRadians(180))
+//                    //.turnTo(Math.toRadians(tagScoreHeading))
 //
 //                    //PUSH IN AND SCORE
 //                    .lineToX(tagScorePosX)

@@ -34,7 +34,7 @@ public class BaseRobotMethods {
     boolean leftclose = false;
     boolean changedRight = false;
     boolean changedLeft = false;
-    Servo wrist, leftclaw, rightclaw, hookR, hookL, drone;
+    Servo wrist, leftclaw, rightclaw, hookR, hookL; //drone
     DcMotorEx arm, slider, hangingL, hangingR;
 
     //VARIABLES---------------------------------------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ public class BaseRobotMethods {
         hangingR = hardwareMap.get(DcMotorEx.class, "hangingR");
         hookR = hardwareMap.servo.get("hookR");
         hookL = hardwareMap.servo.get("hookL");
-        drone = hardwareMap.servo.get("drone");
+        //drone = hardwareMap.servo.get("drone");
         arm.setDirection(DcMotor.Direction.FORWARD);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hangingL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
