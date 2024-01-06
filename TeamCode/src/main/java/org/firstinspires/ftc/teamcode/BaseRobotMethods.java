@@ -182,6 +182,14 @@ public class BaseRobotMethods {
     public Action Low(){
         return  new Low();
     }
+    public class ServoTest implements Action{
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            wrist.setPosition($.WRIST_TEST_POSITION);
+            return false;
+        }
+    }
 
 }
 

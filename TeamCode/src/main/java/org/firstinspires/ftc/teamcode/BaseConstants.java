@@ -14,6 +14,7 @@ public class BaseConstants extends LinearOpMode {
     public static final double LEFT_CLAW_CLOSE = 0.2;
     public static final int LOW = 2000;
     public static final double LOW_SPEED = 0.8;
+    public static final double WRIST_TEST_POSITION = 0.4;
 
     @Override
     public void runOpMode() throws InterruptedException {
