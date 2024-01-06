@@ -190,6 +190,42 @@ public class BaseRobotMethods {
             return false;
         }
     }
+    public Action wristTest(){
+        return  new ServoTest();
+    }
+    public class Score implements Action{
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            wrist.setPosition($.WRIST_SCORE_POSITION);
+            return false;
+        }
+    }
+    public Action score(){
+        return  new Score();
+    }
+    public class Place implements Action{
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            wrist.setPosition($.WRIST_PLACE_POSITION);
+            return false;
+        }
+    }
+    public Action place(){
+        return  new Place();
+    }
+    public class LowHome implements Action{
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            slider.setTargetPosition($.LOW_HOME);
+            return false;
+        }
+    }
+    public Action lowHome(){
+        return  new LowHome();
+    }
 
 }
 
