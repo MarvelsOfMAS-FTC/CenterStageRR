@@ -4,8 +4,9 @@ import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
+@Autonomous
 public class TestBuildRR extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
@@ -70,6 +71,11 @@ public class TestBuildRR extends LinearOpMode {
                         robot.place()
                 ));
             }
+            telemetry.addData("Wrist : ",robot.wrist.getPosition());
+            telemetry.addData("LOW : ",robot.slider.getCurrentPosition());
+            telemetry.addData("LeftClaw : ",robot.leftclaw.getPosition());
+            telemetry.addData("RightClaw : ",robot.rightclaw.getPosition());
+            telemetry.update();
         }
 
     }
