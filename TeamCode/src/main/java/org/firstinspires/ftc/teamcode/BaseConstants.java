@@ -10,11 +10,11 @@ public final class BaseConstants{
 
 
     public static class Params{
-        public static double RIGHT_CLAW_OPEN = -0.7;
+        public static double RIGHT_CLAW_OPEN = -1;
         public static double LEFT_CLAW_OPEN = 1;
-        public static double RIGHT_CLAW_CLOSE = 0.5;
-        public  static double LEFT_CLAW_CLOSE = 0.2;
-        public  static int LOW = 2000;
+        public static double RIGHT_CLAW_CLOSE = 0;
+        public  static double LEFT_CLAW_CLOSE = 0;
+        public  static int LOW = 1300;
         public  static int LOW_HOME = 0;
         public  static double LOW_SPEED = 0.8;
         public  static double WRIST_TEST_POSITION = 0.4;

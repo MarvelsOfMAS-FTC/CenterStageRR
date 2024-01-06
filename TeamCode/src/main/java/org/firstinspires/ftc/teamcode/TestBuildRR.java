@@ -75,6 +75,7 @@ public class TestBuildRR extends LinearOpMode {
             telemetry.addData("LOW : ",robot.slider.getCurrentPosition());
             telemetry.addData("LeftClaw : ",robot.leftclaw.getPosition());
             telemetry.addData("RightClaw : ",robot.rightclaw.getPosition());
+            telemetry.addData("Arm : ",robot.arm.getCurrentPosition());
             telemetry.update();
         }
 
