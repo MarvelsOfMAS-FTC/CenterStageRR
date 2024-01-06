@@ -29,7 +29,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 public class BaseRobotMethods {
-    BaseConstants $ = new BaseConstants();
+    BaseConstants.Params $ = new BaseConstants.Params();
     boolean rightclose = false;
     boolean leftclose = false;
     boolean changedRight = false;
