@@ -21,7 +21,6 @@ public class TestBuildRR extends LinearOpMode {
         //WAIT FOR START CODE ----------------------------------------------------------------------
         while (!opModeIsActive() && !isStopRequested())
         {
-            telemetry.addData("-- BLUE CLOSE AUTO --","");
             telemetry.addData("","");
             telemetry.addData("Cam Place: ", robot.visionProcessor.getSelection());
             telemetry.update();
@@ -48,17 +47,17 @@ public class TestBuildRR extends LinearOpMode {
             }
             if(gamepad1.y){
                 Actions.runBlocking(new SequentialAction(
-                        robot.CloseRightClaw()
+                        robot.closeRightClaw()
                 ));
             }
             if (gamepad1.dpad_up){
                 Actions.runBlocking(new SequentialAction(
-                        robot.Low()
+                        robot.low()
                 ));
             }
             if (gamepad1.dpad_down){
                 Actions.runBlocking(new SequentialAction(
-                        robot.lowHome()
+                        robot.initRobot()
                 ));
             }
             if (gamepad1.dpad_left){

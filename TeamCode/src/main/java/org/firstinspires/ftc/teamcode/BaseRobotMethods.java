@@ -55,15 +55,14 @@ public class BaseRobotMethods {
     public BaseRobotMethods(HardwareMap hardwareMap) {
         // initialise
         wrist = hardwareMap.servo.get("wrist");
-        leftclaw = hardwareMap.servo.get("right");
-        rightclaw = hardwareMap.servo.get("left");
+        leftclaw = hardwareMap.servo.get("left");
+        rightclaw = hardwareMap.servo.get("right");
         arm = hardwareMap.get(DcMotorEx.class, "arm");
         slider = hardwareMap.get(DcMotorEx.class, "slider");
         hangingL = hardwareMap.get(DcMotorEx.class, "hangingL");
         hangingR = hardwareMap.get(DcMotorEx.class, "hangingR");
         hookR = hardwareMap.servo.get("hookR");
         hookL = hardwareMap.servo.get("hookL");
-        //drone = hardwareMap.servo.get("drone");
         arm.setDirection(DcMotor.Direction.FORWARD);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hangingL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -85,6 +84,28 @@ public class BaseRobotMethods {
                 .setAutoStopLiveView(true)
                 .build();
     }
+
+    public class InitRobot implements Action {
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            rightclaw.setPosition($.RIGHT_CLAW_CLOSE);
+            rightclose = true;
+            leftclaw.setPosition($.LEFT_CLAW_CLOSE);
+            leftclose = true;
+
+//            slider.setTargetPosition($.HOME);
+//            slider.setPower($.DEFAULT_SPEED);
+//            slider.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+
+            wrist.setPosition($.WRIST_HOME_POSITION);
+            return false;
+        }
+    }
+
+    public Action initRobot() {
+        return new InitRobot();
+    }
+
     public class OpenClaw implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
@@ -153,7 +174,7 @@ public class BaseRobotMethods {
         }
     }
 
-    public Action CloseRightClaw() {
+    public Action closeRightClaw() {
         return new CloseRightClaw();
     }
 
@@ -175,26 +196,16 @@ public class BaseRobotMethods {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             slider.setTargetPosition($.LOW);
-            slider.setPower($.LOW_SPEED);
+            slider.setPower($.DEFAULT_SPEED);
             slider.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             return false;
         }
     }
-    public Action Low(){
+    public Action low(){
         return  new Low();
     }
-    public class ServoTest implements Action{
 
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            wrist.setPosition($.WRIST_TEST_POSITION);
-            return false;
-        }
-    }
-    public Action wristTest(){
-        return  new ServoTest();
-    }
-    public class Score implements Action{
+    public class Score implements Action{ //SCORE ON BACKBOARD
 
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
@@ -205,7 +216,7 @@ public class BaseRobotMethods {
     public Action score(){
         return  new Score();
     }
-    public class Place implements Action{
+    public class Place implements Action{ //SCORE ON SPIKE MARK
 
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
@@ -216,19 +227,32 @@ public class BaseRobotMethods {
     public Action place(){
         return  new Place();
     }
-    public class LowHome implements Action{
+    public class GoHome implements Action{ //return to home for slider and arm
 
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            slider.setTargetPosition($.LOW_HOME);
+            slider.setTargetPosition($.HOME);
             return false;
         }
     }
-    public Action lowHome(){
-        return  new LowHome();
+    public Action goHome(){
+        return  new GoHome();
+    }
+
+    public class StopMotors implements Action{ //stop motors from becoming shawerma
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            slider.setPower(0);
+            return false;
+        }
+    }
+    public Action stopMotors(){
+        return  new StopMotors();
     }
 
 }
+
 
 
 
