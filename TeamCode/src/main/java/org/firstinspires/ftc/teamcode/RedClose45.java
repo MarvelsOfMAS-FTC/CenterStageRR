@@ -29,7 +29,7 @@ public class RedClose45 extends LinearOpMode {
 
     double tagScorePosX = 44; //center preload tag score pos X
     double tagScoreOffsetX = 9; //move forward more to score
-    double tagScorePoxY = -47; //center preload tag score pos Y
+    double tagScorePoxY = -44; //center preload tag score pos Y
     double tagScoreOffsetY; //controls left-right preload displacement
     double tagScoreHeading = Math.toRadians(180);
 
@@ -88,17 +88,17 @@ public class RedClose45 extends LinearOpMode {
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagHeading = tagMid;
-                tagScoreOffsetY = 0;
-                spikeMarkOffsetY = 0;
+                tagScoreOffsetY = 0; //MIDDLE MUST BE ZERO
+                spikeMarkOffsetY = 0; //MIDDLE MUST BE ZERO
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
-                tagScoreOffsetY = 9;
+                tagScoreOffsetY = 7.5;
                 spikeMarkOffsetY = 0;
 
             } else {
                 tagHeading = tagRight;
-                tagScoreOffsetY = -9;
+                tagScoreOffsetY = -7.5;
                 spikeMarkOffsetY = 0;
             }
 
@@ -146,6 +146,7 @@ public class RedClose45 extends LinearOpMode {
                     .afterTime(1, robot.stopMotors())
 
                     //MOVEMENT ---------------------------------------------------------------------
+                    .waitSeconds(1)
                     .strafeToLinearHeading(new Vector2d(parkPosX, parkPosY), tagScoreHeading)
                     .waitSeconds(2)
                     .endTrajectory()

@@ -102,7 +102,7 @@ public class RedClose extends LinearOpMode {
             } else {
                 tagHeading = tagRight;
                 tagScoreOffsetY = 0;
-                spikeMarkOffsetY = -5;
+                spikeMarkOffsetY = 0;
             }
 
             //SCORE PRELOAD PIXELS

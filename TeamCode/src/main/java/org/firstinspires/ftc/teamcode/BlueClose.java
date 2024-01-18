@@ -17,7 +17,7 @@ public class BlueClose extends LinearOpMode {
     //START POS
     double startPosX = 12 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
     double startPosY = 72 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
-    double startHeading = Math.toRadians(90 + 180);
+    double startHeading = Math.toRadians(270);
 
     //PRELOAD POS
     double spikeMarkPosY = 45;
