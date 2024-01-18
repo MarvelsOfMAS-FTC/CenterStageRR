@@ -9,36 +9,33 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous
-public class BlueClose extends LinearOpMode {
+public class RedClose45 extends LinearOpMode {
     //VARIABLES---------------------------------------------------------------------------------------------------------------
     public boolean waitBool = false;
     public int waitDuration; //how long to wait on partner alliance in seconds
 
     //START POS
     double startPosX = 12 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
-    double startPosY = 72 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
-    double startHeading = Math.toRadians(90 + 180);
+    double startPosY = -72 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
+    double startHeading = Math.toRadians(90);
 
     //PRELOAD POS
-    double spikeMarkPosY = 45;
+    double spikeMarkPosY = -45;
     double spikeMarkOffsetY; //change spike mark tape forward movement
     double tagHeading;
-    double tagLeft = Math.toRadians(315);
-    double tagMid = Math.toRadians(280);
-    double tagRight = Math.toRadians(210);
+    double tagLeft = Math.toRadians(150);
+    double tagMid = Math.toRadians(100);
+    double tagRight = Math.toRadians(60);
 
-    double tagScorePosX = 46; //center preload tag score pos X
-    double tagScorePoxY = 57; //center preload tag score pos Y
+    double tagScorePosX = 44; //center preload tag score pos X
+    double tagScoreOffsetX = 9; //move forward more to score
+    double tagScorePoxY = -47; //center preload tag score pos Y
     double tagScoreOffsetY; //controls left-right preload displacement
-    double tagScoreHeading = Math.toRadians(0);
-
-
-    double routeOffsetY; //how far from center tag to move for outside cycle run
-    double routeWait; //need more time for outside route
+    double tagScoreHeading = Math.toRadians(180);
 
     //PARK POS
-    double parkPosX = 48;
-    double parkPosY = 71;
+    double parkPosX = 50;
+    double parkPosY = -72;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -73,7 +70,7 @@ public class BlueClose extends LinearOpMode {
                 waitDuration = 0;
             }
 
-            telemetry.addData("-- BLUE CLOSE AUTO --","");
+            telemetry.addData("-- RED CLOSE AUTO --","");
             telemetry.addData("","");
             telemetry.addData("Cam Place: ", robot.visionProcessor.getSelection());
             telemetry.addData("Wait on Partner?: ", waitBool);
@@ -96,13 +93,13 @@ public class BlueClose extends LinearOpMode {
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
-                tagScoreOffsetY = 0;
-                spikeMarkOffsetY = 1;
+                tagScoreOffsetY = 9;
+                spikeMarkOffsetY = 0;
 
             } else {
                 tagHeading = tagRight;
-                tagScoreOffsetY = 0;
-                spikeMarkOffsetY = 1;
+                tagScoreOffsetY = -9;
+                spikeMarkOffsetY = 0;
             }
 
             //SCORE PRELOAD PIXELS
@@ -115,11 +112,9 @@ public class BlueClose extends LinearOpMode {
                     .afterTime(2.5, robot.score())
 
                     //SCORE BACKDROP PIXEL
-                    .afterTime(5, robot.place())
-                    .afterTime(6, robot.openLeftClaw())
-                    .afterTime(6.75, robot.closeLeftClaw())
-                    .afterTime(6.75, robot.score())
-
+                    .afterTime(7, robot.scoreArm())
+                    .afterTime(9, robot.openLeftClaw())
+                    .afterTime(10, robot.closeLeftClaw())
 
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
@@ -127,16 +122,13 @@ public class BlueClose extends LinearOpMode {
                     .turnTo(tagHeading)
                     .waitSeconds(1.75)
 
-                    //TURN TO BACKBOARD
+                    //MOVE TO BACKBOARD
                     .strafeToLinearHeading(new Vector2d(tagScorePosX, tagScorePoxY + tagScoreOffsetY), tagScoreHeading)
-                    .waitSeconds(2)
-
+                    .waitSeconds(1)
 
                     //PUSH IN AND SCORE
-
-
-
-            //.waitSeconds(1)
+                    .lineToX(tagScorePosX + tagScoreOffsetX)
+                    .waitSeconds(3)
                     .endTrajectory()
                     .build();
 

@@ -23,9 +23,9 @@ public class RedClose extends LinearOpMode {
     double spikeMarkPosY = -45;
     double spikeMarkOffsetY; //change spike mark tape forward movement
     double tagHeading;
-    double tagLeft = Math.toRadians(60);
+    double tagLeft = Math.toRadians(150);
     double tagMid = Math.toRadians(100);
-    double tagRight = Math.toRadians(150);
+    double tagRight = Math.toRadians(60);
 
     double tagScorePosX = 46; //center preload tag score pos X
     double tagScorePoxY = -57; //center preload tag score pos Y
@@ -102,7 +102,7 @@ public class RedClose extends LinearOpMode {
             } else {
                 tagHeading = tagRight;
                 tagScoreOffsetY = 0;
-                spikeMarkOffsetY = -1;
+                spikeMarkOffsetY = -5;
             }
 
             //SCORE PRELOAD PIXELS

@@ -65,6 +65,9 @@ public class BaseRobotMethods {
         hookL = hardwareMap.servo.get("hookL");
         arm.setDirection(DcMotor.Direction.FORWARD);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slider.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slider.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         hangingL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         hangingR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         wrist.setDirection(Servo.Direction.REVERSE);
@@ -93,11 +96,11 @@ public class BaseRobotMethods {
             leftclaw.setPosition($.LEFT_CLAW_CLOSE);
             leftclose = true;
 
-//            slider.setTargetPosition($.HOME);
-//            slider.setPower($.DEFAULT_SPEED);
-//            slider.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-
             wrist.setPosition($.WRIST_HOME_POSITION);
+
+            arm.setTargetPosition($.ARMHOME);
+            arm.setPower($.DEFAULT_SPEED);
+            arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             return false;
         }
     }
@@ -227,30 +230,34 @@ public class BaseRobotMethods {
     public Action place(){
         return  new Place();
     }
-    public class GoHome implements Action{ //return to home for slider and arm
-
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            slider.setTargetPosition($.HOME);
-            return false;
-        }
-    }
-    public Action goHome(){
-        return  new GoHome();
-    }
 
     public class StopMotors implements Action{ //stop motors from becoming shawerma
 
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             slider.setPower(0);
+            arm.setPower(0);
             return false;
         }
     }
+
     public Action stopMotors(){
         return  new StopMotors();
     }
 
+    public class ScoreArm implements Action{
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            arm.setTargetPosition($.BACKDROP);
+            arm.setPower($.DEFAULT_SPEED);
+            arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            return false;
+        }
+    }
+    public Action scoreArm(){
+        return  new ScoreArm();
+    }
 }
 
 
