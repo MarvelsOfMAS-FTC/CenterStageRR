@@ -23,15 +23,15 @@ public class RedClose45 extends LinearOpMode {
     double spikeMarkPosY = -45;
     double spikeMarkOffsetY; //change spike mark tape forward movement
     double tagHeading;
-    double tagLeft = Math.toRadians(150);
+    double tagLeft = Math.toRadians(175);
     double tagMid = Math.toRadians(100);
-    double tagRight = Math.toRadians(60);
+    double tagRight = Math.toRadians(50);
 
     double tagScorePosX = 44; //center preload tag score pos X
-    double tagScoreOffsetX = 9; //move forward more to score
+    double tagScoreOffsetX = 9.5; //move forward more to score
     double tagScorePoxY = -44; //center preload tag score pos Y
     double tagScoreOffsetY; //controls left-right preload displacement
-    double tagScoreHeading = Math.toRadians(180);
+    double tagScoreHeading = Math.toRadians(0);
 
     //PARK POS
     double parkPosX = 50;
@@ -113,8 +113,10 @@ public class RedClose45 extends LinearOpMode {
 
                     //SCORE BACKDROP PIXEL
                     .afterTime(7, robot.scoreArm())
+                    .afterTime(8, robot.place())
                     .afterTime(9, robot.openLeftClaw())
-                    .afterTime(10, robot.closeLeftClaw())
+                    .afterTime(10, robot.home_pos())
+                    .afterTime(11, robot.closeLeftClaw())
 
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK

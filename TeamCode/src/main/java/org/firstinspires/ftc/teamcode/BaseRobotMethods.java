@@ -219,6 +219,19 @@ public class BaseRobotMethods {
     public Action score(){
         return  new Score();
     }
+
+    public class Home_Pos implements Action{ //SCORE ON BACKBOARD
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            wrist.setPosition($.WRIST_HOME_POSITION);
+            return false;
+        }
+    }
+    public Action home_pos (){
+        return  new Score();
+    }
+
     public class Place implements Action{ //SCORE ON SPIKE MARK
 
         @Override
@@ -227,6 +240,7 @@ public class BaseRobotMethods {
             return false;
         }
     }
+
     public Action place(){
         return  new Place();
     }
@@ -249,6 +263,10 @@ public class BaseRobotMethods {
 
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
+            telemetryPacket.put("Arm Encoder", arm.getCurrentPosition());
+            telemetryPacket.put("Arm Target", $.BACKDROP);
+
             arm.setTargetPosition($.BACKDROP);
             arm.setPower($.DEFAULT_SPEED);
             arm.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
@@ -259,6 +277,9 @@ public class BaseRobotMethods {
         return  new ScoreArm();
     }
 }
+
+
+
 
 
 

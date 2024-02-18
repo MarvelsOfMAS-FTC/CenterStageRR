@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous
-public class BlueClose45 extends LinearOpMode {
+public class BlueClose45TEST extends LinearOpMode {
     //VARIABLES---------------------------------------------------------------------------------------------------------------
     public boolean waitBool = false;
     public int waitDuration; //how long to wait on partner alliance in seconds
@@ -25,18 +25,20 @@ public class BlueClose45 extends LinearOpMode {
     double tagHeading;
     double tagLeft = Math.toRadians(315);
     double tagMid = Math.toRadians(280);
-    double tagRight = Math.toRadians(205);
+    double tagRight = Math.toRadians(210);
 
-    double tagScorePosX = 44; //center preload tag score pos X
-    double tagScoreOffsetX = 9; //move forward more to score
-    double tagScorePoxY = 42; //center preload tag score pos Y
+    double tagScorePosX = 46; //center preload tag score pos X
+    double tagScorePoxY = 57; //center preload tag score pos Y
     double tagScoreOffsetY; //controls left-right preload displacement
     double tagScoreHeading = Math.toRadians(0);
 
 
+    double routeOffsetY; //how far from center tag to move for outside cycle run
+    double routeWait; //need more time for outside route
+
     //PARK POS
-    double parkPosX = 50;
-    double parkPosY = 72;
+    double parkPosX = 48;
+    double parkPosY = 71;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -89,18 +91,18 @@ public class BlueClose45 extends LinearOpMode {
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagHeading = tagMid;
-                tagScoreOffsetY = 0.01; //MIDDLE MUST BE ZERO
-                spikeMarkOffsetY = 0; //MIDDLE MUST BE ZERO
+                tagScoreOffsetY = 0;
+                spikeMarkOffsetY = 0;
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
-                tagScoreOffsetY = 7.5;
-                spikeMarkOffsetY = 0;
+                tagScoreOffsetY = 0;
+                spikeMarkOffsetY = 1;
 
             } else {
                 tagHeading = tagRight;
-                tagScoreOffsetY = -7.5;
-                spikeMarkOffsetY = 0;
+                tagScoreOffsetY = 0;
+                spikeMarkOffsetY = 1;
             }
 
             //SCORE PRELOAD PIXELS
@@ -113,11 +115,12 @@ public class BlueClose45 extends LinearOpMode {
                     .afterTime(2.5, robot.score())
 
                     //SCORE BACKDROP PIXEL
-                    .afterTime(7, robot.scoreArm())
-                    .afterTime(8, robot.place())
-                    .afterTime(9, robot.openLeftClaw())
-                    .afterTime(10, robot.home_pos())
-                    .afterTime(1, robot.closeLeftClaw())
+
+                    .afterTime(5, robot.place())
+                    .afterTime(6, robot.openLeftClaw())
+                    .afterTime(6.75, robot.closeLeftClaw())
+                    .afterTime(6.75, robot.score())
+
 
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
@@ -125,13 +128,16 @@ public class BlueClose45 extends LinearOpMode {
                     .turnTo(tagHeading)
                     .waitSeconds(1.75)
 
-                    //MOVE TO BACKBOARD
+                    //TURN TO BACKBOARD
                     .strafeToLinearHeading(new Vector2d(tagScorePosX, tagScorePoxY + tagScoreOffsetY), tagScoreHeading)
-                    .waitSeconds(1)
+                    .waitSeconds(2)
+
 
                     //PUSH IN AND SCORE
-                    .lineToX(tagScorePosX + tagScoreOffsetX)
-                    .waitSeconds(3)
+
+
+
+                    //.waitSeconds(1)
                     .endTrajectory()
                     .build();
 
@@ -149,7 +155,6 @@ public class BlueClose45 extends LinearOpMode {
                     .afterTime(1, robot.stopMotors())
 
                     //MOVEMENT ---------------------------------------------------------------------
-                    .waitSeconds(1)
                     .strafeToLinearHeading(new Vector2d(parkPosX, parkPosY), tagScoreHeading)
                     .waitSeconds(2)
                     .endTrajectory()

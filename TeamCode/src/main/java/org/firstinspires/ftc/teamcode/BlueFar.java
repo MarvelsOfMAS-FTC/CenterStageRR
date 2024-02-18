@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous
-public class BlueClose45 extends LinearOpMode {
+public class BlueFar extends LinearOpMode {
     //VARIABLES---------------------------------------------------------------------------------------------------------------
     public boolean waitBool = false;
     public int waitDuration; //how long to wait on partner alliance in seconds
@@ -25,13 +25,13 @@ public class BlueClose45 extends LinearOpMode {
     double tagHeading;
     double tagLeft = Math.toRadians(315);
     double tagMid = Math.toRadians(280);
-    double tagRight = Math.toRadians(205);
+    double tagRight = Math.toRadians(210);
 
-    double tagScorePosX = 44; //center preload tag score pos X
-    double tagScoreOffsetX = 9; //move forward more to score
-    double tagScorePoxY = 42; //center preload tag score pos Y
+    double tagScorePosX = 64; //center preload tag score pos X
+    double tagScoreOffsetX = 18; //move forward more to score
+    double tagScorePoxY = 67; //center preload tag score pos Y
     double tagScoreOffsetY; //controls left-right preload displacement
-    double tagScoreHeading = Math.toRadians(0);
+    double tagScoreHeading = Math.toRadians(360);
 
 
     //PARK POS
@@ -89,7 +89,7 @@ public class BlueClose45 extends LinearOpMode {
             //SELECT TEAM ELEMENT SIDE
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagHeading = tagMid;
-                tagScoreOffsetY = 0.01; //MIDDLE MUST BE ZERO
+                tagScoreOffsetY = 0; //MIDDLE MUST BE ZERO
                 spikeMarkOffsetY = 0; //MIDDLE MUST BE ZERO
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
@@ -119,7 +119,10 @@ public class BlueClose45 extends LinearOpMode {
                     .afterTime(10, robot.home_pos())
                     .afterTime(1, robot.closeLeftClaw())
 
+
                     //MOVEMENT ---------------------------------------------------------------------
+
+
                     //DRIVE TO SPIKE MARK
                     .lineToYLinearHeading(spikeMarkPosY + spikeMarkOffsetY, startHeading)
                     .turnTo(tagHeading)

@@ -71,7 +71,7 @@ public class TestBuildRR extends LinearOpMode {
                 ));
             }
             telemetry.addData("Wrist : ",robot.wrist.getPosition());
-            telemetry.addData("LOW : ",robot.slider.getCurrentPosition());
+            telemetry.addData("Low : ",robot.slider.getCurrentPosition());
             telemetry.addData("LeftClaw : ",robot.leftclaw.getPosition());
             telemetry.addData("RightClaw : ",robot.rightclaw.getPosition());
             telemetry.addData("Arm : ",robot.arm.getCurrentPosition());
