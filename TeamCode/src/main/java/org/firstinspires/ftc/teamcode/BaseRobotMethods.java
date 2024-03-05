@@ -18,6 +18,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 public class BaseRobotMethods{
     //VARIABLES---------------------------------------------------------------------------------------------------------------
+    BaseConstants.Params $ = new BaseConstants.Params();
     private static final boolean USE_WEBCAM = true;
     ElapsedTime timer = new ElapsedTime();
     boolean holdWrist = false;
