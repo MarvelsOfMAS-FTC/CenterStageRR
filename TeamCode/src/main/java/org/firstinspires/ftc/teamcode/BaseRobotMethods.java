@@ -1,43 +1,37 @@
 package org.firstinspires.ftc.teamcode;
 import android.util.Size;
 import androidx.annotation.NonNull;
-import com.acmerobotics.dashboard.config.variable.VariableType;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.SleepAction;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 public class BaseRobotMethods{
     //VARIABLES---------------------------------------------------------------------------------------------------------------
     BaseConstants.Params $ = new BaseConstants.Params();
-    private static final boolean USE_WEBCAM = true;
-    ElapsedTime timer = new ElapsedTime();
-    boolean holdWrist = false;
-    boolean resetEncoder = false;
     private AprilTagProcessor aprilTag;
     public FirstVisionProcessor visionProcessor;
     private VisionPortal visionPortal;
-    private VisionPortal visionPortalBack;
-    private VisionPortal visionPortalApril;
     DcMotorEx intake, climbl, climbr, extend, fl, fr, bl, br;
-    Servo wrist, elbowl, elbowr, lhook, rhook, score, finger, droneLaunch;
-    private ElapsedTime runtime = new ElapsedTime();
+    Servo wrist, lhook, rhook, droneLaunch, droneFlip, score, finger;
+    private NormalizedColorSensor lcolor;
+    private NormalizedColorSensor rcolor;
+    private DistanceSensor ldistance;
+    private DistanceSensor rdistance;
+    
     boolean passiveIntake = false;
     TouchSensor elevatorLimit;
-    private int timeout = 7;
-    double scoreHome = 0.95;
     public LinearOpMode parent;
     public Telemetry telemetry;
-    public double elbowHome = 0.0;
     //HARDWARE SETUP-------------------------------------------------------------------------------------------------
     public BaseRobotMethods(HardwareMap hardwareMap) {
         //MOTORS INIT
@@ -62,27 +56,25 @@ public class BaseRobotMethods{
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         extend.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        extend.setTargetPosition(0);
-        extend.setPower(0.0);
+        extend.setTargetPosition($.HOME);
+        extend.setPower($.ZERO);
         extend.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        extend.setTargetPosition(0); //it doesn't crash when we keep this in so idk
+        extend.setTargetPosition($.HOME); //it doesn't crash when we keep this in so idk
         extend.setVelocityPIDFCoefficients(25.0,0.0,0.0,0.0);
         extend.setPositionPIDFCoefficients(25.0);
-        extend.setPower(1.0);
+        extend.setPower($.FULL_PWR);
 
         climbl.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         climbr.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        climbl.setPower(0.0);
-        climbr.setPower(0.0);
-        climbl.setTargetPosition(0);
-        climbr.setTargetPosition(0);
+        climbl.setPower($.ZERO);
+        climbr.setPower($.ZERO);
+        climbl.setTargetPosition($.HOME);
+        climbr.setTargetPosition($.HOME);
         climbl.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         climbr.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        climbl.setPower(1.0);
-        climbr.setPower(1.0);
+        climbl.setPower($.FULL_PWR);
+        climbr.setPower($.FULL_PWR);
 
-        elbowl = hardwareMap.get(Servo.class, "larm");
-        elbowr = hardwareMap.get(Servo.class, "rarm");
         wrist = hardwareMap.get(Servo.class, "wrist");
         lhook = hardwareMap.get(Servo.class, "lhook");
         rhook = hardwareMap.get(Servo.class, "rhook");
@@ -91,16 +83,17 @@ public class BaseRobotMethods{
         finger = hardwareMap.get(Servo.class, "finger");
         elevatorLimit = hardwareMap.get(TouchSensor.class, "elevatorLimit");
 
-        score.setPosition(scoreHome);
+        score.setPosition($.SCORE_HOME);
+
+        lcolor = hardwareMap.get(NormalizedColorSensor.class, "ldist");
+        rcolor = hardwareMap.get(NormalizedColorSensor.class, "rdist");
+        ldistance = (DistanceSensor) lcolor;
+        rdistance = (DistanceSensor) rcolor;
 
         //SERVO POS
-        elbowl.setPosition(0.55 + elbowHome);
-        elbowr.setPosition(0.30 + elbowHome);
-        wrist.setPosition(0.83);
-        finger.setPosition(0.32);
-        finger.setPosition(0.3);
-        droneLaunch.setPosition(0.4);
-
+        wrist.setPosition($.WRIST_IN);
+        finger.setPosition($.FINGER_GND);
+        droneLaunch.setPosition($.DRONE_HOME);
 
         //CAMERA INIT
         visionProcessor = new FirstVisionProcessor();
@@ -121,20 +114,20 @@ public class BaseRobotMethods{
         fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        bl.setPower(0);
-        fl.setPower(0);
-        fr.setPower(0);
-        br.setPower(0);
+        bl.setPower($.ZERO);
+        fl.setPower($.ZERO);
+        fr.setPower($.ZERO);
+        br.setPower($.ZERO);
     }
     public class Home implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setPower(1);
-            extend.setTargetPosition(-50);
-            climbl.setTargetPosition(5);
-            climbr.setTargetPosition(5);
-            score.setPosition(scoreHome);
-            finger.setPosition(0.84);
+            extend.setPower($.FULL_PWR);
+            extend.setTargetPosition($.EXT_HOME);
+            climbl.setTargetPosition($.CLIMB_HOME);
+            climbr.setTargetPosition($.CLIMB_HOME);
+            score.setPosition($.SCORE_HOME);
+            finger.setPosition($.FINGER_IN);
             return false;
         }
     }
@@ -145,12 +138,10 @@ public class BaseRobotMethods{
     public class Retract implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setPower(0.75);
-            extend.setTargetPosition(75);
-            //climbl.setTargetPosition(450);
-            //climbr.setTargetPosition(450);
-            score.setPosition(scoreHome);
-            finger.setPosition(0.84);
+            extend.setPower($.EXT_PWR_OUT);
+            extend.setTargetPosition($.EXT_RETRACT);
+            score.setPosition($.SCORE_HOME);
+            finger.setPosition($.FINGER_IN);
             return false;
         }
     }
@@ -158,11 +149,10 @@ public class BaseRobotMethods{
         return new Retract();
     }
 
-
     public class IntakeStop implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            intake.setPower(0.2); //stop intake
+            intake.setPower($.ZERO); //stop intake
             return false;
         }
     }
@@ -173,10 +163,10 @@ public class BaseRobotMethods{
     public class IntakeGround implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            elbowl.setPosition(0.786);//  INTAKE DOWN and TURN ON
-            elbowr.setPosition(0.536);
-            wrist.setPosition(0.343);
-            intake.setPower(-1.0); //turn intake on full speed
+            climbl.setTargetPosition($.CLIMB_INT_GND);
+            climbr.setTargetPosition($.CLIMB_INT_GND);
+            wrist.setPosition($.WRIST_GND);
+            intake.setPower($.FULL_PWR_INV); //turn intake on full speed
             passiveIntake = true;
             return false;
         }
@@ -187,10 +177,10 @@ public class BaseRobotMethods{
     public class IntakeLevel5 implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            elbowl.setPosition(0.74838);//  INTAKE DOWN and TURN ON
-            elbowr.setPosition(0.498);
-            wrist.setPosition(0.33);
-            intake.setPower(-1.0); //turn intake on full speed
+            climbl.setTargetPosition($.CLIMB_INT_LVL_5);
+            climbr.setTargetPosition($.CLIMB_INT_LVL_5);
+            wrist.setPosition($.WRIST_LVL_5);
+            intake.setPower($.FULL_PWR_INV); //turn intake on full speed
             passiveIntake = true;
             return false;
         }
@@ -203,10 +193,10 @@ public class BaseRobotMethods{
     public class IntakeLevel3 implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            elbowl.setPosition(0.584);//  INTAKE DOWN and TURN ON
-            elbowr.setPosition(0.544);
+            climbl.setTargetPosition($.CLIMB_INT_LVL_3);
+            climbr.setTargetPosition($.CLIMB_INT_LVL_3);
             wrist.setPosition(0.395);
-            intake.setPower(-1.0); //turn intake on full speed
+            intake.setPower($.FULL_PWR_INV); //turn intake on full speed
             passiveIntake = true;
             return false;
         }
@@ -215,56 +205,48 @@ public class BaseRobotMethods{
         return new IntakeLevel3();
     }
 
-
-
     public class Transfer implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-
             //then transfer and reset elevator encoder
-            intake.setPower(1.0);
+            intake.setPower($.FULL_PWR);
             return false;
         }
     }
+
     public Action transfer(){return new Transfer();}
     //wait until elevator limit switch is pressed
     public class IntakeUp implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            extend.setPower(-0.5);//set 50% speed elevator in
-            elbowl.setPosition(0.55 + elbowHome);
-            elbowr.setPosition(0.30 + elbowHome);
-            wrist.setPosition(0.83);
+            extend.setPower($.EXT_PWR_IN);//set 50% speed elevator in
+            wrist.setPosition($.WRIST_IN);
             return false;
         }
     }
     public Action intakeUp(){return new IntakeUp();}
 
-    public class extraMid implements Action{
+    public class High implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setPower(1);
-            extend.setTargetPosition(460);
-            climbl.setTargetPosition(370);
-            climbr.setTargetPosition(370);
-            score.setPosition(0.34);
+            extend.setPower($.FULL_PWR);
+            extend.setTargetPosition($.EXT_HIGH);
+            climbl.setTargetPosition($.CLIMB_HIGH);
+            climbr.setTargetPosition($.CLIMB_HIGH);
+            score.setPosition($.SCORE_BACKDROP);
             return false;
         }
     }
-    public Action extraMid(){return new extraMid();}
+    public Action High(){return new High();}
 
     public class SpikeExtend implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setPower(0.4);
-            extend.setTargetPosition(300);
-//            while (extend.isBusy()) {
-//                finger.setPosition(-0.00007 * extend.getCurrentPosition() + 0.44);
-//            }
+            extend.setPower($.EXT_PWR_OUT);
+            extend.setTargetPosition($.EXT_PRELOAD);
             return false;
         }
-        // (int extendticks)
     }
     public Action spikeExtend(){
         return new SpikeExtend();
@@ -272,8 +254,8 @@ public class BaseRobotMethods{
     public class SpikeScore implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            climbl.setTargetPosition(300);
-            climbr.setTargetPosition(300);
+            climbl.setTargetPosition($.CLIMB_LOW);
+            climbr.setTargetPosition($.CLIMB_LOW);
             return false;
         }
     }
@@ -289,10 +271,10 @@ public class BaseRobotMethods{
     public class SpikeUp implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            finger.setPosition(0.32);
+            finger.setPosition($.FINGER_GND);
 
-            climbl.setTargetPosition((300));
-            climbr.setTargetPosition((300));
+            climbl.setTargetPosition(($.CLIMB_LOW));
+            climbr.setTargetPosition(($.CLIMB_LOW));
             return false;
         }
     }
@@ -300,7 +282,7 @@ public class BaseRobotMethods{
     public class FingerHome implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            finger.setPosition(0.8);
+            finger.setPosition($.FINGER_IN);
             return false;
         }
     }
@@ -310,11 +292,11 @@ public class BaseRobotMethods{
     public class Low implements Action { //(int extendTarget)
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setPower(0.65);
-            extend.setTargetPosition(400);
-            climbl.setTargetPosition(300);
-            climbr.setTargetPosition(300);
-            score.setPosition(0.4);
+            extend.setPower($.EXT_PWR_OUT);
+            extend.setTargetPosition($.EXT_LOW);
+            climbl.setTargetPosition($.CLIMB_LOW);
+            climbr.setTargetPosition($.CLIMB_LOW);
+            score.setPosition($.SCORE_BACKDROP);
             return false;
         }
     }
@@ -325,11 +307,11 @@ public class BaseRobotMethods{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            extend.setPower(1);
-            extend.setTargetPosition(460);
-            climbl.setTargetPosition(525);
-            climbr.setTargetPosition(525);
-            score.setPosition(0.34);
+            extend.setPower($.FULL_PWR);
+            extend.setTargetPosition($.EXT_MID);
+            climbl.setTargetPosition($.CLIMB_MID);
+            climbr.setTargetPosition($.CLIMB_MID);
+            score.setPosition($.SCORE_BACKDROP);
             return false;
         }
     }

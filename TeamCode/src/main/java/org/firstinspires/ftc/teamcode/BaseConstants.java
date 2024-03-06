@@ -4,18 +4,54 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public final class BaseConstants{
     public static class Params{
-        public static double RIGHT_CLAW_OPEN = 0.5;
-        public static double LEFT_CLAW_OPEN = 0.8;
-        public static double RIGHT_CLAW_CLOSE = 0.85;
-        public  static double LEFT_CLAW_CLOSE = 0.5;
-        public  static int HOME = -1088;
-        public  static int LOW = 750;
-        public  static int BACKDROP = 657;
-        public  static int ARMHOME = 6;
-        public  static double DEFAULT_SPEED = 0.4;
-        public  static double WRIST_HOME_POSITION = 0.2;
-        public  static double WRIST_SCORE_POSITION = 0.2;
-        public  static double WRIST_PLACE_POSITION=0.87;
+
+        //GENERIC MOTOR POWER
+        public static final double ZERO = 0.0;
+        public static final double FULL_PWR = 1.0;
+        public static final double FULL_PWR_INV = 1.0;
+
+        //GENERIC HOME = 0
+        public static final int HOME = 0;
+
+        //CLIMB POS
+        public static final int CLIMB_HOME = 0; //INTAKE IN POS
+        public static final int CLIMB_INT_GND = 750; //INTAKE OUT POS
+        public static final int CLIMB_INT_LVL_5 = 550; //INTAKE OUT POS
+        public static final int CLIMB_INT_LVL_3 = 450; //INTAKE OUT POS
+        public static final int CLIMB_LOW = 300;
+        public static final int CLIMB_MID = 525;
+        public static final int CLIMB_HIGH = 470;
+
+        //SCORE POS
+        public static final double SCORE_HOME = 0.975;
+        public static final double SCORE_BACKDROP = 0.34;
+
+        //EXTEND POS
+        public static final double EXT_PWR_OUT = 0.65; //default power out
+        public static final double EXT_PWR_IN = -0.5; //default power in
+        public static final int EXT_HOME = 0;
+        public static final int EXT_RETRACT = 75;
+        public static final int EXT_PRELOAD = 300;
+        public static final int EXT_LOW = 400;
+        public static final int EXT_MID = 460;
+        public static final int EXT_HIGH = 460;
+
+        //WRIST POS
+        public static final double WRIST_IN = 0.87;
+        public static final double WRIST_GND = 0.39;
+        public static final double WRIST_LVL_5 = 0.4484;
+
+        //FINGER POS
+        public static final double FINGER_IN = 0.9;
+        public static final double FINGER_GND = 0.32;
+        public static final double FINGER_SCORE = 0.84;
+
+        //DRONE POS
+        public static final double DRONE_HOME = 0.8;
+
+
+        //TIMER FUNCTIONS
+        public static int TIMEOUT = 7;
 
 
     }
