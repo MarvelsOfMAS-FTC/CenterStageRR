@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.config.Config;
 @Config
 public final class BaseConstants{
-    public static class Params{
+    public static class  Params{
 
         //GENERIC MOTOR POWER
         public static final double ZERO = 0.0;
@@ -15,16 +15,16 @@ public final class BaseConstants{
 
         //CLIMB POS
         public static final int CLIMB_HOME = 0; //INTAKE IN POS
-        public static final int CLIMB_INT_GND = 750; //INTAKE OUT POS
+        public static final int CLIMB_INT_GND = 1000; //INTAKE OUT POS
         public static final int CLIMB_INT_LVL_5 = 550; //INTAKE OUT POS
         public static final int CLIMB_INT_LVL_3 = 450; //INTAKE OUT POS
-        public static final int CLIMB_LOW = 300;
-        public static final int CLIMB_MID = 525;
-        public static final int CLIMB_HIGH = 470;
+        public static final int CLIMB_LOW = 400;
+        public static final int CLIMB_MID = 600;
+        public static final int CLIMB_HIGH = 1000;
 
         //SCORE POS
-        public static final double SCORE_HOME = 0.975;
-        public static final double SCORE_BACKDROP = 0.34;
+        public static final double SCORE_HOME = 0.9;
+        public static final double SCORE_BACKDROP = 0.52;
 
         //EXTEND POS
         public static final double EXT_PWR_OUT = 0.65; //default power out
@@ -32,14 +32,15 @@ public final class BaseConstants{
         public static final int EXT_HOME = 0;
         public static final int EXT_RETRACT = 75;
         public static final int EXT_PRELOAD = 300;
-        public static final int EXT_LOW = 400;
-        public static final int EXT_MID = 460;
-        public static final int EXT_HIGH = 460;
+        public static final int EXT_LOW = 520;
+        public static final int EXT_MID = 650;
+        public static final int EXT_HIGH = 760;
 
         //WRIST POS
         public static final double WRIST_IN = 0.87;
-        public static final double WRIST_GND = 0.39;
+        public static final double WRIST_GND = 0.41;
         public static final double WRIST_LVL_5 = 0.4484;
+        public static final double WRIST_TRANSFER_PWR = 0.75;
 
         //FINGER POS
         public static final double FINGER_IN = 0.9;

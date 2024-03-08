@@ -52,6 +52,7 @@ public class BlueClose extends LinearOpMode {
     //PARK POS
     double parkPosX = 46;
     double parkPosY = 68;
+    boolean OppositePark=false;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -96,13 +97,17 @@ public class BlueClose extends LinearOpMode {
                 waitBool = false;
                 waitDuration = 0;
             }
+            if(gamepad1.touchpad){
+                OppositePark=!OppositePark;
+            }
 
             telemetry.addData("-- BLUE CLOSE AUTO --","");
             telemetry.addData("","");
-            telemetry.addData("Cam Place: ", robot.visionProcessor.getSelection());
-            telemetry.addData("Cycle Stack?: ", cycleStack);
             telemetry.addData("Inside Route?: ", insideRoute);
+            telemetry.addData("Cam Place: ", robot.visionProcessor.getSelection());
+            telemetry.addData("Cycle Stack?: ", cycleStack);;
             telemetry.addData("Wait on Partner?: ", waitBool);
+            telemetry.addData("Opposite Park : ",OppositePark);
             telemetry.addData("","");
 
             telemetry.addData("Press X to CYCLE, B to NOT CYCLE","");
@@ -113,6 +118,11 @@ public class BlueClose extends LinearOpMode {
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(startPosX, startPosY, startHeading));
 
+        if(OppositePark){
+            parkPosX = 6;
+        }else{
+            parkPosX = 46;
+        }
         //EXECUTE ACTIONS -----------------------------------------------------------------
         while (opModeIsActive() && !isStopRequested()) {
 
@@ -150,11 +160,11 @@ public class BlueClose extends LinearOpMode {
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
                     .lineToYLinearHeading(spikeMarkPosY + spikeMarkOffsetY, tagHeading)
-                    .waitSeconds(1.75+0.5)
+                    .waitSeconds(1.75+0.5) // t≅2.25
 
                     //TURN TO BACKBOARD
-                    .strafeToLinearHeading(new Vector2d(27, tagScorePoxY + tagScoreOffsetY), tagScoreHeading)
-                    .turnTo(Math.toRadians(180))
+                    .strafeToLinearHeading(new Vector2d(27, tagScorePoxY + tagScoreOffsetY), tagScoreHeading) // 180
+                    .turnTo(Math.toRadians(180.0000000000001))
 
                     //PUSH IN AND SCORE
                     .lineToX(tagScorePosX)

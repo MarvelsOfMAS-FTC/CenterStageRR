@@ -3,6 +3,8 @@ import android.util.Size;
 import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -119,6 +121,18 @@ public class BaseRobotMethods{
         fr.setPower($.ZERO);
         br.setPower($.ZERO);
     }
+    public class StopMotor implements Action {
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            fr.setMotorDisable();
+            fl.setMotorDisable();
+            br.setMotorDisable();
+            bl.setMotorDisable();
+            return false;
+        }
+    }
+    public Action stopMotors(){return new StopMotor();}
     public class Home implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
@@ -148,6 +162,12 @@ public class BaseRobotMethods{
     public Action retract(){
         return new Retract();
     }
+    private void Retract(){
+        extend.setPower($.EXT_PWR_OUT);
+        extend.setTargetPosition($.EXT_RETRACT);
+        score.setPosition($.SCORE_HOME);
+        finger.setPosition($.FINGER_IN);
+    }
 
     public class IntakeStop implements Action{
         @Override
@@ -171,6 +191,7 @@ public class BaseRobotMethods{
             return false;
         }
     }
+
     public Action intakeGround() {
         return new IntakeGround();
     }
@@ -205,11 +226,15 @@ public class BaseRobotMethods{
         return new IntakeLevel3();
     }
 
+    /*
+     * Deprecated use IntakeUp instead...
+     */
     public class Transfer implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             //then transfer and reset elevator encoder
-            intake.setPower($.FULL_PWR);
+            //intake.setPower($.FULL_PWR);
+            IntakeUp();
             return false;
         }
     }
@@ -219,11 +244,30 @@ public class BaseRobotMethods{
     public class IntakeUp implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            extend.setPower($.EXT_PWR_IN);//set 50% speed elevator in
+
+            //wait until elevator limit switch is pressed
+            Retract();
+            //then transfer and reset elevator encoder
+            intake.setPower($.WRIST_TRANSFER_PWR);
             wrist.setPosition($.WRIST_IN);
+
+            extend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            extend.setTargetPosition($.EXT_HOME);
+            extend.setPower($.FULL_PWR);
+            extend.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             return false;
         }
+    }
+    private void IntakeUp(){
+        Retract();
+        //then transfer and reset elevator encoder
+        intake.setPower($.WRIST_TRANSFER_PWR);
+        wrist.setPosition($.WRIST_IN);
+
+        extend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        extend.setTargetPosition($.EXT_HOME);
+        extend.setPower($.FULL_PWR);
+        extend.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
     }
     public Action intakeUp(){return new IntakeUp();}
 
@@ -318,6 +362,7 @@ public class BaseRobotMethods{
     public Action mid(){
         return new Mid();
     }
+
     public static double Tiles(double amt_of_tiles){
         return (double) amt_of_tiles*24;
     }
