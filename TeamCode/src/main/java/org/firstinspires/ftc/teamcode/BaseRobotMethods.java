@@ -154,7 +154,6 @@ public class BaseRobotMethods{
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setPower($.EXT_PWR_OUT);
             extend.setTargetPosition($.EXT_RETRACT);
-            score.setPosition($.SCORE_HOME);
             finger.setPosition($.FINGER_IN);
             return false;
         }
@@ -165,7 +164,7 @@ public class BaseRobotMethods{
     private void Retract(){
         extend.setPower($.EXT_PWR_OUT);
         extend.setTargetPosition($.EXT_RETRACT);
-        score.setPosition($.SCORE_HOME);
+
         finger.setPosition($.FINGER_IN);
     }
 
@@ -250,7 +249,7 @@ public class BaseRobotMethods{
             //then transfer and reset elevator encoder
             intake.setPower($.WRIST_TRANSFER_PWR);
             wrist.setPosition($.WRIST_IN);
-
+            score.setPosition($.SCORE_HOME);
             extend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             extend.setTargetPosition($.EXT_HOME);
             extend.setPower($.FULL_PWR);
