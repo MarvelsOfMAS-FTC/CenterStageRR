@@ -270,19 +270,6 @@ public class BaseRobotMethods{
     }
     public Action intakeUp(){return new IntakeUp();}
 
-    public class High implements Action{
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            extend.setPower($.FULL_PWR);
-            extend.setTargetPosition($.EXT_HIGH);
-            climbl.setTargetPosition($.CLIMB_HIGH);
-            climbr.setTargetPosition($.CLIMB_HIGH);
-            score.setPosition($.SCORE_BACKDROP);
-            return false;
-        }
-    }
-    public Action High(){return new High();}
-
     public class SpikeExtend implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
@@ -361,6 +348,19 @@ public class BaseRobotMethods{
     public Action mid(){
         return new Mid();
     }
+
+    public class High implements Action{
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            extend.setPower($.FULL_PWR);
+            extend.setTargetPosition($.EXT_HIGH);
+            climbl.setTargetPosition($.CLIMB_HIGH);
+            climbr.setTargetPosition($.CLIMB_HIGH);
+            score.setPosition($.SCORE_BACKDROP);
+            return false;
+        }
+    }
+    public Action High(){return new High();}
 
     public static double Tiles(double amt_of_tiles){
         return (double) amt_of_tiles*24;
