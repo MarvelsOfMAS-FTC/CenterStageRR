@@ -55,9 +55,9 @@ import java.util.List;
 public final class MecanumDrive {
     public static class Params {
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
-                RevHubOrientationOnRobot.LogoFacingDirection.FORWARD;
+                RevHubOrientationOnRobot.LogoFacingDirection.UP;
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
+                RevHubOrientationOnRobot.UsbFacingDirection.LEFT;
 
         // drive model parameters
         public double inPerTick = 0.0335459131526613;
@@ -65,9 +65,9 @@ public final class MecanumDrive {
         public double trackWidthTicks = 743.1812201833369;
 
         // feedforward parameters (in tick units)
-        public double kS = 1.7085825229972262;
-        public double kV = 0.0034089123920152628;
-        public double kA = 0.00108;
+        public double kS = 0;
+        public double kV = 0.0047;
+        public double kA = 0.00104;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -79,8 +79,8 @@ public final class MecanumDrive {
         public double maxAngAccel = Math.PI;
 
         // path controller gains
-        public double axialGain = 0; //5.25
-        public double lateralGain = 0; //4.75
+        public double axialGain = 4; //5.25
+        public double lateralGain = 4; //4.75
         public double headingGain = 0; // shared with turn
 
         public double axialVelGain = 0; //0.35
@@ -147,8 +147,8 @@ public final class MecanumDrive {
             imu = lazyImu.get();
 
 
-            rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-            rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+            leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+            leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
         @Override
@@ -235,8 +235,8 @@ public final class MecanumDrive {
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         lazyImu = new LazyImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
                 PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));

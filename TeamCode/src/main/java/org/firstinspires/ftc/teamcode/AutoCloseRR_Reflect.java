@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Autonomous
-public class AutoCloseRR extends LinearOpMode {
+public class AutoCloseRR_Reflect extends LinearOpMode {
     //VARIABLES---------------------------------------------------------------------------------------------------------------
     public boolean cycleStack = true;
 
@@ -18,11 +18,9 @@ public class AutoCloseRR extends LinearOpMode {
     public int waitOnAlliance = 0;
     public int waitDuration = 1; //how long to wait
 
-    public int sideMult = 1; //default blue = 1, red = -1
-
     //START POS
     double startPosX = 12 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITIONAutoCloseRR
-    double startPosY = (72 + 0) * sideMult; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
+    double startPosY = 72 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
     double startHeading = Math.toRadians(90);
 
     //PRELOAD POS
