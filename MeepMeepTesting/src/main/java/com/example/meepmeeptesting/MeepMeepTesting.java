@@ -85,7 +85,7 @@ public class MeepMeepTesting {
                 .waitSeconds(0.01)
                 .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY-4), tagScoreHeading)
                 .waitSeconds(1)
-                .strafeToLinearHeading(new Vector2d(parkPosX, parkPosY-6), tagScoreHeading)
+                .strafeToLinearHeading(new Vector2d(parkPosX, 18), tagScoreHeading)
                 .build());
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)

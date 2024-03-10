@@ -119,9 +119,9 @@ public class BlueClose extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(startPosX, startPosY, startHeading));
 
         if(OppositePark){
-            parkPosX = 6;
+            parkPosY=20;
         }else{
-            parkPosX = 46;
+            parkPosY=68;
         }
         //EXECUTE ACTIONS -----------------------------------------------------------------
         while (opModeIsActive() && !isStopRequested()) {

@@ -31,7 +31,7 @@ public final class BaseConstants{
         public static final double EXT_PWR_IN = -0.5; //default power in
         public static final int EXT_HOME = 0;
         public static final int EXT_RETRACT = 75;
-        public static final int EXT_PRELOAD = 300;
+        public static final int EXT_PRELOAD = -300;
         public static final int EXT_LOW = 520;
         public static final int EXT_MID = 650;
         public static final int EXT_HIGH = 760;
