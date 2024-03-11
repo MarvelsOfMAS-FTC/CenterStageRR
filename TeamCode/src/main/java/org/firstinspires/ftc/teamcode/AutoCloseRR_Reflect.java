@@ -192,7 +192,7 @@ public class AutoCloseRR_Reflect extends LinearOpMode {
                         .afterTime(4.5 + routeWait, robot.intakeUp())
 
                         //TRANSFER & SCORE
-                        .afterTime(5.25 + routeWait, robot.transfer())
+                        .afterTime(5.25 + routeWait, robot.intakeUp())
                         .afterTime(6 + routeWait, robot.intakeStop())
                         .afterTime(6.5 + (routeWait * 2), robot.mid())
                         .afterTime(8 + routeWait, robot.retract())
@@ -229,7 +229,7 @@ public class AutoCloseRR_Reflect extends LinearOpMode {
                         .afterTime(4.5 + routeWait, robot.intakeUp())
 
                         //TRANSFER & SCORE
-                        .afterTime(5.25 + routeWait, robot.transfer())
+                        .afterTime(5.25 + routeWait, robot.intakeUp())
                         .afterTime(6 + routeWait, robot.intakeStop())
                         .afterTime(6.5 + (routeWait * 2), robot.mid())
                         .afterTime(8.5 + routeWait, robot.retract())

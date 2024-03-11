@@ -62,7 +62,7 @@ public final class MecanumDrive {
         // drive model parameters
         public double inPerTick = 0.0335459131526613;
         public double lateralInPerTick = 0.0270527532420967;
-        public double trackWidthTicks = 743.1812201833369;
+        public double trackWidthTicks = 729.1676223633413;
 
         // feedforward parameters (in tick units)
         public double kS = 0;
@@ -79,13 +79,13 @@ public final class MecanumDrive {
         public double maxAngAccel = Math.PI;
 
         // path controller gains
-        public double axialGain = 4; //5.25
-        public double lateralGain = 4; //4.75
-        public double headingGain = 0; // shared with turn
+        public double axialGain = 4.5;
+        public double lateralGain = 6.5;
+        public double headingGain = 3.5; // shared with turn
 
-        public double axialVelGain = 0; //0.35
-        public double lateralVelGain = 0;
-        public double headingVelGain = 0; // shared with turn
+        public double axialVelGain = 0.15;
+        public double lateralVelGain = 0.15;
+        public double headingVelGain = 0.15; // shared with turn
 
     }
 
@@ -144,11 +144,10 @@ public final class MecanumDrive {
             rightBack = new OverflowEncoder(new RawEncoder(MecanumDrive.this.rightBack));
             rightFront = new OverflowEncoder(new RawEncoder(MecanumDrive.this.rightFront));
 
-            imu = lazyImu.get();
-
-
             leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
             leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+
+            imu = lazyImu.get();
         }
 
         @Override

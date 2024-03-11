@@ -166,7 +166,7 @@ public class AutoCloseRR extends LinearOpMode {
                     .waitSeconds(1.75+0.5) // t≅2.25
 
                     //TURN TO BACKBOARD
-                    .strafeToLinearHeading(new Vector2d(27, tagScorePoxY + tagScoreOffsetY), tagScoreHeading) // 180
+                    .strafeToLinearHeading(new Vector2d(27, tagScorePoxY + tagScoreOffsetY), tagScoreHeading)
                     .turnTo(Math.toRadians(180.0000000000001))
 
                     //PUSH IN AND SCORE
@@ -194,7 +194,7 @@ public class AutoCloseRR extends LinearOpMode {
                         .afterTime(4.5 + routeWait, robot.intakeUp())
 
                         //TRANSFER & SCORE
-                        .afterTime(5.25 + routeWait, robot.transfer())
+                        .afterTime(5.25 + routeWait, robot.intakeUp())
                         .afterTime(6 + routeWait, robot.intakeStop())
                         .afterTime(6.5 + (routeWait * 2), robot.mid())
                         .afterTime(8 + routeWait, robot.retract())
@@ -231,7 +231,7 @@ public class AutoCloseRR extends LinearOpMode {
                         .afterTime(4.5 + routeWait, robot.intakeUp())
 
                         //TRANSFER & SCORE
-                        .afterTime(5.25 + routeWait, robot.transfer())
+                        .afterTime(5.25 + routeWait, robot.intakeUp())
                         .afterTime(6 + routeWait, robot.intakeStop())
                         .afterTime(6.5 + (routeWait * 2), robot.mid())
                         .afterTime(8.5 + routeWait, robot.retract())
