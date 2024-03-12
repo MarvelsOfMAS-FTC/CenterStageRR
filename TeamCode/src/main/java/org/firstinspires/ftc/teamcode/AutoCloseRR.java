@@ -185,7 +185,7 @@ public class AutoCloseRR extends LinearOpMode {
                     .turnTo(Math.toRadians(180.0000000000001))
 
                     //PUSH IN AND SCORE
-                    .lineToX(tagScorePosX-5)
+                    .lineToX(tagScorePosX-8.5)
                     .waitSeconds(0.01)
                     .endTrajectory()
                     .build();
