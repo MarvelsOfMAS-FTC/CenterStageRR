@@ -154,12 +154,12 @@ public class AutoCloseRR extends LinearOpMode {
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
                 tagScoreOffsetY = 5*sideMult;
-                spikeMarkOffsetY = -1*sideMult;
+                spikeMarkOffsetY = -2*sideMult;
 
             } else {
                 tagHeading = tagRight;
                 tagScoreOffsetY = -6.3*sideMult;
-                spikeMarkOffsetY = 8*sideMult;
+                spikeMarkOffsetY = 7*sideMult;
             }
 
             //SCORE PRELOAD PIXELS
@@ -206,30 +206,34 @@ public class AutoCloseRR extends LinearOpMode {
                         .afterTime(0.5, robot.home())
 
                         //WHIP OUT INTAKE & FEED
-                        .afterTime(2.5 + routeWait, robot.intakeLevel5())
-                        .afterTime(4.5 + routeWait, robot.intakeUp())
+                        .afterTime(2.8 + routeWait, robot.intakeLevel5())
+                        .afterTime(4+routeWait,robot.ScoreMid())
+                        .afterTime(4.5 + routeWait, robot.transfer())
+
 
                         //TRANSFER & SCORE
-                        .afterTime(5.25 + routeWait, robot.intakeUp())
+                        .afterTime(5 + routeWait, robot.a())
+                        .afterTime(5.2 + routeWait, robot.b())
                         .afterTime(6 + routeWait, robot.intakeStop())
-                        .afterTime(6.5 + (routeWait * 2), robot.mid())
-                        .afterTime(8 + routeWait, robot.retract())
+                        .afterTime(7 + (routeWait * 2), robot.low())
+                        .afterTime(8, robot.mid())
+                        .afterTime(10 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
-                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
+                        .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
                         .waitSeconds(0.01)
 
                         //GOTO STACK AND WAIT IF NEEDED
-                        .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
+                        .strafeToLinearHeading(new Vector2d(-54, cycleScorePosY + routeOffsetY-3), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
                         .waitSeconds(0.01) //added to make approach more gentle
                         .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading, drive.defaultVelConstraint)
-                        .waitSeconds(0.75)
+                        .waitSeconds(1.25)
 
                         //RETURN TO BACKBOARD AND SCORE
-                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
+                        .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
                         .waitSeconds(0.01)
-                        .strafeToLinearHeading(new Vector2d(cycleScorePosX, cycleScorePosY), tagScoreHeading, drive.defaultVelConstraint)
+                        .strafeToLinearHeading(new Vector2d(cycleScorePosX-4, cycleScorePosY), tagScoreHeading, drive.defaultVelConstraint)
                         .waitSeconds(1)
                         .build();
 
@@ -244,27 +248,29 @@ public class AutoCloseRR extends LinearOpMode {
 
                         //WHIP OUT INTAKE & FEED
                         .afterTime(2.0 + routeWait, robot.intakeGround())
-                        .afterTime(4.5 + routeWait, robot.intakeUp())
+                        .afterTime(4+routeWait,robot.ScoreMid())
+                        .afterTime(4.5 + routeWait, robot.transfer())
 
                         //TRANSFER & SCORE
-                        .afterTime(5.25 + routeWait, robot.intakeUp())
-                        .afterTime(6 + routeWait, robot.intakeStop())
-                        .afterTime(6.5 + (routeWait * 2), robot.mid())
-                        .afterTime(8.5 + routeWait, robot.retract())
+                        .afterTime(5.2 + routeWait, robot.a())
+                        .afterTime(5.4 + routeWait, robot.b())
+                        .afterTime(6.2 + routeWait, robot.intakeStop())
+                        .afterTime(6.7 + (routeWait * 2), robot.mid())
+                        .afterTime(8.7 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
-                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.01)
 
                         //GOTO STACK AND WAIT IF NEEDED
                         .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading)
-                        .waitSeconds(0.01) //added to make approach more gentle
+                        .waitSeconds(0.5) //added to make approach more gentle
                         .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY + pixelStackOffsetY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.5)
 
                         //RETURN TO BACKBOARD AND SCORE
-                        .strafeToLinearHeading(new Vector2d(25, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY), tagScoreHeading)
                         .waitSeconds(0.01)
                         .strafeToLinearHeading(new Vector2d(cycleScorePosX + cycleScoreOffsetX, cycleScorePosY), tagScoreHeading)
                         .waitSeconds(1)

@@ -186,11 +186,12 @@ public class BaseRobotMethods extends LinearOpMode {
     public class IntakeGround implements Action{ //place intake on ground to feed
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            score.setPosition($.SCORE_BACKDROP);
+
             climbl.setTargetPosition($.CLIMB_INT_GND);
             climbr.setTargetPosition($.CLIMB_INT_GND);
             wrist.setPosition($.WRIST_GND);
             intake.setPower($.FULL_PWR_INV); //turn intake on full speed
+            //score.setPosition($.SCORE_MID);
             return false;
         }
     }
@@ -201,11 +202,11 @@ public class BaseRobotMethods extends LinearOpMode {
     public class IntakeLevel5 implements Action{ //drop intake to top of pixel stack
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            score.setPosition($.SCORE_BACKDROP);
             climbl.setTargetPosition($.CLIMB_INT_LVL_5);
             climbr.setTargetPosition($.CLIMB_INT_LVL_5);
             wrist.setPosition($.WRIST_LVL_5);
             intake.setPower($.FULL_PWR_INV); //turn intake on full speed
+            //score.setPosition($.SCORE_MID);
             return false;
         }
     }
@@ -217,22 +218,33 @@ public class BaseRobotMethods extends LinearOpMode {
     public class IntakeLevel3 implements Action{ //drop intake to midway pos on pixel stack
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            score.setPosition($.SCORE_BACKDROP);
+
             climbl.setTargetPosition($.CLIMB_INT_LVL_3);
             climbr.setTargetPosition($.CLIMB_INT_LVL_3);
             wrist.setPosition($.WRIST_LVL_3);
             intake.setPower($.FULL_PWR_INV); //turn intake on full speed
+            //score.setPosition($.SCORE_MID);
             return false;
         }
     }
     public Action intakeLevel3() {
         return new IntakeLevel3();
     }
+    public class ScoreMid implements Action{ //drop intake to midway pos on pixel stack
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            score.setPosition($.SCORE_MID);
+            return false;
+        }
+    }
+    public Action ScoreMid() {
+        return new ScoreMid();
+    }
 
     public class IntakeUp implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            score.setPosition($.SCORE_BACKDROP);
+            score.setPosition($.SCORE_MID);
             intake.setPower($.FULL_PWR_INV);
             climbl.setTargetPosition($.HOME);
             climbr.setTargetPosition($.HOME);
@@ -249,25 +261,36 @@ public class BaseRobotMethods extends LinearOpMode {
     }
 
     public Action intakeUp(){return new IntakeUp();}
-    public class inverseIntake implements Action{
+    public class Transfera implements Action{
 
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            sleep(500);
+            //500
             score.setPosition($.SCORE_HOME);
-            sleep(200);
+            //            200
+            //            intake.setPower($.WRIST_TRANSFER_PWR);
+            return false;
+        }
+    }
+    public Action a(){return new Transfera();}
+    public class Transferb implements Action{
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            //500
+            //score.setPosition($.SCORE_HOME);
+            //            200
             intake.setPower($.WRIST_TRANSFER_PWR);
             return false;
         }
     }
-    public Action Int(){return new inverseIntake();}
+    public Action b(){return new Transferb();}
     public class transfer implements Action{
 
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             Actions.runBlocking(new SequentialAction(
-                    intakeUp(),
-                    Int()
+                    intakeUp()
             ));
             return false;
         }
