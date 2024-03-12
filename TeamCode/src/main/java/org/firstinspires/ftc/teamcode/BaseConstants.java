@@ -15,8 +15,8 @@ public final class BaseConstants{
 
         //CLIMB POS
         public static final int CLIMB_HOME = 0; //INTAKE IN POS
-        public static final int CLIMB_INT_GND = 1000; //INTAKE OUT POS
-        public static final int CLIMB_INT_LVL_5 = 550; //INTAKE OUT POS
+        public static final int CLIMB_INT_GND = 1200; //INTAKE OUT POS
+        public static final int CLIMB_INT_LVL_5 = 900; //INTAKE OUT POS
         public static final int CLIMB_INT_LVL_3 = 450; //INTAKE OUT POS
         public static final int CLIMB_LOW = 400;
         public static final int CLIMB_MID = 600;
@@ -44,7 +44,7 @@ public final class BaseConstants{
 
         //FINGER POS
         public static final double FINGER_IN = 0.9; //FINGER TUCKED IN
-        public static final double FINGER_GND = 0.32; //FINGER ON GND
+        public static final double FINGER_GND = 0.35; //FINGER ON GND
 
         //DRONE POS
         public static final double DRONE_HOME = 0.8;

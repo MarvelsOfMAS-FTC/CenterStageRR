@@ -239,6 +239,8 @@ public class BaseRobotMethods extends LinearOpMode {
     public class SpikeExtend implements Action { //extend outtake to spike mark pos
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            finger.setPosition($.FINGER_GND);
+
             extend.setPower($.EXT_PWR);
             extend.setTargetPosition($.EXT_PRELOAD);
             return false;
@@ -250,6 +252,7 @@ public class BaseRobotMethods extends LinearOpMode {
     public class SpikeScore implements Action { // lift climber motors to clear finger pixel
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            finger.setPosition($.FINGER_GND);
             climbl.setTargetPosition($.CLIMB_LOW);
             climbr.setTargetPosition($.CLIMB_LOW);
             return false;

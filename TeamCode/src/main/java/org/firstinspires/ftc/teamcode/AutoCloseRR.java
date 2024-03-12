@@ -23,39 +23,40 @@ public class AutoCloseRR extends LinearOpMode {
     //START POS
     double startPosX = 12 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITIONAutoCloseRR
     double startPosY = (72 + 0) * sideMult; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
-    double startHeading = Math.toRadians(90);
+    double startHeading = Math.toRadians(90*sideMult);
 
     //PRELOAD POS
-    double spikeMarkPosY = 55;
+    double spikeMarkPosY = 55*sideMult;
     double spikeMarkOffsetY; //change spike mark tape forward movement
     double tagHeading;
-    double tagLeft = Math.toRadians(120);
-    double tagMid = Math.toRadians(100);
-    double tagRight = Math.toRadians(72);
+    double tagLeft = Math.toRadians(120*sideMult);
+    double tagMid = Math.toRadians(100*sideMult);
+    double tagRight = Math.toRadians(66.5*sideMult);
 
     double tagScorePosX = 48; //center preload tag score pos X
-    double tagScorePoxY = 42; //center preload tag score pos Y
+    double tagScorePoxY = 42*sideMult; //center preload tag score pos Y
     double tagScoreOffsetY; //controls left-right preload displacement
-    double tagScoreHeading = Math.toRadians(180);
+    double tagScoreHeading = Math.toRadians(180*sideMult);
 
 
     //CYCLING POS
     double pixelStackPosX = -55; //how far into back wall to drive
     double pixelStackOffsetX = -2.5;
-    double pixelStackPosY = 43.2;
-    double pixelStackOffsetY = -2.2;
+    double pixelStackPosY = 43.2*sideMult;
+    double pixelStackOffsetY = -2.2*sideMult;
 
     double cycleScorePosX = 48; //push in more than tag score
     double cycleScoreOffsetX = 1;
-    double cycleScorePosY = 44; //used to dodge right pixel on transit
+    double cycleScorePosY = 44*sideMult; //used to dodge right pixel on transit
 
     double routeOffsetY; //how far from center tag to move for outside cycle run
     double routeWait; //need more time for outside route
 
     //PARK POS
     double parkPosX = 46;
-    double parkPosY = 68;
+    double parkPosY = 68*sideMult;
     boolean OppositePark=false;
+    String Side = "Blue";
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -81,11 +82,11 @@ public class AutoCloseRR extends LinearOpMode {
             //INSIDE CYCLE OR OUTSIDE?
             if(gamepad1.a) {
                 insideRoute = true;
-                routeOffsetY = 0;
+                routeOffsetY = 0*sideMult;
                 routeWait = 0;
             } else if(gamepad1.y) {
                 insideRoute = false;
-                routeOffsetY = -26.5;
+                routeOffsetY = -26.5*sideMult;
                 routeWait = 0.5;
 
                 waitBool = false; //no time to wait on outside route
@@ -103,6 +104,11 @@ public class AutoCloseRR extends LinearOpMode {
             if(gamepad1.touchpad){
                 OppositePark=!OppositePark;
             }
+            if(gamepad1.right_trigger>0.1){
+                Side = "blue";
+            }else if (gamepad1.left_trigger>0.1){
+                Side = "red";
+            }
 
             telemetry.addData("-- BLUE CLOSE AUTO --","");
             telemetry.addData("","");
@@ -111,21 +117,30 @@ public class AutoCloseRR extends LinearOpMode {
             telemetry.addData("Cycle Stack?: ", cycleStack);;
             telemetry.addData("Wait on Partner?: ", waitBool);
             telemetry.addData("Opposite Park : ",OppositePark);
+            telemetry.addData("Side : ",Side);
             telemetry.addData("","");
 
             telemetry.addData("Press X to CYCLE, B to NOT CYCLE","");
             telemetry.addData("Press A for INSIDE ROUTE, Y for OUT","");
             telemetry.addData("Press LB to WAIT, RB to ZOOM ZOOM","");
+            telemetry.addData("TouchPad for opposite park","");
+            telemetry.addData("right trigger for blue left trigger for red...","");
             telemetry.update();
+        }
+        if(Side.equalsIgnoreCase("Blue")){
+            sideMult = 1;
+        }else{
+            sideMult = -1;
         }
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(startPosX, startPosY, startHeading));
 
         if(OppositePark){
-            parkPosY=20;
+            parkPosY=20*sideMult;
         }else{
-            parkPosY=68;
+            parkPosY=68*sideMult;
         }
+
         //EXECUTE ACTIONS -----------------------------------------------------------------
         while (opModeIsActive() && !isStopRequested()) {
 
@@ -137,13 +152,13 @@ public class AutoCloseRR extends LinearOpMode {
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
-                tagScoreOffsetY = 5;
-                spikeMarkOffsetY = -1;
+                tagScoreOffsetY = 5*sideMult;
+                spikeMarkOffsetY = -1*sideMult;
 
             } else {
                 tagHeading = tagRight;
-                tagScoreOffsetY = -5.8;
-                spikeMarkOffsetY = 8.5;
+                tagScoreOffsetY = -6.3*sideMult;
+                spikeMarkOffsetY = 8.5*sideMult;
             }
 
             //SCORE PRELOAD PIXELS
@@ -170,7 +185,7 @@ public class AutoCloseRR extends LinearOpMode {
                     .turnTo(Math.toRadians(180.0000000000001))
 
                     //PUSH IN AND SCORE
-                    .lineToX(tagScorePosX)
+                    .lineToX(tagScorePosX-5)
                     .waitSeconds(0.01)
                     .endTrajectory()
                     .build();
