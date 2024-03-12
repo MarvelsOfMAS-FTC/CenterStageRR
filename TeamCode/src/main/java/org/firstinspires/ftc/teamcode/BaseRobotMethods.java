@@ -6,7 +6,9 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -184,6 +186,7 @@ public class BaseRobotMethods extends LinearOpMode {
     public class IntakeGround implements Action{ //place intake on ground to feed
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            score.setPosition($.SCORE_BACKDROP);
             climbl.setTargetPosition($.CLIMB_INT_GND);
             climbr.setTargetPosition($.CLIMB_INT_GND);
             wrist.setPosition($.WRIST_GND);
@@ -198,6 +201,7 @@ public class BaseRobotMethods extends LinearOpMode {
     public class IntakeLevel5 implements Action{ //drop intake to top of pixel stack
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            score.setPosition($.SCORE_BACKDROP);
             climbl.setTargetPosition($.CLIMB_INT_LVL_5);
             climbr.setTargetPosition($.CLIMB_INT_LVL_5);
             wrist.setPosition($.WRIST_LVL_5);
@@ -213,6 +217,7 @@ public class BaseRobotMethods extends LinearOpMode {
     public class IntakeLevel3 implements Action{ //drop intake to midway pos on pixel stack
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            score.setPosition($.SCORE_BACKDROP);
             climbl.setTargetPosition($.CLIMB_INT_LVL_3);
             climbr.setTargetPosition($.CLIMB_INT_LVL_3);
             wrist.setPosition($.WRIST_LVL_3);
@@ -227,14 +232,47 @@ public class BaseRobotMethods extends LinearOpMode {
     public class IntakeUp implements Action{
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            intake.setPower($.WRIST_TRANSFER_PWR);
-            wrist.setPosition($.WRIST_IN);
-            score.setPosition($.SCORE_HOME);
+            score.setPosition($.SCORE_BACKDROP);
+            intake.setPower($.FULL_PWR_INV);
+            climbl.setTargetPosition($.HOME);
+            climbr.setTargetPosition($.HOME);
+            climbl.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            climbr.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+            climbl.setPower($.FULL_PWR);
+            climbr.setPower($.FULL_PWR);
             extend.setTargetPosition($.EXT_HOME);
+            wrist.setPosition($.WRIST_IN);
+
+
             return false;
         }
     }
+
     public Action intakeUp(){return new IntakeUp();}
+    public class inverseIntake implements Action{
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            sleep(500);
+            score.setPosition($.SCORE_HOME);
+            sleep(200);
+            intake.setPower($.WRIST_TRANSFER_PWR);
+            return false;
+        }
+    }
+    public Action Int(){return new inverseIntake();}
+    public class transfer implements Action{
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            Actions.runBlocking(new SequentialAction(
+                    intakeUp(),
+                    Int()
+            ));
+            return false;
+        }
+    }
+    public Action transfer(){return new transfer();}
 
     public class SpikeExtend implements Action { //extend outtake to spike mark pos
         @Override
