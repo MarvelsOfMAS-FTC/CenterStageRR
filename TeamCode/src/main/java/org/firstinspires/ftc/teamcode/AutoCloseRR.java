@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+
 @Autonomous
 public class AutoCloseRR extends LinearOpMode {
     //VARIABLES---------------------------------------------------------------------------------------------------------------
@@ -148,7 +149,7 @@ public class AutoCloseRR extends LinearOpMode {
             if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.MIDDLE) {
                 tagHeading = tagMid;
                 tagScoreOffsetY = 0;
-                spikeMarkOffsetY = 0;
+                spikeMarkOffsetY = 2;
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
                 tagHeading = tagLeft;
@@ -158,7 +159,7 @@ public class AutoCloseRR extends LinearOpMode {
             } else {
                 tagHeading = tagRight;
                 tagScoreOffsetY = -6.3*sideMult;
-                spikeMarkOffsetY = 8.5*sideMult;
+                spikeMarkOffsetY = 8*sideMult;
             }
 
             //SCORE PRELOAD PIXELS
@@ -289,4 +290,6 @@ public class AutoCloseRR extends LinearOpMode {
             break;
         }
     }
+
+
 }
