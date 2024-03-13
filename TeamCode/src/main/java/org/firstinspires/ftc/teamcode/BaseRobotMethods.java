@@ -17,7 +17,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.VisionProcessor;
+import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -97,17 +101,38 @@ public class BaseRobotMethods extends LinearOpMode {
 
         //CAMERA INIT
         visionProcessor = new FirstVisionProcessor();
+
+        aprilTag = new AprilTagProcessor.Builder().build();
+        aprilTag.setDecimation(1);
         initCamera(hardwareMap);
     }
     //CAMERA COMMANDS ----------------------------------------------------------------------------------------------------
     public void initCamera(HardwareMap hardwareMap){
         visionPortal = new VisionPortal.Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, "webcamback"))
-                .addProcessor(visionProcessor)
+                .addProcessors(getVisionProcessor(), getAprilTag())
                 .setCameraResolution(new Size(864, 480))
                 .setStreamFormat(VisionPortal.StreamFormat.YUY2)
                 .setAutoStopLiveView(true)
                 .build();
+        visionPortal.setProcessorEnabled(getAprilTag(),false);
+        visionPortal.setProcessorEnabled(getVisionProcessor(), true);
+    }
+    public VisionProcessor getVisionProcessor(){
+        return visionProcessor;
+    }
+    public VisionPortal getPortal(){
+        return visionPortal;
+    }
+    public AprilTagProcessor getAprilTag(){
+        return aprilTag;
+    }
+    public void useApriltag(){
+        getPortal().setProcessorEnabled(visionProcessor, false);
+        getPortal().setProcessorEnabled(aprilTag, true);
+    }
+    public void closeCamera(){
+        visionPortal.close();
     }
     public void stopMovement(){ //stop motor movement if using encoder auto
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
