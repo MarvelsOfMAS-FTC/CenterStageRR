@@ -240,21 +240,7 @@ public class BaseRobotMethods extends LinearOpMode {
     }
 
 
-    public class IntakeLevel3 implements Action{ //drop intake to midway pos on pixel stack
-        @Override
-        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
 
-            climbl.setTargetPosition($.CLIMB_INT_LVL_3);
-            climbr.setTargetPosition($.CLIMB_INT_LVL_3);
-            wrist.setPosition($.WRIST_LVL_3);
-            intake.setPower($.FULL_PWR_INV); //turn intake on full speed
-            //score.setPosition($.SCORE_MID);
-            return false;
-        }
-    }
-    public Action intakeLevel3() {
-        return new IntakeLevel3();
-    }
     public class ScoreMid implements Action{ //drop intake to midway pos on pixel stack
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {

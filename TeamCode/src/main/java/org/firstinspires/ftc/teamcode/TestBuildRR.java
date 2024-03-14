@@ -4,6 +4,7 @@ import android.util.Size;
 
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.PoseVelocity2d;
 import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
@@ -45,10 +46,24 @@ public class TestBuildRR extends LinearOpMode {
         robot.parent = this;
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, Math.toRadians(180)));
         robot.useApriltag();
+        waitForStart();
         while (opModeIsActive() && !isStopRequested()) {
+            telemetry.addData("CLIMBL",robot.climbl.getCurrentPosition());
             if(gamepad1.touchpad){
                 summonAprilTag(1,drive);
+            } else if (gamepad1.a) {
+                Actions.runBlocking(new SequentialAction(
+                        robot.intakeLevel5()
+                ));
             }
+            telemetry.update();
+            drive.setDrivePowers(new PoseVelocity2d(
+                    new Vector2d(
+                            -gamepad1.left_stick_y*2,
+                            -gamepad1.left_stick_x*2
+                    ),
+                    -gamepad1.right_stick_x
+            ));
         }
 
     }
@@ -81,6 +96,9 @@ public class TestBuildRR extends LinearOpMode {
     }
     public void summonAprilTag(int id,MecanumDrive drive) {
         aprilTagTrack(id);
+        if(error == null){
+            return;
+        }
         sleep(250);
         telemetry.addData("Array: ", Arrays.toString(error));
         telemetry.update();

@@ -9,6 +9,8 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.robot.Robot;
+import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -272,13 +274,14 @@ public class AutoCloseRR extends LinearOpMode {
                         //GOTO STACK AND WAIT IF NEEDED
                         .strafeToLinearHeading(new Vector2d(-54, cycleScorePosY + routeOffsetY-3), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
                         .waitSeconds(0.01) //added to make approach more gentle
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading, drive.defaultVelConstraint)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading+Math.toRadians(20), drive.defaultVelConstraint)
                         .waitSeconds(1.25)
+                        .turnTo(tagScoreHeading)
 
                         //RETURN TO BACKBOARD AND SCORE
                         .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
                         .waitSeconds(0.01)
-                        .strafeToLinearHeading(new Vector2d(cycleScorePosX-4, cycleScorePosY), tagScoreHeading, drive.defaultVelConstraint)
+                        .strafeToLinearHeading(new Vector2d(tagScorePosX-8.5, cycleScorePosY), tagScoreHeading, drive.defaultVelConstraint)
                         .waitSeconds(1)
                         .build();
 
@@ -349,7 +352,6 @@ public class AutoCloseRR extends LinearOpMode {
         // Step through the list of detected tags and look for a matching tag
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         for (AprilTagDetection detection : currentDetections) {
-
             // Look to see if we have size info on this tag.
             if (detection.metadata != null) {
                 //  Check to see if we want to track towards this tag.
@@ -369,6 +371,10 @@ public class AutoCloseRR extends LinearOpMode {
     }
     public void summonAprilTag(int id,MecanumDrive drive) {
         aprilTagTrack(id);
+        if(error == null){
+            //RobotLog.vv("", "COULD NOT FIND APRIL TAG!!!");
+            return;
+        }
         sleep(250);
         telemetry.addData("Array: ", Arrays.toString(error));
         telemetry.update();
