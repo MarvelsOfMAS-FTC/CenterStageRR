@@ -236,7 +236,7 @@ public class AutoCloseRR extends LinearOpMode {
                     .afterTime(0, robot.low())
                     .afterTime(2, robot.mid())
                     .afterTime(2.5, robot.retract())
-                    .lineToX(tagScorePosX-8.5)
+                    .lineToX(tagScorePosX-5.5)
                     .endTrajectory()
                     .build();
             Actions.runBlocking(p2);
@@ -262,9 +262,8 @@ public class AutoCloseRR extends LinearOpMode {
                         .afterTime(5 + routeWait, robot.a())
                         .afterTime(5.2 + routeWait, robot.b())
                         .afterTime(6 + routeWait, robot.intakeStop())
-                        .afterTime(7 + (routeWait * 2), robot.low())
-                        .afterTime(8, robot.mid())
-                        .afterTime(10 + routeWait, robot.retract())
+                        .afterTime(9 + (routeWait * 2), robot.mid())
+                        .afterTime(12 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
@@ -274,14 +273,16 @@ public class AutoCloseRR extends LinearOpMode {
                         //GOTO STACK AND WAIT IF NEEDED
                         .strafeToLinearHeading(new Vector2d(-54, cycleScorePosY + routeOffsetY-3), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
                         .waitSeconds(0.01) //added to make approach more gentle
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, pixelStackPosY + routeOffsetY), tagScoreHeading+Math.toRadians(20), drive.defaultVelConstraint)
-                        .waitSeconds(1.25)
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX-1, pixelStackPosY + routeOffsetY), tagScoreHeading+Math.toRadians(20), drive.defaultVelConstraint)
+                        .waitSeconds(0.3)
                         .turnTo(tagScoreHeading)
+                        .waitSeconds(0.95)
+
 
                         //RETURN TO BACKBOARD AND SCORE
                         .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
                         .waitSeconds(0.01)
-                        .strafeToLinearHeading(new Vector2d(tagScorePosX-8.5, cycleScorePosY), tagScoreHeading, drive.defaultVelConstraint)
+                        .strafeToLinearHeading(new Vector2d(tagScorePosX-5.5, cycleScorePosY), tagScoreHeading, drive.defaultVelConstraint)
                         .waitSeconds(1)
                         .build();
 

@@ -6,35 +6,35 @@ public final class BaseConstants{
     public static class  Params{
 
         //GENERIC MOTOR POWER
-        public static final double ZERO = 0.0;
-        public static final double FULL_PWR = 1.0;
-        public static final double FULL_PWR_INV = -1.0;
+        public  double ZERO = 0.0;
+        public  double FULL_PWR = 1.0;
+        public  double FULL_PWR_INV = -1.0;
 
         //GENERIC HOME
-        public static final int HOME = 0;
+        public  int HOME = 0;
 
         //CLIMB POS
-        public static final int CLIMB_HOME = 0; //INTAKE IN POS
-        public static final int CLIMB_INT_GND = 1200; //INTAKE OUT POS
-        public static final int CLIMB_INT_LVL_5 = 950; //INTAKE OUT POS
-        public static final int CLIMB_INT_LVL_3 = 450; //INTAKE OUT POS
-        public static final int CLIMB_LOW = 400;
-        public static final int CLIMB_MID = 600;
-        public static final int CLIMB_HIGH = 1000;
+        public  int CLIMB_HOME = 0; //INTAKE IN POS
+        public  int CLIMB_INT_GND = 1200; //INTAKE OUT POS
+        public int CLIMB_INT_LVL_5 = 850; //INTAKE OUT POS
+        public  int CLIMB_INT_LVL_3 = 450; //INTAKE OUT POS
+        public  int CLIMB_LOW = 400;
+        public  int CLIMB_MID = 550;
+        public  int CLIMB_HIGH = 1000;
 
         //SCORE POS
-        public static final double SCORE_HOME = 0.9;
-        public static final double SCORE_BACKDROP = 0.52;
-        public static final double SCORE_MID = 0.8;
+        public  double SCORE_HOME = 0.9;
+        public  double SCORE_BACKDROP = 0.42;
+        public  double SCORE_MID = 0.8;
 
         //EXTEND POS
-        public static final double EXT_PWR = 0.65; //default power out
-        public static final int EXT_HOME = 0;
-        public static final int EXT_RETRACT = 75;
-        public static final int EXT_PRELOAD = 300;
-        public static final int EXT_LOW = 520;
-        public static final int EXT_MID = 600;
-        public static final int EXT_HIGH = 760;
+        public  double EXT_PWR = 0.65; //default power out
+        public  int EXT_HOME = 0;
+        public  int EXT_RETRACT = 75;
+        public  int EXT_PRELOAD = 300;
+        public  int EXT_LOW = 520;
+        public  int EXT_MID = 600;
+        public  int EXT_HIGH = 760;
 
         //WRIST POS
         public static final double WRIST_IN = 0.87;
@@ -45,7 +45,7 @@ public final class BaseConstants{
 
         //FINGER POS
         public static final double FINGER_IN = 0.9; //FINGER TUCKED IN
-        public static final double FINGER_GND = 0.35; //FINGER ON GND
+        public static final double FINGER_GND = 0.4; //FINGER ON GND
 
         //DRONE POS
         public static final double DRONE_HOME = 0.8;
