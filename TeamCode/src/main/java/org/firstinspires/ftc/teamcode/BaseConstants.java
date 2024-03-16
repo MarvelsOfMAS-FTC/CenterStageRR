@@ -16,7 +16,7 @@ public final class BaseConstants{
         //CLIMB POS
         public  int CLIMB_HOME = 0; //INTAKE IN POS
         public  int CLIMB_INT_GND = 1200; //INTAKE OUT POS
-        public int CLIMB_INT_LVL_5 = 850; //INTAKE OUT POS
+        public int CLIMB_INT_LVL_5 = 900; //INTAKE OUT POS
         public  int CLIMB_INT_LVL_3 = 450; //INTAKE OUT POS
         public  int CLIMB_LOW = 400;
         public  int CLIMB_MID = 550;
@@ -24,11 +24,11 @@ public final class BaseConstants{
 
         //SCORE POS
         public  double SCORE_HOME = 0.9;
-        public  double SCORE_BACKDROP = 0.42;
+        public  double SCORE_BACKDROP = 0.44;
         public  double SCORE_MID = 0.8;
 
         //EXTEND POS
-        public  double EXT_PWR = 0.65; //default power out
+        public  double EXT_PWR = 0.5; //default power out
         public  int EXT_HOME = 0;
         public  int EXT_RETRACT = 75;
         public  int EXT_PRELOAD = 300;

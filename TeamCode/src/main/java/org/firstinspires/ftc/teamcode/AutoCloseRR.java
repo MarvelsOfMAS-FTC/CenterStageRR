@@ -263,26 +263,28 @@ public class AutoCloseRR extends LinearOpMode {
                         .afterTime(5.2 + routeWait, robot.b())
                         .afterTime(6 + routeWait, robot.intakeStop())
                         .afterTime(9 + (routeWait * 2), robot.mid())
+                        .afterTime(10.5 + routeWait, robot.High())
                         .afterTime(12 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
-                        .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
+                        .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fastVelConstant, drive.defaultAccelConstraint)
                         .waitSeconds(0.01)
 
                         //GOTO STACK AND WAIT IF NEEDED
-                        .strafeToLinearHeading(new Vector2d(-54, cycleScorePosY + routeOffsetY-3), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
+                        .strafeToLinearHeading(new Vector2d(-54, cycleScorePosY + routeOffsetY-3), tagScoreHeading, drive.fastVelConstant, drive.defaultAccelConstraint)
+                        .turnTo(tagScoreHeading+Math.toRadians(20))
                         .waitSeconds(0.01) //added to make approach more gentle
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX-1, pixelStackPosY + routeOffsetY), tagScoreHeading+Math.toRadians(20), drive.defaultVelConstraint)
-                        .waitSeconds(0.3)
+
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX-2, pixelStackPosY + routeOffsetY), tagScoreHeading, drive.fastVelConstant)
                         .turnTo(tagScoreHeading)
-                        .waitSeconds(0.95)
+                        .waitSeconds(1.25)
 
 
                         //RETURN TO BACKBOARD AND SCORE
-                        .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
+                        .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fastVelConstant, drive.defaultAccelConstraint)
                         .waitSeconds(0.01)
-                        .strafeToLinearHeading(new Vector2d(tagScorePosX-5.5, cycleScorePosY), tagScoreHeading, drive.defaultVelConstraint)
+                        .strafeToLinearHeading(new Vector2d(tagScorePosX-7, cycleScorePosY), tagScoreHeading, drive.fastVelConstant)
                         .waitSeconds(1)
                         .build();
 
@@ -296,32 +298,34 @@ public class AutoCloseRR extends LinearOpMode {
                         .afterTime(0.5, robot.home())
 
                         //WHIP OUT INTAKE & FEED
-                        .afterTime(2.0 + routeWait, robot.intakeGround())
+                        .afterTime(2.4 + routeWait, robot.intakeGround())
                         .afterTime(4+routeWait,robot.ScoreMid())
                         .afterTime(4.5 + routeWait, robot.transfer())
 
+
                         //TRANSFER & SCORE
-                        .afterTime(5.2 + routeWait, robot.a())
-                        .afterTime(5.4 + routeWait, robot.b())
-                        .afterTime(6.2 + routeWait, robot.intakeStop())
-                        .afterTime(6.7 + (routeWait * 2), robot.mid())
-                        .afterTime(8.7 + routeWait, robot.retract())
+                        .afterTime(4.8 + routeWait, robot.a())
+                        .afterTime(5.2 + routeWait, robot.b())
+                        .afterTime(6 + routeWait, robot.intakeStop())
+                        .afterTime(9 + (routeWait * 2), robot.mid())
+                        .afterTime(10.5 + routeWait, robot.High())
+                        .afterTime(12 + routeWait, robot.retract())
 
                         //MOVEMENT -------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
-                        .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
                         .waitSeconds(0.01)
 
                         //GOTO STACK AND WAIT IF NEEDED
-                        .strafeToLinearHeading(new Vector2d(-48, cycleScorePosY + routeOffsetY), tagScoreHeading)
-                        .waitSeconds(0.5) //added to make approach more gentle
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelStackOffsetX, pixelStackPosY + pixelStackOffsetY + routeOffsetY), tagScoreHeading)
-                        .waitSeconds(0.5)
+                        .strafeToLinearHeading(new Vector2d(-54, cycleScorePosY + routeOffsetY-3), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
+                        .waitSeconds(0.01) //added to make approach more gentle
 
+                        .strafeToLinearHeading(new Vector2d(pixelStackPosX-2, pixelStackPosY + routeOffsetY), tagScoreHeading, drive.defaultVelConstraint)
+                        .waitSeconds(1.25)
                         //RETURN TO BACKBOARD AND SCORE
-                        .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
                         .waitSeconds(0.01)
-                        .strafeToLinearHeading(new Vector2d(cycleScorePosX + cycleScoreOffsetX, cycleScorePosY), tagScoreHeading)
+                        .strafeToLinearHeading(new Vector2d(tagScorePosX-7, cycleScorePosY), tagScoreHeading, drive.defaultVelConstraint)
                         .waitSeconds(1)
                         .build();
 
@@ -382,7 +386,7 @@ public class AutoCloseRR extends LinearOpMode {
         //+Math.toRadians(error[2])
         Actions.runBlocking(drive
                 .actionBuilder(drive.pose)
-                .strafeToLinearHeading(new Vector2d(drive.pose.position.x,drive.pose.position.y-error[0]), new Rotation2d(drive.pose.heading.real, drive.pose.heading.imag).toDouble(), drive.fastVelConstant)
+                .strafeToLinearHeading(new Vector2d(drive.pose.position.x,drive.pose.position.y-error[0]+1), new Rotation2d(drive.pose.heading.real, drive.pose.heading.imag).toDouble(), drive.fastVelConstant)
                 .build());
         sleep(500);
     }
