@@ -98,7 +98,8 @@ public class BaseRobotMethods extends LinearOpMode {
         wrist.setPosition($.WRIST_IN);
         finger.setPosition($.FINGER_GND);
         droneLaunch.setPosition($.DRONE_HOME);
-
+        ldistance = (DistanceSensor) lcolor;
+        rdistance = (DistanceSensor) rcolor;
         //CAMERA INIT
         visionProcessor = new FirstVisionProcessor();
 
@@ -390,6 +391,18 @@ public class BaseRobotMethods extends LinearOpMode {
         }
     }
     public Action High(){return new High();}
+    public boolean leftSensed(){
+        return ldistance.getDistance(DistanceUnit.CM) < 1.3;
+    }
+    public boolean rightSensed(){
+        return rdistance.getDistance(DistanceUnit.CM) < 1.3;
+    }
+    public boolean intakeFull(){
+        return leftSensed()&rightSensed();
+    }
+
+
+
 
     public static double Tiles(double amt_of_tiles){
         return (double) amt_of_tiles*24;

@@ -16,7 +16,7 @@ public final class BaseConstants{
         //CLIMB POS
         public  int CLIMB_HOME = 0; //INTAKE IN POS
         public  int CLIMB_INT_GND = 1200; //INTAKE OUT POS
-        public int CLIMB_INT_LVL_5 = 900; //INTAKE OUT POS
+        public int CLIMB_INT_LVL_5 = 876; //INTAKE OUT POS
         public  int CLIMB_INT_LVL_3 = 450; //INTAKE OUT POS
         public  int CLIMB_LOW = 400;
         public  int CLIMB_MID = 550;
@@ -28,20 +28,20 @@ public final class BaseConstants{
         public  double SCORE_MID = 0.8;
 
         //EXTEND POS
-        public  double EXT_PWR = 0.5; //default power out
+        public  double EXT_PWR = 0.65; //default power out
         public  int EXT_HOME = 0;
         public  int EXT_RETRACT = 75;
         public  int EXT_PRELOAD = 300;
-        public  int EXT_LOW = 520;
-        public  int EXT_MID = 600;
-        public  int EXT_HIGH = 760;
+        public  int EXT_LOW = 450;
+        public  int EXT_MID = 470;
+        public  int EXT_HIGH = 500;
 
         //WRIST POS
         public static final double WRIST_IN = 0.87;
         public static final double WRIST_GND = 0.41;
         public static final double WRIST_LVL_5 = 0.42;
 
-        public static final double WRIST_TRANSFER_PWR = 0.75;
+        public static final double WRIST_TRANSFER_PWR = 0.65;
 
         //FINGER POS
         public static final double FINGER_IN = 0.9; //FINGER TUCKED IN
