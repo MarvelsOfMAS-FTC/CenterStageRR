@@ -217,7 +217,6 @@ public class BaseRobotMethods extends LinearOpMode {
             climbr.setTargetPosition($.CLIMB_INT_GND);
             wrist.setPosition($.WRIST_GND);
             intake.setPower($.FULL_PWR_INV); //turn intake on full speed
-            //score.setPosition($.SCORE_MID);
             return false;
         }
     }
@@ -232,7 +231,6 @@ public class BaseRobotMethods extends LinearOpMode {
             climbr.setTargetPosition($.CLIMB_INT_LVL_5);
             wrist.setPosition($.WRIST_LVL_5);
             intake.setPower($.FULL_PWR_INV); //turn intake on full speed
-            //score.setPosition($.SCORE_MID);
             return false;
         }
     }
@@ -249,11 +247,11 @@ public class BaseRobotMethods extends LinearOpMode {
             return false;
         }
     }
-    public Action ScoreMid() {
+    public Action scoreMid() {
         return new ScoreMid();
     }
 
-    public class IntakeUp implements Action{
+    public class IntakeUp implements Action{ //brings intake up and gets the climber motors in pos to transfer
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             score.setPosition($.SCORE_MID);
@@ -266,38 +264,30 @@ public class BaseRobotMethods extends LinearOpMode {
             climbr.setPower($.FULL_PWR);
             extend.setTargetPosition($.EXT_HOME);
             wrist.setPosition($.WRIST_IN);
-
-
             return false;
         }
     }
 
     public Action intakeUp(){return new IntakeUp();}
-    public class Transfera implements Action{
+    public class TransferC implements Action{ //pull in score bucket all the way final step
 
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            //500
             score.setPosition($.SCORE_HOME);
-            //            200
-            //            intake.setPower($.WRIST_TRANSFER_PWR);
             return false;
         }
     }
-    public Action a(){return new Transfera();}
-    public class Transferb implements Action{
+    public Action transferC(){return new TransferC();}
+    public class TransferB implements Action{ //spit pixels out into scoring bucket second step
 
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            //500
-            //score.setPosition($.SCORE_HOME);
-            //            200
-            intake.setPower($.WRIST_TRANSFER_PWR);
+            intake.setPower($.FULL_PWR);
             return false;
         }
     }
-    public Action b(){return new Transferb();}
-    public class transfer implements Action{
+    public Action transferB(){return new TransferB();}
+    public class TransferA implements Action{ //intake up in a wrapper for first transfer step
 
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
@@ -307,13 +297,12 @@ public class BaseRobotMethods extends LinearOpMode {
             return false;
         }
     }
-    public Action transfer(){return new transfer();}
+    public Action transferA(){return new TransferA();}
 
     public class SpikeExtend implements Action { //extend outtake to spike mark pos
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             finger.setPosition($.FINGER_GND);
-
             extend.setPower($.EXT_PWR);
             extend.setTargetPosition($.EXT_PRELOAD);
             return false;
@@ -346,7 +335,7 @@ public class BaseRobotMethods extends LinearOpMode {
     public Action fingerHome(){
         return new FingerHome();
     }
-    public class Low implements Action { // low target on backdrop to score
+    public class Low implements Action { // extend to low target on backdrop to score
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setPower($.EXT_PWR);
@@ -362,7 +351,7 @@ public class BaseRobotMethods extends LinearOpMode {
     public Action low(){
         return new Low();
     }
-    public class Mid implements Action{ // medium target on backdrop to score
+    public class Mid implements Action{ // extend to medium target on backdrop to score
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setPower($.EXT_PWR);
@@ -379,7 +368,7 @@ public class BaseRobotMethods extends LinearOpMode {
         return new Mid();
     }
 
-    public class High implements Action{ // high target on backdrop to score
+    public class High implements Action{ // extend to high target on backdrop to score
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             extend.setPower($.EXT_PWR);
@@ -393,16 +382,13 @@ public class BaseRobotMethods extends LinearOpMode {
     public Action High(){return new High();}
     public boolean leftSensed(){
         return ldistance.getDistance(DistanceUnit.CM) < 1.3;
-    }
+    } //sensor on intake left
     public boolean rightSensed(){
         return rdistance.getDistance(DistanceUnit.CM) < 1.3;
-    }
+    } //sensor on intake right
     public boolean intakeFull(){
         return leftSensed()&rightSensed();
-    }
-
-
-
+    } //if both sensors true
 
     public static double Tiles(double amt_of_tiles){
         return (double) amt_of_tiles*24;

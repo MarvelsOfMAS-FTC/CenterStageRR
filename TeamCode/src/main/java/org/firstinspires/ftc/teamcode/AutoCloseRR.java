@@ -79,7 +79,7 @@ public class AutoCloseRR extends LinearOpMode {
     double[] error;
     VisionPortal visionPortal;
     VisionProcessor visionProcessor;
-    int id = 0;
+    int id = 0; // 1 = blue L, 2 = blue M, 3 = blue R, 4 = red L, 5 = red M, 6 = red R
     String spike;
     @Override
     public void runOpMode() throws InterruptedException {
@@ -136,33 +136,36 @@ public class AutoCloseRR extends LinearOpMode {
                 Side = "red";
             }
 
-            telemetry.addData("-- BLUE CLOSE AUTO --","");
+            telemetry.addData("-- CLOSE AUTO --","");
             telemetry.addData("","");
-            telemetry.addData("Inside Route?: ", insideRoute);
+
             telemetry.addData("Cam Place: ", robot.visionProcessor.getSelection());
-            telemetry.addData("Cycle Stack?: ", cycleStack);;
-            telemetry.addData("Wait on Partner?: ", waitBool);
-            telemetry.addData("Opposite Park : ",OppositePark);
             telemetry.addData("Side : ",Side);
             telemetry.addData("","");
 
-            telemetry.addData("Press X to CYCLE, B to NOT CYCLE","");
+            telemetry.addData("Inside Route?: ", insideRoute);
+            telemetry.addData("Cycle Stack?: ", cycleStack);
+            telemetry.addData("Opposite Park : ",OppositePark);
+            telemetry.addData("Wait on Partner?: ", waitBool);
+
+            telemetry.addData("","");
+            telemetry.addData("Press RIGHT TRIGGER for BLUE, LEFT TRIGGER for RED ","");
             telemetry.addData("Press A for INSIDE ROUTE, Y for OUT","");
+            telemetry.addData("Press X to CYCLE, B to NOT CYCLE","");
+            telemetry.addData("Press TOUCHPAD for OPPOSITE PARK","");
             telemetry.addData("Press LB to WAIT, RB to ZOOM ZOOM","");
-            telemetry.addData("TouchPad for opposite park","");
-            telemetry.addData("right trigger for blue left trigger for red...","");
             telemetry.update();
         }
         if(Side.equalsIgnoreCase("Blue")){
             sideMult = 1;
         }else{
-            sideMult = -1;
+            sideMult = -1; //flip y for red side
         }
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(startPosX, startPosY, startHeading));
 
         if(OppositePark){
-            parkPosY=20*sideMult;
+            parkPosY=20*sideMult; //inside park vs outside for y
         }else{
             parkPosY=68*sideMult;
         }
@@ -177,9 +180,9 @@ public class AutoCloseRR extends LinearOpMode {
                 tagScoreOffsetY = 0;
                 spikeMarkOffsetY = 2;
                 if(Side.equalsIgnoreCase("Red")){
-                    id=5;
+                    id=5; //red M
                 }else {
-                    id=2;
+                    id=2; //red M
                 }
 
             } else if (robot.visionProcessor.getSelection() == FirstVisionProcessor.Selected.LEFT) {
@@ -188,9 +191,9 @@ public class AutoCloseRR extends LinearOpMode {
                 tagScoreOffsetY = 5*sideMult;
                 spikeMarkOffsetY = -2*sideMult;
                 if(Side.equalsIgnoreCase("Red")){
-                    id=4;
+                    id=4; //red L
                 }else {
-                    id=1;
+                    id=1; //blue L
                 }
 
             } else {
@@ -199,11 +202,12 @@ public class AutoCloseRR extends LinearOpMode {
                 tagScoreOffsetY = -6.3*sideMult;
                 spikeMarkOffsetY = 7*sideMult;
                 if(Side.equalsIgnoreCase("Red")){
-                    id=6;
+                    id=6; //red R
                 }else {
-                    id=3;
+                    id=3; //blue R
                 }
             }
+            //APRIL TAG INIT -----------------------------------------------------------------------
             robot.useApriltag();
             //SCORE PRELOAD PIXELS
             Action spikeMark = drive.actionBuilder(drive.pose)
@@ -215,18 +219,16 @@ public class AutoCloseRR extends LinearOpMode {
                     .afterTime(2, robot.home())
 
                     //SCORE BACKDROP PIXEL
-
-
                     //MOVEMENT ---------------------------------------------------------------------
                     //DRIVE TO SPIKE MARK
                     .lineToYLinearHeading(spikeMarkPosY + spikeMarkOffsetY, tagHeading)
                     .waitSeconds(1.75+0.5) // t≅2.25
 
                     //TURN TO BACKBOARD
-                    .strafeToLinearHeading(new Vector2d(27, tagScorePoxY + tagScoreOffsetY), tagScoreHeading)
+                    .strafeToLinearHeading(new Vector2d(27, tagScorePoxY + tagScoreOffsetY), tagScoreHeading, drive.fastVelConstant, drive.fastAccelConstraint)
                     .turnTo(Math.toRadians(180.0000000000001))
-                    // auto align
-                    //PUSH IN AND SCORE
+
+                    //GOTO APRIL TAG AUTO ALIGN POS
                     .lineToX(tagScorePosX-10)
                     .waitSeconds(0.01)
                     .endTrajectory()
@@ -234,47 +236,55 @@ public class AutoCloseRR extends LinearOpMode {
 
             Actions.runBlocking(spikeMark);
             drive.updatePoseEstimate();
+
             summonAprilTag(id,drive);
             drive.updatePoseEstimate();
-            Action p2 = drive.actionBuilder(drive.pose)
+            Action spikeBackDrop = drive.actionBuilder(drive.pose)
+                    //ACTIONS ----------------------------------------------------------------------
+                    //SCORE BACKDROP PIXEL
                     .afterTime(0, robot.low())
                     .afterTime(2, robot.mid())
                     .afterTime(2.5, robot.retract())
+
+                    //BACK AWAY FROM BACKDROP
                     .lineToX(tagScorePosX-4.5)
                     .endTrajectory()
                     .build();
-            Actions.runBlocking(p2);
+
+            Actions.runBlocking(spikeBackDrop);
             drive.updatePoseEstimate();
+
             if(waitBool){
-                sleep(waitOnAlliance * 1000);
+                sleep(waitOnAlliance * 1000); //WAIT IF NEEDED FOR ALLIANCE
             }
 
             //CYCLE PIXEL STACK
             if (cycleStack) {
                 Action pixelCycle1 = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, tagScoreHeading))
-                        //ACTIONS --------------------------------------------------------------
+                        //ACTIONS ------------------------------------------------------------------
                         //RETRACT
                         .afterTime(0.5, robot.home())
 
                         //WHIP OUT INTAKE & FEED
                         .afterTime(2.3 + routeWait, robot.intakeLevel5())
-                        .afterTime(5+routeWait,robot.ScoreMid())
-                        .afterTime(5.5 + routeWait, robot.transfer())
-
+                        .afterTime(5+routeWait,robot.scoreMid())
 
                         //TRANSFER & SCORE
-                        .afterTime(6 + routeWait, robot.a())
-                        .afterTime(6.2 + routeWait, robot.b())
+                        .afterTime(5.5 + routeWait, robot.transferA())
+                        .afterTime(6 + routeWait, robot.transferB())
+                        .afterTime(6.2 + routeWait, robot.transferC())
                         .afterTime(7 + routeWait, robot.intakeStop())
+
+                        //SCORE ON BACKDROP
                         .afterTime(12 + (routeWait * 2), robot.mid())
 
-                        //MOVEMENT -------------------------------------------------------------
+                        //MOVEMENT -----------------------------------------------------------------
                         //CENTER ROBOT ON PIXEL STACK
-                        .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fastVelConstant, drive.defaultAccelConstraint)
+                        .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY), tagScoreHeading, drive.fastVelConstant, drive.fastAccelConstraint)
                         .waitSeconds(0.01)
 
-                        //GOTO STACK AND WAIT IF NEEDED
-                        .strafeToLinearHeading(new Vector2d(-56, cycleScorePosY + routeOffsetY-5), tagScoreHeading, drive.fastVelConstant, drive.defaultAccelConstraint)
+                        //GOTO STACK AND SWEEP PIXELS
+                        .strafeToLinearHeading(new Vector2d(-56, cycleScorePosY + routeOffsetY-5), tagScoreHeading, drive.fastVelConstant, drive.fastAccelConstraint)
                         .turnTo(tagScoreHeading-Math.toRadians(20))
                         .waitSeconds(0.2) //added to make approach more gentle
 
@@ -284,7 +294,7 @@ public class AutoCloseRR extends LinearOpMode {
 
 
                         //RETURN TO BACKBOARD AND SCORE
-                        .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY-2), tagScoreHeading, drive.fastVelConstant, drive.defaultAccelConstraint)
+                        .strafeToLinearHeading(new Vector2d(22, cycleScorePosY + routeOffsetY-2), tagScoreHeading, drive.fastVelConstant, drive.fastAccelConstraint)
                         .waitSeconds(0.01)
                         .strafeToLinearHeading(new Vector2d(tagScorePosX-3, cycleScorePosY-2), tagScoreHeading, drive.fastVelConstant)
 
@@ -373,7 +383,7 @@ public class AutoCloseRR extends LinearOpMode {
         //+Math.toRadians(error[2])
         Actions.runBlocking(drive
                 .actionBuilder(drive.pose)
-                .strafeToLinearHeading(new Vector2d(drive.pose.position.x,drive.pose.position.y-error[0]+3), new Rotation2d(drive.pose.heading.real, drive.pose.heading.imag).toDouble(), drive.fastVelConstant)
+                .strafeToLinearHeading(new Vector2d(drive.pose.position.x,drive.pose.position.y-error[0]+3), new Rotation2d(drive.pose.heading.real, drive.pose.heading.imag).toDouble(), drive.fastVelConstant, drive.fastAccelConstraint)
                 .build());
         sleep(500);
     }

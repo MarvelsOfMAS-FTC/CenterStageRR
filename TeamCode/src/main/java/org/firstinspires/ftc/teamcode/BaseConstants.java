@@ -17,7 +17,6 @@ public final class BaseConstants{
         public  int CLIMB_HOME = 0; //INTAKE IN POS
         public  int CLIMB_INT_GND = 1200; //INTAKE OUT POS
         public int CLIMB_INT_LVL_5 = 876; //INTAKE OUT POS
-        public  int CLIMB_INT_LVL_3 = 450; //INTAKE OUT POS
         public  int CLIMB_LOW = 400;
         public  int CLIMB_MID = 550;
         public  int CLIMB_HIGH = 1000;
