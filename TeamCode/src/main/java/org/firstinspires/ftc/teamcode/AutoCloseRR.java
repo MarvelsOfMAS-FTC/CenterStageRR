@@ -314,7 +314,7 @@ public class AutoCloseRR extends LinearOpMode {
                 }
                 drive.updatePoseEstimate();
                 Action c2 = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, tagScoreHeading))
-                        .strafeToLinearHeading(new Vector2d(tagScorePosX-4, drive.pose.position.y), tagScoreHeading, drive.fastVelConstant)
+                        .strafeToLinearHeading(new Vector2d(tagScorePosX-3, drive.pose.position.y), tagScoreHeading, drive.fastVelConstant)
                         .afterTime(1 + routeWait, robot.retract())
                         .build();
                 drive.updatePoseEstimate();
