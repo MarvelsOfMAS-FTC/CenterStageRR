@@ -392,6 +392,14 @@ public class BaseRobotMethods extends LinearOpMode {
     public boolean intakeFull(){
         return leftSensed()&rightSensed();
     } //if both sensors true
+    public void sendTelemetry(String Key, Object Value){
+        TelemetryPacket packet = new TelemetryPacket();
+        packet.put(Key,Value);
+        FtcDashboard.getInstance().sendTelemetryPacket(packet);
+    }
+    public void newLine(){
+        sendTelemetry("\u200B","\u200B");
+    }
 
     public static double Tiles(double amt_of_tiles){
         return (double) amt_of_tiles*24;

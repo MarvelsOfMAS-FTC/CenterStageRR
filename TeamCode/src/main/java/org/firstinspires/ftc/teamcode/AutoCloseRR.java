@@ -150,6 +150,25 @@ public class AutoCloseRR extends LinearOpMode {
             telemetry.addData("Press X to CYCLE, B to NOT CYCLE","");
             telemetry.addData("Press TOUCHPAD for OPPOSITE PARK","");
             telemetry.addData("Press LB to WAIT, RB to ZOOM ZOOM","");
+
+            // dashboard telemetry
+            robot.sendTelemetry("-- CLOSE AUTO --","");
+            robot.newLine();
+            robot.sendTelemetry("Cam Place: ",robot.visionProcessor.getSelection());
+            robot.sendTelemetry("Side : ",Side);
+            robot.newLine();
+            robot.sendTelemetry("Inside Route?: ",insideRoute);
+            robot.sendTelemetry("Cycle Stack?: ", cycleStack);
+            robot.sendTelemetry("Opposite Park : ",OppositePark);
+            robot.sendTelemetry("Wait on Partner?: ", waitBool);
+            robot.newLine();
+            robot.sendTelemetry("Press RIGHT TRIGGER for BLUE, LEFT TRIGGER for RED ","");
+            robot.sendTelemetry("Press A for INSIDE ROUTE, Y for OUT","");
+            robot.sendTelemetry("Press X to CYCLE, B to NOT CYCLE","");
+            robot.sendTelemetry("Press TOUCHPAD for OPPOSITE PARK","");
+            robot.sendTelemetry("Press LB to WAIT, RB to ZOOM ZOOM","");
+
+
             telemetry.update();
         }
         if(Side.equalsIgnoreCase("Blue")){
@@ -372,6 +391,7 @@ public class AutoCloseRR extends LinearOpMode {
         aprilTagTrack(id);
         if(error == null){
             telemetry.addData("BACKDROP APRIL TAG NOT FOUND","");
+            robot.sendTelemetry("BACKDROP APRIL TAG NOT FOUND","");
             telemetry.update();
             Actions.runBlocking(drive
                     .actionBuilder(drive.pose)
@@ -384,6 +404,7 @@ public class AutoCloseRR extends LinearOpMode {
         }
         //sleep(250);
         telemetry.addData("Array: ", Arrays.toString(error));
+        robot.sendTelemetry("Array: ", Arrays.toString(error));
         telemetry.update();
         Actions.runBlocking(drive
                 .actionBuilder(drive.pose)
