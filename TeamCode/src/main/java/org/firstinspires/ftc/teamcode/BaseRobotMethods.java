@@ -3,6 +3,8 @@ import static java.lang.Thread.sleep;
 
 import android.util.Size;
 import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -118,6 +120,7 @@ public class BaseRobotMethods extends LinearOpMode {
                 .build();
         visionPortal.setProcessorEnabled(getAprilTag(),false);
         visionPortal.setProcessorEnabled(getVisionProcessor(), true);
+        FtcDashboard.getInstance().startCameraStream(getPortal(), 60);
     }
     public VisionProcessor getVisionProcessor(){
         return visionProcessor;
