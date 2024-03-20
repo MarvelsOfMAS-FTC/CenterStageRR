@@ -3,7 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.config.Config;
 @Config
 public final class BaseConstants{
-    public static class  Params{
+
+    public static class  Params {
 
         //GENERIC MOTOR POWER
         public  double ZERO = 0.0;
@@ -16,7 +17,7 @@ public final class BaseConstants{
         //CLIMB POS
         public  int CLIMB_HOME = 0; //INTAKE IN POS
         public  int CLIMB_INT_GND = 1200; //INTAKE OUT POS
-        public int CLIMB_INT_LVL_5 = 1000; //INTAKE OUT POS
+        public  int CLIMB_INT_LVL_5 = 1000; //INTAKE OUT POS
         public  int CLIMB_LOW = 400;
         public  int CLIMB_MID = 550;
         public  int CLIMB_HIGH = 1000;
@@ -36,24 +37,25 @@ public final class BaseConstants{
         public  int EXT_HIGH = 500;
 
         //WRIST POS
-        public static final double WRIST_IN = 0.87;
-        public static final double WRIST_GND = 0.41;
-        public static final double WRIST_LVL_5 = 0.42;
+        public   double WRIST_IN = 0.87;
+        public   double WRIST_GND = 0.41;
+        public   double WRIST_LVL_5 = 0.42;
 
-        public static final double WRIST_TRANSFER_PWR = 0.65;
+        public   double WRIST_TRANSFER_PWR = 0.65;
 
         //FINGER POS
-        public static final double FINGER_IN = 0.9; //FINGER TUCKED IN
-        public static final double FINGER_GND = 0.4; //FINGER ON GND
+        public   double FINGER_IN = 0.9; //FINGER TUCKED IN
+        public   double FINGER_GND = 0.4; //FINGER ON GND
 
         //DRONE POS
-        public static final double DRONE_HOME = 0.8;
+        public   double DRONE_HOME = 0.8;
 
 
         //TIMER FUNCTIONS
-        public static int TIMEOUT = 7;
+        public   int TIMEOUT = 7;
 
 
     }
+    public static Params PARAMS = new Params();
 
 }
