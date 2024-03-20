@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import android.util.Size;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Rotation2d;
@@ -24,9 +25,11 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.Arrays;
 import java.util.List;
 
-
+@Config
 @Autonomous
-public class AutoCloseRR extends LinearOpMode {
+public final class AutoCloseRR extends LinearOpMode {
+    public static class Params{}
+    public static Params PARAMS = new Params();
     //VARIABLES-------------------------------------------------------------------------------------
     String Side = "blue";
     String spike;
@@ -42,65 +45,66 @@ public class AutoCloseRR extends LinearOpMode {
 
 
     //START POS ------------------------------------------------------------------------------------
-    double startPosX = 12 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITIONAutoCloseRR
-    double startPosY = (72 + 0) * sideMult; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
-    double startHeading = Math.toRadians(90*sideMult);
+    public double startPosX = 12 + 0; //MODIFY OFFSET TO CALIBRATE IN COMPETITIONAutoCloseRR
+    public double startPosY = (72 + 0) * sideMult; //MODIFY OFFSET TO CALIBRATE IN COMPETITION
+    public double startHeading = Math.toRadians(90*sideMult);
 
     //SPIKE MARK POS -------------------------------------------------------------------------------
-    double spikeHeading; //heading to score spike mark
-    double spikeMarkPosY = 57*sideMult; //how far forward to move for the very first auto movement
-    double spikeMarkOffsetY; //change spike mark tape forward movement
-    double spikeMarkLeft = Math.toRadians(120*sideMult);
-    double spikeMarkLeftY = 6;
-    double spikeMarkMid = Math.toRadians(100*sideMult);
-    double spikeMarkRight = Math.toRadians(70*sideMult);
-    double spikeMarkRightY = 6;
+    public double spikeHeading; //heading to score spike mark
+    public double spikeMarkPosY = 57*sideMult; //how far forward to move for the very first auto movement
+    public double spikeMarkOffsetY; //change spike mark tape forward movement
+    public double spikeMarkLeft = Math.toRadians(120*sideMult);
+    public double spikeMarkLeftY = 6;
+    public double spikeMarkMid = Math.toRadians(100*sideMult);
+    public double spikeMarkRight = Math.toRadians(70*sideMult);
+    public double spikeMarkRightY = 6;
     
     //BACKDROP POS ---------------------------------------------------------------------------------
 
-    double tagScorePosX = 38; //backdrop scoring center point for AprilTag 
-    double tagScoreOffsetX = 6; //how much to push into the backdrop for the backup move
-    double tagScorePoxY = 42*sideMult; //mid placement preload tag score pos Y
-    double tagScoreOffsetY; //controls left-right preload displacement
-    double tagScoreLeft = 5; //left offset
-    double tagScoreRight = -6.3; //right offset
-    double tagScoreHeading = Math.toRadians(180); //heading to score on backdrop
-    double tagScoreHeadingOffset = Math.toRadians(4); //extra adjust for complicated moves
+    public double tagScorePosX = 38; //backdrop scoring center point for AprilTag
+    public double tagScoreOffsetX = 6; //how much to push into the backdrop for the backup move
+    public double tagScorePoxY = 42*sideMult; //mid placement preload tag score pos Y
+    public double tagScoreOffsetY; //controls left-right preload displacement
+    public double tagScoreLeft = 5; //left offset
+    public double tagScoreRight = -6.3; //right offset
+    public double tagScoreHeading = Math.toRadians(180); //heading to score on backdrop
+    public double tagScoreHeadingOffset = Math.toRadians(4); //extra adjust for complicated moves
 
     //CYCLING POS ----------------------------------------------------------------------------------
-    double pixelStackPosX = -56; //where the actual pixel stack is in X
-    double pixelBeforeY = -5; //justify to the left of pixel stack
-    double pixelAfterY = 4; //move to the right to spread pixels out
-    double pixelSweepOffsetX = 5; //how much to backup to spread out
-    double pixelHeading = Math.toRadians(20); //how much to turn to sweep the stack
-    double pixelStackPosY = 43.2*sideMult;
-    double cycleScorePosY = 44*sideMult; //used to dodge right pixel on transit
+    public double pixelStackPosX = -56; //where the actual pixel stack is in X
+    public double pixelBeforeY = -5; //justify to the left of pixel stack
+    public double pixelAfterY = 4; //move to the right to spread pixels out
+    public double pixelSweepOffsetX = 5; //how much to backup to spread out
+    public double pixelHeading = Math.toRadians(20); //how much to turn to sweep the stack
+    public double pixelStackPosY = 43.2*sideMult;
+    public double cycleScorePosY = 44*sideMult; //used to dodge right pixel on transit
 
-    double routeOffsetY = -26.5*sideMult; //how far from center tag to move for outside cycle run. Also sets default value.
-    double routeOut = -26.5; //outside pixel stack
-    double routeIn = 0; //inside pixel stack (in line with middle of backdrop)
+    public double routeOffsetY = -26.5*sideMult; //how far from center tag to move for outside cycle run. Also sets default value.
+    public double routeOut = -26.5; //outside pixel stack
+    public double routeIn = 0; //inside pixel stack (in line with middle of backdrop)
 
-    double routeWait = 0.5; //need more time for outside route. Also sets default value.
-    double routeWaitIn = 0;
-    double routeWaitOut = 0.5;
+    public double routeWait = 0.5; //need more time for outside route. Also sets default value.
+    public double routeWaitIn = 0;
+    public double routeWaitOut = 0.5;
 
     //PARK POS -------------------------------------------------------------------------------------
-    double parkPosX = 46; //default is to park near the corner of the field next to backdrop
-    double parkPosY = 68*sideMult;
-    double parkInY = 68;
-    double parkOutY = 20;
-    boolean OppositePark = false;
+    public double parkPosX = 46; //default is to park near the corner of the field next to backdrop
+    public double parkPosY = 68*sideMult;
+    public double parkInY = 68;
+    public double parkOutY = 20;
+    public boolean OppositePark = false;
 
     //APRIL TAG VARAIABLES -------------------------------------------------------------------------
     AprilTagProcessor aprilTag;
     double[] error;
     VisionPortal visionPortal;
     VisionProcessor visionProcessor;
-    double aprilTagOffsetX = 22; //how much to push into backdrop from zero for april tag
-    double aprilTagOffsetY = 3;
+    public double aprilTagOffsetX = 22; //how much to push into backdrop from zero for april tag
+    public double aprilTagOffsetY = 3;
     int id = 0;
     int blueL = 1; int blueM = 2; int blueR = 3;
     int redL = 4; int redM = 5; int redR = 6;
+
     @Override
     public void runOpMode() throws InterruptedException {
         //ROBOT INITIALIZATION ---------------------------------------------------------------------

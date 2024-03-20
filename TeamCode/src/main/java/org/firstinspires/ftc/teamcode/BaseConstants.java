@@ -5,6 +5,16 @@ import com.acmerobotics.dashboard.config.Config;
 public final class BaseConstants{
 
     public static class  Params {
+        public static class Camera{
+            public static int LeftX = 150;
+            public static int LeftY = 350;
+            public static int Width = 60;
+            public static int Height = 60;
+            public static int MiddleX = 415;
+            public static int MiddleY = 350;
+            public static int RightX = 700;
+            public static int RightY = 350;
+        }
 
         //GENERIC MOTOR POWER
         public  double ZERO = 0.0;
@@ -57,5 +67,6 @@ public final class BaseConstants{
 
     }
     public static Params PARAMS = new Params();
+    public static Params.Camera CAMERA = new Params.Camera();
 
 }
