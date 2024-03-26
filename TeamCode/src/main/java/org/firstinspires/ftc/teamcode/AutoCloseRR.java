@@ -76,11 +76,11 @@ public final class AutoCloseRR extends LinearOpMode {
     //PIXEL STACK POS ----------------------------------------------------------------------------------
     public double pixelStackPosX = -57; //where the actual outside pixel stack is in X
     public double pixelStackPosY = 15; //where the actual outside pixel stack is in Y
-    public double pixelSweepOffsetX = 4; //how much to backup to spread out
+    public double pixelSweepOffsetX = 8; //how much to backup to spread out
     
     public double pixelBeforeY = -4; //justify to the left of pixel stack
     public double pixelAfterY = 1; //move to the right to spread pixels out
-    public double pixelHeading = Math.toRadians(10); //how much to turn to sweep the stack
+    public double pixelHeading = Math.toRadians(8); //how much to turn to sweep the stack
     public double routeOffsetY = 0; //how far from outside stack to move for cycle run. Also sets default value.
     public double routeOut = 0; //outside pixel stack
     public double routeIn = 26; //offset by roughly a tile for inside stack
@@ -297,12 +297,13 @@ public final class AutoCloseRR extends LinearOpMode {
                             //WHIP OUT INTAKE & FEED
                             .afterTime(2.15 + routeWait, robot.intakeGround())
                             .afterTime(3 + routeWait, robot.intakeLevel3())
+                            .afterTime(5 + routeWait, robot.intakeGround())
 
                             //TRANSFER & SCORE
-                            .afterTime(6 + routeWait, robot.transferA())
-                            .afterTime(6.5 + routeWait, robot.transferB())
-                            .afterTime(7 + routeWait, robot.transferC())
-                            .afterTime(8 + routeWait, robot.intakeStop())
+                            .afterTime(7.25 + routeWait, robot.transferA())
+                            .afterTime(7.75 + routeWait, robot.transferB())
+                            .afterTime(8.25 + routeWait, robot.transferC())
+                            .afterTime(9.25 + routeWait, robot.intakeStop())
 
                             //MOVEMENT -----------------------------------------------------------------
                             //CENTER ROBOT ON STACK
@@ -316,7 +317,8 @@ public final class AutoCloseRR extends LinearOpMode {
                             //BACKUP AND TURN AT THE SAME TIME TO SWEEP THE STACK
                             .strafeToLinearHeading(new Vector2d(pixelStackPosX, (pixelStackPosY + routeOffsetY + pixelAfterY) * sideMult), (tagScoreHeading - pixelHeading * sideMult), drive.slowVelConstant, drive.slowAccelConstraint)
                             .waitSeconds(0.5)
-                            .turnTo(tagScoreHeading)
+                            .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelSweepOffsetX, (pixelStackPosY + routeOffsetY + pixelAfterY) * sideMult), (tagScoreHeading * sideMult), drive.slowVelConstant, drive.slowAccelConstraint)
+                            .strafeToLinearHeading(new Vector2d(pixelStackPosX, (pixelStackPosY + routeOffsetY + pixelAfterY) * sideMult), (tagScoreHeading * sideMult), drive.slowVelConstant, drive.slowAccelConstraint)
                             .waitSeconds(1)
 
                             //RETURN TO BACKBOARD
