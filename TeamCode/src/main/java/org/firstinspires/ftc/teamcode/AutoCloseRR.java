@@ -39,6 +39,7 @@ public final class AutoCloseRR extends LinearOpMode {
 
     public boolean cycleStack = true; //to init the robot
     public boolean stackCycling = false; //to let april tag know if we're currently cycling
+    public int cycles = 1; //how many cycles to run
     public boolean insideRoute = false;
     public boolean waitBool = false;
     public int waitOnAlliance = 0; //default variable for waiting
@@ -62,9 +63,9 @@ public final class AutoCloseRR extends LinearOpMode {
     
     //BACKDROP POS ---------------------------------------------------------------------------------
 
-    public double tagScorePosX = 36; //backdrop scoring center point for AprilTag
-    public double tagScoreOffsetX = 8; //how much to push into the backdrop
-    public double tagScoreCycleX = 2; //adjustment for tag position during cycle
+    public double tagScorePosX = 38; //backdrop scoring center point for AprilTag
+    public double tagScoreOffsetX = 12; //how much to push into the backdrop
+    public double tagScoreCycleX = 2.5; //adjustment for tag position during cycle
     public double tagScorePoxY = 40; //mid placement preload tag score pos Y
     public double tagScoreOffsetY; //controls left-right preload displacement
     public double tagScoreLeft = 5; //left offset backdrop tag
@@ -73,7 +74,7 @@ public final class AutoCloseRR extends LinearOpMode {
     public double tagScoreHeadingOffset = Math.toRadians(4); //extra adjust for complicated moves
 
     //PIXEL STACK POS ----------------------------------------------------------------------------------
-    public double pixelStackPosX = -54; //where the actual outside pixel stack is in X
+    public double pixelStackPosX = -57; //where the actual outside pixel stack is in X
     public double pixelStackPosY = 15; //where the actual outside pixel stack is in Y
     public double pixelSweepOffsetX = 4; //how much to backup to spread out
     
@@ -270,7 +271,7 @@ public final class AutoCloseRR extends LinearOpMode {
 
                     //TURN TO BACKBOARD
                     .strafeToLinearHeading(new Vector2d(tagScorePosX, tagScorePoxY + tagScoreOffsetY), tagScoreHeading + tagScoreHeadingOffset, drive.defaultVelConstraint, drive.fastAccelConstraint)
-                    .waitSeconds(.5)
+                    .waitSeconds(0.25)
                     .endTrajectory()
                     .build();
 
@@ -287,67 +288,69 @@ public final class AutoCloseRR extends LinearOpMode {
             //CYCLE PIXEL STACK
             if (cycleStack) {
                 stackCycling = true; //for april tag alignment
-                Action pixelCycle1 = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, tagScoreHeading))
-                        //ACTIONS ------------------------------------------------------------------
-                        //RETRACT
-                        .afterTime(0, robot.home())
+                for(int i=0; i<cycles; i++){
+                    Action pixelCycle1 = drive.actionBuilder(new Pose2d(drive.pose.position.x, drive.pose.position.y, tagScoreHeading))
+                            //ACTIONS ------------------------------------------------------------------
+                            //RETRACT
+                            .afterTime(0, robot.home())
 
-                        //WHIP OUT INTAKE & FEED
-                        .afterTime(2.25 + routeWait, robot.intakeLevel5())
-                        .afterTime(4.25 + routeWait, robot.intakeGround())
+                            //WHIP OUT INTAKE & FEED
+                            .afterTime(2.15 + routeWait, robot.intakeGround())
+                            .afterTime(3 + routeWait, robot.intakeLevel3())
 
-                        //TRANSFER & SCORE
-                        .afterTime(5.5 + routeWait, robot.transferA())
-                        .afterTime(6 + routeWait, robot.transferB())
-                        .afterTime(7 + routeWait, robot.transferC())
-                        .afterTime(9.5 + routeWait, robot.intakeStop())
+                            //TRANSFER & SCORE
+                            .afterTime(6 + routeWait, robot.transferA())
+                            .afterTime(6.5 + routeWait, robot.transferB())
+                            .afterTime(7 + routeWait, robot.transferC())
+                            .afterTime(8 + routeWait, robot.intakeStop())
 
-                        //MOVEMENT -----------------------------------------------------------------
-                        //CENTER ROBOT ON STACK
-                        .strafeToLinearHeading(new Vector2d(tagScorePosX, (pixelStackPosY + routeOffsetY)*sideMult), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
-                        .waitSeconds(0.01)
+                            //MOVEMENT -----------------------------------------------------------------
+                            //CENTER ROBOT ON STACK
+                            .strafeToLinearHeading(new Vector2d(tagScorePosX, (pixelStackPosY + routeOffsetY) * sideMult), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
+                            .waitSeconds(0.01)
 
-                        //GOTO STACK ON LEFT SIDE
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, (pixelStackPosY + routeOffsetY + pixelBeforeY)*sideMult), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
-                        .waitSeconds(0.1) //added to make approach more gentle
+                            //GOTO STACK ON LEFT SIDE
+                            .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelSweepOffsetX, (pixelStackPosY + routeOffsetY + pixelBeforeY) * sideMult), tagScoreHeading, drive.defaultVelConstraint, drive.fastAccelConstraint)
+                            .waitSeconds(0.01) //added to make approach more gentle
 
-                        //BACKUP AND TURN AT THE SAME TIME TO SWEEP THE STACK
-                        //.turnTo(tagScoreHeading - pixelHeading*sideMult)
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX + pixelSweepOffsetX, (pixelStackPosY + routeOffsetY + pixelAfterY)*sideMult), (tagScoreHeading - pixelHeading*sideMult), drive.defaultVelConstraint, drive.defaultAccelConstraint)
-                        .strafeToLinearHeading(new Vector2d(pixelStackPosX, (pixelStackPosY + routeOffsetY + pixelAfterY)*sideMult), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
-                        .waitSeconds(1.25)
+                            //BACKUP AND TURN AT THE SAME TIME TO SWEEP THE STACK
+                            .strafeToLinearHeading(new Vector2d(pixelStackPosX, (pixelStackPosY + routeOffsetY + pixelAfterY) * sideMult), (tagScoreHeading - pixelHeading * sideMult), drive.slowVelConstant, drive.slowAccelConstraint)
+                            .waitSeconds(0.5)
+                            .turnTo(tagScoreHeading)
+                            .waitSeconds(1)
 
-                        //RETURN TO BACKBOARD
-                        .strafeToLinearHeading(new Vector2d(tagScorePosX + tagScoreCycleX, (pixelStackPosY + routeOffsetY)*sideMult), tagScoreHeading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
-                        .waitSeconds(0.01)
-                        //GO TO APRIL TAG SCORE POS
-                        .strafeToLinearHeading(new Vector2d(tagScorePosX + tagScoreCycleX, tagScorePoxY*sideMult), tagScoreHeading, drive.defaultVelConstraint)
-                        .endTrajectory()
-                        .build();
+                            //RETURN TO BACKBOARD
+                            .strafeToLinearHeading(new Vector2d(tagScorePosX + tagScoreCycleX, (pixelStackPosY + routeOffsetY) * sideMult), tagScoreHeading, drive.defaultVelConstraint, drive.fastAccelConstraint)
+                            .waitSeconds(0.01)
+                            //GO TO APRIL TAG SCORE POS
+                            .strafeToLinearHeading(new Vector2d(tagScorePosX + tagScoreCycleX, tagScorePoxY * sideMult), tagScoreHeading, drive.defaultVelConstraint)
+                            .endTrajectory()
+                            .build();
 
-                Actions.runBlocking(pixelCycle1);
-                drive.updatePoseEstimate();
+                    Actions.runBlocking(pixelCycle1);
+                    drive.updatePoseEstimate();
 
-                //This controls where to drop off pixels on backdrop
-                if(spike.equalsIgnoreCase("left")){
-                    if(Side.equalsIgnoreCase("blue")){
-                        aprilTagAlignment(blueR,drive,robot);
-                    }else{
-                        aprilTagAlignment(redR,drive,robot);
-                    }
+                    //This controls where to drop off pixels on backdrop
+                    if (spike.equalsIgnoreCase("left")) {
+                        if (Side.equalsIgnoreCase("blue")) {
+                            aprilTagAlignment(blueM, drive, robot);
+                        } else {
+                            aprilTagAlignment(redM, drive, robot);
+                        }
 
-                }else if (spike.equalsIgnoreCase("middle")) {
-                    if(Side.equalsIgnoreCase("blue")){
-                        aprilTagAlignment(blueL,drive,robot);
-                    }else{
-                        aprilTagAlignment(redL,drive,robot);
-                    }
+                    } else if (spike.equalsIgnoreCase("middle")) {
+                        if (Side.equalsIgnoreCase("blue")) {
+                            aprilTagAlignment(blueL, drive, robot);
+                        } else {
+                            aprilTagAlignment(redR, drive, robot);
+                        }
 
-                }else {
-                    if(Side.equalsIgnoreCase("blue")){
-                        aprilTagAlignment(blueL,drive,robot);
-                    }else{
-                        aprilTagAlignment(redL,drive,robot);
+                    } else {
+                        if (Side.equalsIgnoreCase("blue")) {
+                            aprilTagAlignment(blueM, drive, robot);
+                        } else {
+                            aprilTagAlignment(redM, drive, robot);
+                        }
                     }
                 }
             }
@@ -400,8 +403,9 @@ public final class AutoCloseRR extends LinearOpMode {
         return arr;
     }
     public void aprilTagAlignment(int id,MecanumDrive drive, BaseRobotMethods robot) {
-        sleep (250);
+        sleep (250); //for everything to settle
         aprilTagTrack(id, robot);
+        //error = null;
         if(error == null){
             telemetry.addData("BACKDROP APRIL TAG NOT FOUND","");
             robot.sendTelemetry("BACKDROP APRIL TAG NOT FOUND","");
@@ -410,10 +414,10 @@ public final class AutoCloseRR extends LinearOpMode {
                 Actions.runBlocking(drive
                         .actionBuilder(drive.pose)
                         .afterTime(0, robot.low())
-                        .afterTime(1.5, robot.high())
-                        .afterTime(2, robot.retract())
-                        .turnTo(tagScoreHeading)
+                        .afterTime(2, robot.high())
+                        .afterTime(2.5, robot.retract())
                         .waitSeconds(0.5)
+                        .turnTo(tagScoreHeading)
                         .lineToX(drive.pose.position.x + tagScoreOffsetX)
                         .waitSeconds(1)
                         .build());
@@ -423,10 +427,10 @@ public final class AutoCloseRR extends LinearOpMode {
                 Actions.runBlocking(drive
                         .actionBuilder(drive.pose)
                         .afterTime(0, robot.mid())
-                        .afterTime(1.5, robot.high())
-                        .afterTime(2, robot.retract())
-                        .turnTo(tagScoreHeading)
+                        .afterTime(2, robot.high())
+                        .afterTime(2.5, robot.retract())
                         .waitSeconds(0.5)
+                        .turnTo(tagScoreHeading)
                         .lineToX(drive.pose.position.x + tagScoreOffsetX)
                         .waitSeconds(1)
                         .build());
@@ -441,9 +445,9 @@ public final class AutoCloseRR extends LinearOpMode {
                     .actionBuilder(drive.pose)
                     .afterTime(0, robot.low())
                     .afterTime(2, robot.high())
-                    .afterTime(3, robot.retract())
-                    .strafeToLinearHeading(new Vector2d(drive.pose.position.x, drive.pose.position.y - error[0] + aprilTagOffsetY * sideMult), drive.pose.heading, drive.fastVelConstant, drive.fastAccelConstraint)
+                    .afterTime(2.5, robot.retract())
                     .waitSeconds(0.5)
+                    .strafeToLinearHeading(new Vector2d(drive.pose.position.x, drive.pose.position.y - error[0] + aprilTagOffsetY * sideMult), drive.pose.heading, drive.fastVelConstant, drive.fastAccelConstraint)
                     .strafeToLinearHeading(new Vector2d(drive.pose.position.x + tagScoreOffsetX, drive.pose.position.y - error[0] + aprilTagOffsetY * sideMult), drive.pose.heading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
                     .waitSeconds(1)
                     .build());
@@ -453,10 +457,10 @@ public final class AutoCloseRR extends LinearOpMode {
                     .actionBuilder(drive.pose)
                     .afterTime(0, robot.mid())
                     .afterTime(2, robot.high())
-                    .afterTime(3, robot.retract())
-                    .strafeToLinearHeading(new Vector2d(drive.pose.position.x, drive.pose.position.y - error[0] + aprilTagOffsetY * sideMult), drive.pose.heading, drive.fastVelConstant, drive.fastAccelConstraint)
+                    .afterTime(2.5, robot.retract())
                     .waitSeconds(0.5)
-                    .strafeToLinearHeading(new Vector2d(drive.pose.position.x + tagScoreOffsetX, drive.pose.position.y - error[0] * sideMult), drive.pose.heading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
+                    .strafeToLinearHeading(new Vector2d(drive.pose.position.x, drive.pose.position.y - error[0] + aprilTagOffsetY * sideMult), drive.pose.heading, drive.fastVelConstant, drive.fastAccelConstraint)
+                    .strafeToLinearHeading(new Vector2d(drive.pose.position.x + tagScoreOffsetX, drive.pose.position.y - error[0] + aprilTagOffsetY * sideMult), drive.pose.heading, drive.defaultVelConstraint, drive.defaultAccelConstraint)
                     .waitSeconds(1)
                     .build());
         }

@@ -14,6 +14,7 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
@@ -50,6 +51,7 @@ public class BaseRobotMethods extends LinearOpMode {
         climbr = hardwareMap.get(DcMotorEx.class, "rclimb");
         extend = hardwareMap.get(DcMotorEx.class, "extend");
 
+        intake.setDirection(DcMotorSimple.Direction.REVERSE);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         climbl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         climbr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -171,9 +173,12 @@ public class BaseRobotMethods extends LinearOpMode {
     }
 
     //INTAKE ACTIONS -------------------------------------------------------------------------------
-    public class IntakeStop implements Action{ //tell intake motor to stop spinning
+    public class IntakeStop implements Action{ //tell intake motor to stop spinning and fix extend motor
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+//            extend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            extend.setTargetPosition($.HOME);
+//            extend.setPower($.EXT_PWR);
             intake.setPower($.ZERO); //stop intake
             return false;
         }
@@ -189,7 +194,7 @@ public class BaseRobotMethods extends LinearOpMode {
             climbl.setTargetPosition($.CLIMB_INT_GND);
             climbr.setTargetPosition($.CLIMB_INT_GND);
             wrist.setPosition($.WRIST_GND);
-            intake.setPower($.FULL_PWR); //turn intake on full speed
+            intake.setPower($.INTAKE_PWR); //turn intake on full speed
             return false;
         }
     }
@@ -197,13 +202,29 @@ public class BaseRobotMethods extends LinearOpMode {
     public Action intakeGround() {
         return new IntakeGround();
     }
+
+    public class IntakeLevel3 implements Action{ //place intake on ground to feed
+        @Override
+        public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
+            climbl.setTargetPosition($.CLIMB_INT_LVL_3);
+            climbr.setTargetPosition($.CLIMB_INT_LVL_3);
+            wrist.setPosition($.WRIST_GND);
+            intake.setPower($.INTAKE_PWR); //turn intake on full speed
+            return false;
+        }
+    }
+    public Action intakeLevel3() {
+        return new IntakeLevel3();
+    }
+
     public class IntakeLevel5 implements Action{ //drop intake to top of pixel stack
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             climbl.setTargetPosition($.CLIMB_INT_LVL_5);
             climbr.setTargetPosition($.CLIMB_INT_LVL_5);
             wrist.setPosition($.WRIST_LVL_5);
-            intake.setPower($.FULL_PWR); //turn intake on full speed
+            intake.setPower($.INTAKE_PWR); //turn intake on full speed
             return false;
         }
     }
@@ -215,7 +236,7 @@ public class BaseRobotMethods extends LinearOpMode {
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
             score.setPosition($.SCORE_TRANSFER);
-            intake.setPower($.FULL_PWR_INV);
+            intake.setPower($.ZERO);
             climbl.setTargetPosition($.HOME);
             climbr.setTargetPosition($.HOME);
             climbl.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
@@ -257,8 +278,8 @@ public class BaseRobotMethods extends LinearOpMode {
 
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+            extend.setTargetPosition($.HOME);
             extend.setPower($.EXT_PWR);
-            extend.setTargetPosition($.EXT_HOME);
             score.setPosition($.SCORE_HOME);
             return false;
         }
@@ -268,7 +289,7 @@ public class BaseRobotMethods extends LinearOpMode {
     public class TransferC implements Action{ //spit pixels out into scoring bucket last step
         @Override
         public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-            intake.setPower($.FULL_PWR);
+            intake.setPower($.FULL_PWR_INV);
             return false;
         }
     }

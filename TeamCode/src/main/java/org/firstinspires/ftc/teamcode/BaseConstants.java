@@ -21,42 +21,49 @@ public final class BaseConstants{
         public  double FULL_PWR = 1.0;
         public  double FULL_PWR_INV = -1.0;
 
+        //INTAKE MOTOR POWER
+        public  double INTAKE_PWR = 0.85;
+
         //GENERIC HOME
         public  int HOME = 0;
 
         //CLIMB POS
         public  int CLIMB_HOME = 0; //INTAKE IN POS
-        public  int CLIMB_INT_GND = 1300; //INTAKE OUT POS
-        public  int CLIMB_INT_LVL_5 = 900; //INTAKE OUT POS
-        public  int CLIMB_LOW = 400;
-        public  int CLIMB_MID = 500;
-        public  int CLIMB_HIGH = 600;
+        public  int CLIMB_INT_GND = 1100; //INTAKE OUT POS
+        public  int CLIMB_INT_LVL_3 = 860; //INTAKE OUT POS
+        public  int CLIMB_INT_LVL_5 = 800; //INTAKE OUT POS
+        public  int CLIMB_LOW = 350;
+        public  int CLIMB_MID = 450;
+        public  int CLIMB_HIGH = 550;
 
         //SCORE POS
-        public  double SCORE_HOME = 0.9;
-        public  double SCORE_TRANSFER = 0.6;
+        public  double SCORE_HOME = 0.975;
+        public  double SCORE_TRANSFER = 0.75;
         public  double SCORE_LOW = 0.44;
-        public  double SCORE_MID = 0.42;
-        public  double SCORE_HIGH = 0.42;
+        public  double SCORE_MID = 0.46;
+        public  double SCORE_HIGH = 0.46;
 
         //EXTEND POS
-        public  double EXT_PWR = 0.65; //default power out
-        public double EXT_PWR_TRANSFER = -0.5;
-        public  int EXT_HOME = 0;
+        public  double EXT_PWR = 0.75; //default power out
+        public  double EXT_PWR_INV = -0.35; //default power out
+        public  int EXT_HOME = -50;
         public  int EXT_RETRACT = 75;
         public  int EXT_PRELOAD = 300;
-        public  int EXT_LOW = 390;
-        public  int EXT_MID = 390;
-        public  int EXT_HIGH = 350;
+        public  int EXT_LOW = 325;
+        public  int EXT_MID = 300;
+        public  int EXT_HIGH = 375;
 
         //WRIST POS
-        public   double WRIST_IN = 0.87;
-        public   double WRIST_GND = 0.41;
-        public   double WRIST_LVL_5 = 0.46;
+        public   double WRIST_IN = 0.9;
+        public   double WRIST_GND = 0.40;
+        public   double WRIST_LVL_5 = 0.40;
 
         //FINGER POS
         public   double FINGER_IN = 0.9; //FINGER TUCKED IN
-        public   double FINGER_GND = 0.385; //FINGER ON GND
+        public   double FINGER_GND = 0.395; //FINGER ON GND
+
+        //INTAKE PWR
+
 
         //DRONE POS
         public   double DRONE_HOME = 0.8;
