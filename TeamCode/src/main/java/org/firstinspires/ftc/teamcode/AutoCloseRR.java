@@ -68,8 +68,8 @@ public final class AutoCloseRR extends LinearOpMode {
     public double tagScoreCycleX = 2.5; //adjustment for tag position during cycle
     public double tagScorePoxY = 40; //mid placement preload tag score pos Y
     public double tagScoreOffsetY; //controls left-right preload displacement
-    public double tagScoreLeft = 5; //left offset backdrop tag
-    public double tagScoreRight = -6.25; //right offset backdrop tag
+    public double tagScoreLeft = 6.5; //left offset backdrop tag
+    public double tagScoreRight = -6.5; //right offset backdrop tag
     public double tagScoreHeading = Math.toRadians(180); //heading to score on backdrop
     public double tagScoreHeadingOffset = Math.toRadians(4); //extra adjust for complicated moves
 
